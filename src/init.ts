@@ -5,7 +5,7 @@ export const init = ({ functions }: InitArgs) => {
   const client = new Discord.Client()
 
   client.on('message', async (msg) => {
-    if (msg.author.id === client.user?.id) {
+    if (!client.user || msg.author.id === client.user.id) {
       return
     }
 

@@ -1,0 +1,85 @@
+import { Client, ClientEvents, Message } from 'discord.js'
+import { init } from './init'
+import { InitArgs, BotFunction } from './types'
+
+const mockClientUserId = 'foobar-client-user-id'
+const mockOn: jest.Mock<Client['on']> = jest.fn()
+const mockBaseClient = { user: { id: mockClientUserId }, on: mockOn }
+jest.mock('discord.js', () => {
+  return {
+    Client: jest.fn().mockImplementation(() => {
+      return mockBaseClient
+    }),
+  }
+})
+
+describe('init', () => {
+  beforeEach(jest.clearAllMocks)
+
+  const mockAuthorUserId = 'foobar-author-user-id'
+  const mockMsg = {
+    author: {
+      id: mockAuthorUserId,
+    },
+    content: 'ping',
+  } as Message
+
+  const pingCallbackSpy = jest.fn()
+  const pingFunction: BotFunction = {
+    condition: (msg) => msg.content === 'ping',
+    callback: pingCallbackSpy,
+  }
+
+  const setupTest = (initArgs: InitArgs) => {
+    init(initArgs)
+
+    expect(mockOn).toHaveBeenCalledWith('message', expect.any(Function))
+
+    return mockOn.mock.calls[0][1] as (...args: ClientEvents['message']) => void
+  }
+
+  it("should call a function's callback if it matches the condition", () => {
+    const handler = setupTest({ functions: [pingFunction] })
+
+    handler(mockMsg)
+
+    expect(pingCallbackSpy).toHaveBeenCalledWith(mockMsg)
+  })
+
+  it("should not call a function's callback if it does not match the condition", () => {
+    const handler = setupTest({ functions: [pingFunction] })
+
+    handler({
+      ...mockMsg,
+      content: 'Foobar',
+    } as Message)
+
+    expect(pingCallbackSpy).not.toHaveBeenCalled()
+  })
+
+  it('should ignore a message if it was authored by the bot', () => {
+    const handler = setupTest({ functions: [pingFunction] })
+
+    handler({
+      ...mockMsg,
+      author: {
+        id: mockClientUserId,
+      },
+    } as Message)
+
+    expect(pingCallbackSpy).not.toHaveBeenCalled()
+  })
+
+  it('should ignore a message if the client has no user', () => {
+    const mockClient = (Client as unknown) as jest.Mock<Client>
+    mockClient.mockImplementationOnce(() => {
+      return { ...mockBaseClient, user: undefined } as any
+    })
+
+    const handler = setupTest({ functions: [pingFunction] })
+
+    handler(mockMsg)
+
+    expect(pingCallbackSpy).not.toHaveBeenCalled()
+  })
+})
