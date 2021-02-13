@@ -1,3 +1,3 @@
-const hello = () => 'Hello world!'
+import Discord from 'discord.js'
 
-export default hello
+export const client = new Discord.Client()

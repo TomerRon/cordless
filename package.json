@@ -9,9 +9,12 @@
     "dist"
   ],
   "scripts": {
-    "prepublish": "tsc"
+    "prepublish": "rm -rf dist && tsc"
   },
   "devDependencies": {
     "typescript": "^4.1.5"
+  },
+  "dependencies": {
+    "discord.js": "^12.5.1"
   }
 }
