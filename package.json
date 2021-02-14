@@ -10,10 +10,11 @@
     "dist"
   ],
   "scripts": {
+    "build": "rm -rf dist && tsc",
     "lint": "eslint . --ext .ts",
     "test": "jest",
     "postinstall": "husky install",
-    "prepublishOnly": "rm -rf dist && tsc && pinst --disable",
+    "prepublishOnly": "yarn build && pinst --disable",
     "postpublish": "pinst --enable"
   },
   "devDependencies": {
