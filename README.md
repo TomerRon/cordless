@@ -1,5 +1,16 @@
 <h1 align="center" style="border-bottom: none;">🤖 cordless</h1>
 <h3 align="center">Opinionated framework for creating Discord bots with minimal boilerplate</h3>
+<p align="center">
+  <a href="https://www.npmjs.com/package/cordless">
+    <img alt="npm latest version" src="https://img.shields.io/npm/v/cordless/latest.svg">
+  </a>
+  <a href="https://travis-ci.com/TomerRon/cordless">
+    <img alt="build status" src="https://travis-ci.com/TomerRon/cordless.svg?branch=master">
+  </a>
+  <a href="https://github.com/semantic-release/semantic-release">
+    <img alt="semantic-release" src="https://img.shields.io/badge/%20%20%F0%9F%93%A6%F0%9F%9A%80-semantic--release-e10079.svg">
+  </a>
+</p>
 
 **cordless** is a simple wrapper for [discord.js](https://github.com/discordjs/discord.js) that allows you to create extensive and extensible Discord bots.
 
