@@ -1,6 +1,6 @@
 import { Client, ClientEvents, Message } from 'discord.js'
 import { init } from './init'
-import { InitArgs, BotFunction } from './types'
+import { InitOptions, BotFunction } from './types'
 
 const mockClientUserId = 'foobar-client-user-id'
 const mockOn: jest.Mock<Client['on']> = jest.fn()
@@ -29,8 +29,8 @@ describe('init', () => {
     callback: pingCallbackSpy,
   }
 
-  const setupTest = (initArgs: InitArgs) => {
-    init(initArgs)
+  const setupTest = (options: InitOptions) => {
+    init(options)
 
     expect(mockOn).toHaveBeenCalledWith('message', expect.any(Function))
 
