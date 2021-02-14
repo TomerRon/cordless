@@ -2,7 +2,7 @@ import Discord from 'discord.js'
 import { InitOptions } from './types'
 
 /**
- * Initializes disco-bot with the given options.
+ * Initializes a cordless bot with the given options.
  * Returns a discord.js client.
  */
 export const init = (options: InitOptions): Discord.Client => {

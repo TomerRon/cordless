@@ -1,17 +1,17 @@
-<h1 align="center" style="border-bottom: none;">💃🤖 disco-bot</h1>
+<h1 align="center" style="border-bottom: none;">🤖 cordless</h1>
 <h3 align="center">Opinionated framework for creating Discord bots with minimal boilerplate</h3>
 
-**disco-bot** is a simple wrapper for [discord.js](https://github.com/discordjs/discord.js) that allows you to create extensive and extensible Discord bots.
+**cordless** is a simple wrapper for [discord.js](https://github.com/discordjs/discord.js) that allows you to create extensive and extensible Discord bots.
 
 ```
-yarn add disco-bot
-npm i disco-bot
+yarn add cordless
+npm i cordless
 ```
 
 ## Basic Usage
 
 ```ts
-import { init, BotFunction } from 'disco-bot'
+import { init, BotFunction } from 'cordless'
 
 const ping: BotFunction = {
   condition: (msg) => msg.content === 'ping',
@@ -26,8 +26,8 @@ init({ functions: [ping] }).login(process.env.TOKEN)
 Clone and install the dependencies:
 
 ```
-git clone https://github.com/TomerRon/disco-bot.git
-cd disco-bot
+git clone https://github.com/TomerRon/cordless.git
+cd cordless
 yarn
 ```
 
@@ -47,7 +47,7 @@ yalc publish
 You can then test your changes in a local app using:
 
 ```
-yalc add disco-bot
+yalc add cordless
 ```
 
 ## License
