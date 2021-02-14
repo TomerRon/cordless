@@ -1,7 +1,12 @@
 import Discord from 'discord.js'
-import { InitArgs } from './types'
+import { InitOptions } from './types'
 
-export const init = ({ functions }: InitArgs): Discord.Client => {
+/**
+ * Initializes disco-bot with the given options.
+ * Returns a discord.js client.
+ */
+export const init = (options: InitOptions): Discord.Client => {
+  const { functions } = options
   const client = new Discord.Client()
 
   client.on('message', async (msg) => {
