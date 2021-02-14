@@ -1,4 +1,5 @@
-<h1 align="center" style="border-bottom: none;">🤖 cordless</h1>
+[![cordless](assets/splash.png)](#)
+
 <h3 align="center">Opinionated framework for creating Discord bots with minimal boilerplate</h3>
 <p align="center">
   <a href="https://www.npmjs.com/package/cordless">
@@ -60,6 +61,10 @@ You can then test your changes in a local app using:
 ```
 yalc add cordless
 ```
+
+## Contributors
+
+Huge shoutout to [fivenp](https://fivenp.com/) ([@fivenp](https://github.com/fivenp)) for the amazing visual assets. Go check out his work!
 
 ## License
 
