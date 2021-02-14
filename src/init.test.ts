@@ -5,13 +5,12 @@ import { InitArgs, BotFunction } from './types'
 const mockClientUserId = 'foobar-client-user-id'
 const mockOn: jest.Mock<Client['on']> = jest.fn()
 const mockBaseClient = { user: { id: mockClientUserId }, on: mockOn }
-jest.mock('discord.js', () => {
-  return {
-    Client: jest.fn().mockImplementation(() => {
-      return mockBaseClient
-    }),
-  }
-})
+
+jest.mock('discord.js', () => ({
+  Client: jest
+    .fn()
+    .mockImplementation(() => (mockBaseClient as unknown) as Client),
+}))
 
 describe('init', () => {
   beforeEach(jest.clearAllMocks)
@@ -72,9 +71,10 @@ describe('init', () => {
 
   it('should ignore a message if the client has no user', () => {
     const mockClient = (Client as unknown) as jest.Mock<Client>
-    mockClient.mockImplementationOnce(() => {
-      return { ...mockBaseClient, user: undefined } as any
-    })
+
+    mockClient.mockImplementationOnce(
+      () => (({ ...mockBaseClient, user: undefined } as unknown) as Client),
+    )
 
     const handler = setupTest({ functions: [pingFunction] })
 

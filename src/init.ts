@@ -1,7 +1,7 @@
 import Discord from 'discord.js'
 import { InitArgs } from './types'
 
-export const init = ({ functions }: InitArgs) => {
+export const init = ({ functions }: InitArgs): Discord.Client => {
   const client = new Discord.Client()
 
   client.on('message', async (msg) => {
