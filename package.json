@@ -1,10 +1,10 @@
 {
-  "name": "disco-bot",
+  "name": "cordless",
   "version": "1.0.0",
   "author": "Tomer Ron",
   "repository": {
     "type": "git",
-    "url": "https://github.com/TomerRon/disco-bot.git"
+    "url": "https://github.com/TomerRon/cordless.git"
   },
   "license": "ISC",
   "private": false,

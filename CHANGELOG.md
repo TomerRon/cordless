@@ -3,4 +3,4 @@
 
 ### Features
 
-* add base functionality ([b533cce](https://github.com/TomerRon/disco-bot/commit/b533cce2933d7687b03ed635e0717b4a4722512c))
+* add base functionality ([b533cce](https://github.com/TomerRon/cordless/commit/b533cce2933d7687b03ed635e0717b4a4722512c))

@@ -1,6 +1,6 @@
 import Discord from 'discord.js'
 
-/** Initialization options for disco-bot */
+/** Initialization options for your cordless bot */
 export type InitOptions = {
   /** The functions used by your bot */
   functions: BotFunction[]
