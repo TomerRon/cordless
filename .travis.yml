@@ -15,4 +15,5 @@ jobs:
 script:
   - yarn lint
   - yarn test
+  - yarn e2e
   - yarn build
