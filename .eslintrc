@@ -13,7 +13,7 @@
   ],
   "rules": {
     "arrow-body-style": [2, "as-needed"],
-    "indent": [2, 2],
+    "indent": [0],
     "import/no-unresolved": "off",
     "padding-line-between-statements": [
       2,

@@ -1,6 +1,6 @@
 import { Client, Message, User } from 'discord.js'
 import handleMessage from './handleMessage'
-import { InitOptions, BotFunction } from '../types'
+import { BotFunction } from '../types'
 
 describe('handleMessage', () => {
   beforeEach(jest.clearAllMocks)
@@ -27,25 +27,23 @@ describe('handleMessage', () => {
     callback: pingCallbackSpy,
   }
 
-  const mockOptions: InitOptions = {
-    functions: [pingFunction],
-  }
+  const mockFunctions: BotFunction[] = [pingFunction]
 
   const setupTest: (args?: {
     msg?: Partial<Omit<Message, 'valueOf'>>
     client?: Partial<Client>
-    options?: Partial<InitOptions>
-  }) => Promise<void> = ({ msg, client, options } = {}) =>
+    functions?: BotFunction[]
+  }) => Promise<void> = ({ msg, client, functions = [] } = {}) =>
     handleMessage(
       { ...mockMsg, ...msg } as Message,
       { ...mockClient, ...client } as Client,
-      { ...mockOptions, ...options } as InitOptions,
+      [...mockFunctions, ...functions],
     )
 
   it("should call a function's callback if it matches the condition", async () => {
     await setupTest()
 
-    expect(pingCallbackSpy).toHaveBeenCalledWith(mockMsg)
+    expect(pingCallbackSpy).toHaveBeenCalledWith(mockMsg, mockFunctions)
   })
 
   it("should not call a function's callback if it does not match the condition", async () => {

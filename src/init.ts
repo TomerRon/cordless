@@ -1,5 +1,6 @@
 import Discord from 'discord.js'
-import { InitOptions } from './types'
+import getHelpFunction from './functions/help'
+import { BotFunction, InitOptions } from './types'
 import handleMessage from './utils/handleMessage'
 
 /**
@@ -7,9 +8,20 @@ import handleMessage from './utils/handleMessage'
  * Returns a discord.js client.
  */
 export const init = (options: InitOptions): Discord.Client => {
+  const { functions, helpCommand } = options
+  let resolvedFns: BotFunction[] = functions
+
+  if (functions.some((fn) => fn.name?.includes(' '))) {
+    throw new Error('A function cannot have spaces in its name.')
+  }
+
   const client = new Discord.Client()
 
-  client.on('message', (msg) => handleMessage(msg, client, options))
+  if (helpCommand) {
+    resolvedFns = [getHelpFunction(helpCommand), ...functions]
+  }
+
+  client.on('message', (msg) => handleMessage(msg, client, resolvedFns))
 
   return client
 }
