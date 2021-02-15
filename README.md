@@ -22,6 +22,10 @@ npm i cordless
 
 ## Basic Usage
 
+Follow [this guide](https://discordjs.guide/preparations/setting-up-a-bot-application.html#creating-your-bot) to create a Discord bot in the Discord developer portal.
+
+TypeScript:
+
 ```ts
 import { init, BotFunction } from 'cordless'
 
@@ -30,10 +34,80 @@ const ping: BotFunction = {
   callback: (msg) => msg.reply('pong'),
 }
 
-init({ functions: [ping] }).login(process.env.TOKEN)
+init({ functions: [ping] }).login('your.bot.token')
 ```
 
-## Contributing
+JavaScript:
+
+```js
+const cordless = require('cordless')
+
+const ping = {
+  condition: (msg) => msg.content === 'ping',
+  callback: (msg) => msg.reply('pong'),
+}
+
+cordless.init({ functions: [ping] }).login('your.bot.token')
+```
+
+## Advanced Usage
+
+### Automatic documentation
+
+Auto-generate a help function for your bot by passing a `helpCommand`.
+Make sure you give your functions a name and description if you want to use them with the generated help function.
+
+For example, let's generate a `!help` command:
+
+```ts
+const ping: BotFunction = {
+  name: 'ping',
+  description: 'Responds to your ping with a pong!\n\nUsage: ping',
+  condition: (msg) => msg.content === 'ping',
+  callback: (msg) => msg.reply('pong'),
+}
+
+const client = init({
+  functions: [ping],
+  helpCommand: '!help',
+})
+
+client.login('your.bot.token')
+```
+
+Now your bot can respond to `!help`:
+
+![Automatic documentation](https://i.imgur.com/kqBnZ5M.png)
+
+### Using discord.js features
+
+The `init` method returns a [discord.js Client](https://discord.js.org/#/docs/main/stable/class/Client).
+
+Read the [discord.js documentation](https://discord.js.org/#/docs/main/master/general/welcome) for more information about using the client.
+
+```ts
+const ping: BotFunction = {
+  name: 'ping',
+  description: 'Responds to your ping with a pong!\n\nUsage: ping',
+  condition: (msg) => msg.content === 'ping',
+  callback: (msg) => msg.reply('pong'),
+}
+
+const client = init({
+  functions: [ping],
+  helpCommand: '!help',
+})
+
+client.on('ready', () => {
+  console.log(`Logged in as ${client.user?.tag}!`)
+})
+
+client.on('message', console.log)
+
+client.login('your.bot.token')
+```
+
+## Local development
 
 Clone and install the dependencies:
 
@@ -42,8 +116,6 @@ git clone https://github.com/TomerRon/cordless.git
 cd cordless
 yarn
 ```
-
-#### Local development
 
 We recommend installing [yalc](https://github.com/wclr/yalc). Publish your changes locally with:
 
@@ -90,7 +162,7 @@ Run the e2e tests:
 yarn e2e
 ```
 
-## Contributors
+## Special thanks
 
 Huge shoutout to [fivenp](https://fivenp.com/) ([@fivenp](https://github.com/fivenp)) for the amazing visual assets. Go check out his work!
 
