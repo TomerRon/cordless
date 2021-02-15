@@ -1,3 +1,10 @@
+# [1.2.0](https://github.com/TomerRon/cordless/compare/v1.1.0...v1.2.0) (2021-02-15)
+
+
+### Features
+
+* **help:** add built-in help function ([0312dcf](https://github.com/TomerRon/cordless/commit/0312dcf7e4110e5f13346726beaca45f9030a11b))
+
 # [1.1.0](https://github.com/TomerRon/cordless/compare/v1.0.0...v1.1.0) (2021-02-14)
 
 
