@@ -43,14 +43,9 @@ cd cordless
 yarn
 ```
 
-Run the linter and tests:
+#### Local development
 
-```
-yarn lint
-yarn test
-```
-
-For local development, we recommend installing [yalc](https://github.com/wclr/yalc). Publish your changes locally with:
+We recommend installing [yalc](https://github.com/wclr/yalc). Publish your changes locally with:
 
 ```
 yalc publish
@@ -60,6 +55,39 @@ You can then test your changes in a local app using:
 
 ```
 yalc add cordless
+```
+
+#### Unit tests
+
+Run the unit tests:
+
+```
+yarn test
+```
+
+#### End-to-end tests
+
+You must first create two bots and add them to a Discord server. One of the bots will run the cordless client, and the other bot will pretend to be a normal user.
+
+You'll need the tokens for both of the bots, and the channel ID of a channel where the bots can send messages.
+
+Copy the `.env` file and edit it:
+
+```
+cp .example.env .env
+```
+
+```
+# .env
+E2E_CLIENT_TOKEN=some.discord.token
+E2E_USER_TOKEN=some.discord.token
+E2E_CHANNEL_ID=12345678
+```
+
+Run the e2e tests:
+
+```
+yarn e2e
 ```
 
 ## Contributors
