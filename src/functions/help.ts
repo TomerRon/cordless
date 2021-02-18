@@ -1,11 +1,14 @@
-import { BotFunction } from '../types'
+import { BotFunction, CustomContext } from '../types'
 
-const getHelpFunction = (command: string): BotFunction => ({
+const getHelpFunction = <T extends CustomContext>(
+  command: string,
+): BotFunction<T> => ({
   name: 'help',
   description: `Shows this help screen.\n\nUsage: ${command} or ${command} <function>`,
   condition: (msg) =>
     msg.content === command || msg.content.startsWith(`${command} `),
-  callback: (msg, functions) => {
+  callback: (msg, context) => {
+    const { functions } = context
     const functionName = msg.content.split(' ')[1]
 
     const getAllFunctions = () => {

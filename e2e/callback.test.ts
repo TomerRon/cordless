@@ -1,9 +1,7 @@
 import { Client, Message, TextChannel } from 'discord.js'
-import dotenv from 'dotenv'
 import { v4 as uuidv4 } from 'uuid'
-import { init, BotFunction } from '../src'
-
-dotenv.config()
+import { setupClients } from './utils'
+import { BotFunction } from '../src'
 
 describe('callback', () => {
   let cordlessClient: Client
@@ -32,27 +30,13 @@ describe('callback', () => {
       },
     }
 
-    // Login as the cordless client
-    cordlessClient = init({ functions: [ping] })
-    await new Promise<void>((resolve) => {
-      cordlessClient.on('message', (msg) => receivedMessages.push(msg))
-      cordlessClient.on('ready', resolve)
+    const setup = await setupClients({ functions: [ping] })
 
-      cordlessClient.login(process.env.E2E_CLIENT_TOKEN)
-    })
+    cordlessClient = setup.cordlessClient
+    userClient = setup.userClient
+    e2eChannel = setup.e2eChannel
 
-    // Login as the test user
-    userClient = new Client()
-    await new Promise<void>((resolve) => {
-      userClient.on('ready', resolve)
-
-      userClient.login(process.env.E2E_USER_TOKEN)
-    })
-
-    // Get the channel for e2e testing
-    e2eChannel = userClient.channels.cache.get(
-      process.env.E2E_CHANNEL_ID || '',
-    ) as TextChannel
+    cordlessClient.on('message', (msg) => receivedMessages.push(msg))
   })
 
   afterAll(() => {
@@ -63,7 +47,7 @@ describe('callback', () => {
   it('should reply to ping with pong when the condition resolves to true', async () => {
     let resolveIfPong: (msg: Message) => void = () => null
 
-    // Wait until pong is received...
+    // Send ping and wait until the pong response is received...
     await new Promise<void>((resolve) => {
       resolveIfPong = (msg: Message) => {
         if (msg.content === testPong) {

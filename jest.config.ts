@@ -20,6 +20,7 @@ const config: Config.InitialOptions = {
       statements: 100,
     },
   },
+  rootDir: 'src',
 }
 
 export default config
