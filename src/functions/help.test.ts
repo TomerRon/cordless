@@ -1,6 +1,6 @@
-import { Message, TextChannel } from 'discord.js'
+import { Message, TextChannel, Client } from 'discord.js'
 import getHelpFunction from './help'
-import { BotFunction } from '../types'
+import { BotFunction, Context } from '../types'
 
 describe('getHelpFunction', () => {
   beforeEach(jest.clearAllMocks)
@@ -16,6 +16,11 @@ describe('getHelpFunction', () => {
 
   const helpFunction = getHelpFunction(mockCommand)
 
+  const mockContext: Context = {
+    client: {} as Client,
+    functions: [mockFunction],
+  }
+
   it('should return a function', () => {
     expect(helpFunction).toMatchObject({
       name: 'help',
@@ -29,13 +34,15 @@ describe('getHelpFunction', () => {
     const { condition } = helpFunction
 
     it('should return true when the message content is the command', () => {
-      expect(condition({ content: mockCommand } as Message)).toBe(true)
+      expect(condition({ content: mockCommand } as Message, mockContext)).toBe(
+        true,
+      )
     })
 
     it('should return true when the message content is the command followed by args', () => {
-      expect(condition({ content: `${mockCommand} foobar` } as Message)).toBe(
-        true,
-      )
+      expect(
+        condition({ content: `${mockCommand} foobar` } as Message, mockContext),
+      ).toBe(true)
     })
 
     it('should return false for other cases', () => {
@@ -50,7 +57,9 @@ describe('getHelpFunction', () => {
       ]
 
       values.map((value) =>
-        expect(condition({ content: value } as Message)).toBe(false),
+        expect(condition({ content: value } as Message, mockContext)).toBe(
+          false,
+        ),
       )
     })
   })
@@ -68,7 +77,7 @@ describe('getHelpFunction', () => {
 
     describe('should return the main help message', () => {
       it('should return a list of functions when there are no unnamed functions', () => {
-        callback(mockMsg, [mockFunction])
+        callback(mockMsg, mockContext)
 
         const expected = `List of available functions: (Use \`${mockCommand} <function>\` for details about a specific function)\n>>> **${mockFunction.name}**\n`
 
@@ -76,10 +85,13 @@ describe('getHelpFunction', () => {
       })
 
       it('should return a list of functions when there is one unnamed function', () => {
-        callback(mockMsg, [
-          mockFunction,
-          { condition: () => true, callback: () => undefined },
-        ])
+        callback(mockMsg, {
+          ...mockContext,
+          functions: [
+            mockFunction,
+            { condition: () => true, callback: () => undefined },
+          ],
+        })
 
         const expected = `List of available functions: (Use \`${mockCommand} <function>\` for details about a specific function)\n>>> **${mockFunction.name}**\n\nThere is also 1 unnamed function.`
 
@@ -87,11 +99,14 @@ describe('getHelpFunction', () => {
       })
 
       it('should return a list of functions when there are multiple unnamed functions', () => {
-        callback(mockMsg, [
-          mockFunction,
-          { condition: () => true, callback: () => undefined },
-          { condition: () => true, callback: () => undefined },
-        ])
+        callback(mockMsg, {
+          ...mockContext,
+          functions: [
+            mockFunction,
+            { condition: () => true, callback: () => undefined },
+            { condition: () => true, callback: () => undefined },
+          ],
+        })
 
         const expected = `List of available functions: (Use \`${mockCommand} <function>\` for details about a specific function)\n>>> **${mockFunction.name}**\n\nThere are also 2 unnamed functions.`
 
@@ -106,7 +121,7 @@ describe('getHelpFunction', () => {
             ...mockMsg,
             content: `${mockCommand} ${mockFunction.name}`,
           } as Message,
-          [mockFunction],
+          mockContext,
         )
 
         const expected = `>>> **${mockFunction.name}**\n${mockFunction.description}`
@@ -122,7 +137,7 @@ describe('getHelpFunction', () => {
             ...mockMsg,
             content: `${mockCommand} ${fn.name}`,
           } as Message,
-          [fn],
+          { ...mockContext, functions: [fn] },
         )
 
         const expected = `>>> **${fn.name}**\nNo description.`
@@ -138,7 +153,7 @@ describe('getHelpFunction', () => {
             ...mockMsg,
             content: `${mockCommand} ${fnName}`,
           } as Message,
-          [mockFunction],
+          mockContext,
         )
 
         const expected = `There's no function called **${fnName}**. Use \`${mockCommand}\` for a list of all functions.`

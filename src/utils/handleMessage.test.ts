@@ -34,16 +34,34 @@ describe('handleMessage', () => {
     client?: Partial<Client>
     functions?: BotFunction[]
   }) => Promise<void> = ({ msg, client, functions = [] } = {}) =>
-    handleMessage(
-      { ...mockMsg, ...msg } as Message,
-      { ...mockClient, ...client } as Client,
-      [...mockFunctions, ...functions],
-    )
+    handleMessage({ ...mockMsg, ...msg } as Message, {
+      client: { ...mockClient, ...client } as Client,
+      functions: [...mockFunctions, ...functions],
+    })
 
   it("should call a function's callback if it matches the condition", async () => {
     await setupTest()
 
-    expect(pingCallbackSpy).toHaveBeenCalledWith(mockMsg, mockFunctions)
+    expect(pingCallbackSpy).toHaveBeenCalledWith(mockMsg, {
+      client: mockClient,
+      functions: mockFunctions,
+    })
+  })
+
+  it("should call a function's callback with custom context", async () => {
+    const customContext = { foo: 'bar' }
+
+    await handleMessage<{ foo: string }>(mockMsg, {
+      client: mockClient,
+      functions: (mockFunctions as unknown) as BotFunction<{ foo: string }>[],
+      ...customContext,
+    })
+
+    expect(pingCallbackSpy).toHaveBeenCalledWith(mockMsg, {
+      client: mockClient,
+      functions: mockFunctions,
+      ...customContext,
+    })
   })
 
   it("should not call a function's callback if it does not match the condition", async () => {
@@ -65,7 +83,9 @@ describe('handleMessage', () => {
   })
 
   it('should ignore a message if the client has no user', async () => {
-    await setupTest({ client: { user: undefined } })
+    await setupTest({
+      client: { ...mockClient, user: undefined },
+    })
 
     expect(pingCallbackSpy).not.toHaveBeenCalled()
   })

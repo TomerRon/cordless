@@ -12,6 +12,15 @@
     "prettier/@typescript-eslint"
   ],
   "rules": {
+    "@typescript-eslint/ban-types": [
+      "error",
+      {
+        "types": {
+          "{}": false
+        },
+        "extendDefaults": true
+      }
+    ],
     "arrow-body-style": [2, "as-needed"],
     "indent": [0],
     "import/no-unresolved": "off",

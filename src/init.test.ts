@@ -46,11 +46,10 @@ describe('init', () => {
 
     onMessageHandler(mockMsg)
 
-    expect(handleMessageSpy).toHaveBeenCalledWith(
-      mockMsg,
-      mockBaseClient,
-      mockOptions.functions,
-    )
+    expect(handleMessageSpy).toHaveBeenCalledWith(mockMsg, {
+      client: mockBaseClient,
+      functions: mockOptions.functions,
+    })
   })
 
   it('should throw an error if a function has spaces in its name', () => {
@@ -78,10 +77,10 @@ describe('init', () => {
 
       onMessageHandler(mockMsg)
 
-      const functions = handleMessageSpy.mock.calls[0][2]
+      const context = handleMessageSpy.mock.calls[0][1]
 
       // The first function should be the one returned from getHelpFunction
-      expect(functions[0]).toStrictEqual(mockHelpFunction)
+      expect(context.functions[0]).toStrictEqual(mockHelpFunction)
       expect(getHelpFunctionSpy).toHaveBeenCalledWith(mockHelpCommand)
     })
 
@@ -90,9 +89,9 @@ describe('init', () => {
 
       onMessageHandler(mockMsg)
 
-      const functions = handleMessageSpy.mock.calls[0][2]
+      const context = handleMessageSpy.mock.calls[0][1]
 
-      expect(functions[0]).not.toStrictEqual(mockHelpFunction)
+      expect(context.functions[0]).not.toStrictEqual(mockHelpFunction)
       expect(getHelpFunctionSpy).not.toHaveBeenCalled()
     })
   })
