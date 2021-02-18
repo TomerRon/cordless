@@ -11,5 +11,12 @@
     "skipLibCheck": true,
     "forceConsistentCasingInFileNames": true
   },
-  "exclude": ["node_modules", "dist", "jest.config.ts", "**/*.test.ts"]
+  "exclude": [
+    "node_modules",
+    "dist",
+    "e2e",
+    "jest.config.ts",
+    "jest.e2e.config.ts",
+    "**/*.test.ts"
+  ]
 }

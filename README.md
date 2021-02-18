@@ -50,6 +50,16 @@ const ping = {
 cordless.init({ functions: [ping] }).login('your.bot.token')
 ```
 
+## Table of Contents
+
+- [Advanced Usage](#advanced-usage)
+  - [Automatic documentation](#automatic-documentation)
+  - [Share business logic with Context](#share-business-logic-with-context)
+  - [Using discord.js features](#using-discordjs-features)
+- [Local development](#local-development)
+- [Special thanks](#special-thanks)
+- [License](#license)
+
 ## Advanced Usage
 
 ### Automatic documentation
@@ -79,6 +89,80 @@ Now your bot can respond to `!help`:
 
 ![Automatic documentation](https://i.imgur.com/kqBnZ5M.png)
 
+### Share business logic with Context
+
+You can share business logic and state between your different functions using context. By default, the context contains the `discord.js` client and the current list of functions.
+
+For example, here is a function that uses context to display the number of functions available:
+
+```ts
+const numberOfFunctions: BotFunction = {
+  condition: (msg) => msg.content === 'How many functions?',
+  callback: (msg, context) => {
+    msg.reply(`There are ${context.functions.length} functions.`)
+  },
+}
+```
+
+You can also extend the context with your own custom context.
+
+Here's a basic implementation of state management - the `count` will be shared between function calls and its value will be persisted:
+
+TypeScript:
+
+```ts
+const state = {
+  count: 0,
+  increment: () => {
+    state.count++
+  },
+}
+
+type MyCustomContext = {
+  state: {
+    count: number
+    increment: () => void
+  }
+}
+
+const counter: BotFunction<MyCustomContext> = {
+  condition: (msg) => msg.content === 'count',
+  callback: (msg, context) => {
+    context.state.increment()
+    msg.reply(`The count is ${context.state.count}`)
+  },
+}
+
+const client = init<MyCustomContext>({
+  functions: [counter],
+  context: { state },
+})
+```
+
+JavaScript:
+
+```js
+const state = {
+  count: 0,
+  increment: () => {
+    state.count++
+  },
+}
+
+const counter = {
+  condition: (msg) => msg.content === 'count',
+  callback: (msg, context) => {
+    context.state.increment()
+    msg.reply(`The count is ${context.state.count}`)
+  },
+}
+
+const client = cordless.init({
+  functions: [counter],
+  context: { state },
+})
+```
+
 ### Using discord.js features
 
 The `init` method returns a [discord.js Client](https://discord.js.org/#/docs/main/stable/class/Client).
@@ -86,16 +170,8 @@ The `init` method returns a [discord.js Client](https://discord.js.org/#/docs/ma
 Read the [discord.js documentation](https://discord.js.org/#/docs/main/master/general/welcome) for more information about using the client.
 
 ```ts
-const ping: BotFunction = {
-  name: 'ping',
-  description: 'Responds to your ping with a pong!\n\nUsage: ping',
-  condition: (msg) => msg.content === 'ping',
-  callback: (msg) => msg.reply('pong'),
-}
-
 const client = init({
-  functions: [ping],
-  helpCommand: '!help',
+  // ...
 })
 
 client.on('ready', () => {

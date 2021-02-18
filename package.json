@@ -25,8 +25,8 @@
   "scripts": {
     "build": "rm -rf dist && tsc",
     "lint": "eslint . --ext .ts",
-    "test": "jest --rootDir src",
-    "e2e": "jest --coverage=false --rootDir e2e",
+    "test": "jest",
+    "e2e": "jest --config=jest.e2e.config.ts --runInBand",
     "postinstall": "husky install",
     "prepublishOnly": "yarn build && pinst --disable",
     "postpublish": "pinst --enable",
