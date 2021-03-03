@@ -34,7 +34,7 @@ export type BotFunction<T extends CustomContext = {}> = {
   callback: (
     msg: Discord.Message,
     context: Context<T>,
-  ) => void | Promise<void> | Promise<Discord.Message>
+  ) => void | Promise<Discord.Message | void>
 }
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
