@@ -1,3 +1,10 @@
+## [1.3.1](https://github.com/TomerRon/cordless/compare/v1.3.0...v1.3.1) (2021-03-03)
+
+
+### Bug Fixes
+
+* **functions:** fix return type for async function callbacks ([0bbe9c2](https://github.com/TomerRon/cordless/commit/0bbe9c2a93430696ffba9929c8a37337e399e319))
+
 # [1.3.0](https://github.com/TomerRon/cordless/compare/v1.2.0...v1.3.0) (2021-02-18)
 
 
