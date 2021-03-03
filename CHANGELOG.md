@@ -1,3 +1,10 @@
+# [1.3.0](https://github.com/TomerRon/cordless/compare/v1.2.0...v1.3.0) (2021-02-18)
+
+
+### Features
+
+* **context:** add base context and custom context ([948c81d](https://github.com/TomerRon/cordless/commit/948c81dad39ebe3847462ac438116d130153c13a))
+
 # [1.2.0](https://github.com/TomerRon/cordless/compare/v1.1.0...v1.2.0) (2021-02-15)
 
 
