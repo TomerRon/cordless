@@ -1,3 +1,17 @@
+# [2.0.0](https://github.com/TomerRon/cordless/compare/v1.3.1...v2.0.0) (2022-06-01)
+
+
+### chore
+
+* **deps:** upgrade discord.js to v13 ([52234a1](https://github.com/TomerRon/cordless/commit/52234a19b3551208ef4d74f53968467f618b5f97))
+
+
+### BREAKING CHANGES
+
+* **deps:** Discord.js has been upgraded to v13.
+Please be aware there are breaking changes in discord.js@13, see: https://discordjs.guide/additional-info/changes-in-v13.html
+The minimum required Node version is now v16.5.0.
+
 ## [1.3.1](https://github.com/TomerRon/cordless/compare/v1.3.0...v1.3.1) (2021-03-03)
 
 
