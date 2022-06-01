@@ -1,15 +1,20 @@
-import { Client, Message } from 'discord.js'
-import { init } from './init'
+import { Client, Intents, Message } from 'discord.js'
 import * as getHelpFunctionModule from './functions/help'
+import { init } from './init'
 import { BotFunction, InitOptions } from './types'
 import * as handleMessageModule from './utils/handleMessage'
 
 const onSpy = jest.fn()
-const mockBaseClient = ({ on: onSpy } as unknown) as Client
+const mockBaseClient = { on: onSpy } as unknown as Client
 
-jest.mock('discord.js', () => ({
-  Client: jest.fn().mockImplementation(() => mockBaseClient),
-}))
+jest.mock('discord.js', () => {
+  const originalModule = jest.requireActual('discord.js')
+
+  return {
+    ...originalModule,
+    Client: jest.fn().mockImplementation(() => mockBaseClient),
+  }
+})
 
 describe('init', () => {
   beforeEach(jest.clearAllMocks)
@@ -35,10 +40,18 @@ describe('init', () => {
     return onSpy.mock.calls[0][1] as (msg: Message) => void
   }
 
+  it('should initialize the client with the default intents', () => {
+    setupTest()
+
+    expect(Client).toHaveBeenCalledWith({
+      intents: [Intents.FLAGS.GUILD_MESSAGES, Intents.FLAGS.GUILDS],
+    })
+  })
+
   it('should subscribe to message events', () => {
     setupTest()
 
-    expect(onSpy).toHaveBeenCalledWith('message', expect.any(Function))
+    expect(onSpy).toHaveBeenCalledWith('messageCreate', expect.any(Function))
   })
 
   it('should call handleMessage when a message was received', () => {

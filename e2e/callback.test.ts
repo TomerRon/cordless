@@ -1,12 +1,12 @@
-import { Client, Message, TextChannel } from 'discord.js'
+import { Client, Message, TextBasedChannel } from 'discord.js'
 import { v4 as uuidv4 } from 'uuid'
-import { setupClients } from './utils'
 import { BotFunction } from '../src'
+import { setupClients } from './utils'
 
 describe('callback', () => {
   let cordlessClient: Client
   let userClient: Client
-  let e2eChannel: TextChannel
+  let e2eChannel: TextBasedChannel
   let receivedMessages: Message[]
 
   const pingCallbackSpy = jest.fn()
@@ -36,7 +36,9 @@ describe('callback', () => {
     userClient = setup.userClient
     e2eChannel = setup.e2eChannel
 
-    cordlessClient.on('message', (msg) => receivedMessages.push(msg))
+    cordlessClient.on('messageCreate', (msg) => {
+      receivedMessages.push(msg)
+    })
   })
 
   afterAll(() => {
@@ -55,11 +57,11 @@ describe('callback', () => {
         }
       }
 
-      cordlessClient.on('message', resolveIfPong)
+      cordlessClient.on('messageCreate', resolveIfPong)
       e2eChannel.send(testPing)
     })
 
-    cordlessClient.off('message', resolveIfPong)
+    cordlessClient.off('messageCreate', resolveIfPong)
 
     expect(pingCallbackSpy).toHaveBeenCalledWith(
       expect.objectContaining({ content: testPing }),
