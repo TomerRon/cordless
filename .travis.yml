@@ -1,0 +1,19 @@
+language: node_js
+node_js:
+  - 16
+
+jobs:
+  include:
+    - stage: release
+      node_js: node
+      deploy:
+        provider: script
+        skip_cleanup: true
+        script:
+          - yarn semantic-release
+
+script:
+  - yarn lint
+  - yarn test
+  - yarn e2e
+  - yarn build
