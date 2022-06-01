@@ -1,7 +1,7 @@
 import { Client } from 'discord.js'
 import { v4 as uuidv4 } from 'uuid'
-import { setupClients } from './utils'
 import { BotFunction, Context } from '../src'
+import { setupClients } from './utils'
 
 interface CustomContext {
   foo: string
@@ -54,17 +54,15 @@ describe('context', () => {
   })
 
   it('should have access to the client', async () => {
-    const { client } = pingCallbackSpy.mock.calls[0][1] as Context<
-      CustomContext
-    >
+    const { client } = pingCallbackSpy.mock
+      .calls[0][1] as Context<CustomContext>
 
     expect(client.user?.id).toBe(cordlessClient.user?.id)
   })
 
   it('should have access to the functions', async () => {
-    const { functions } = pingCallbackSpy.mock.calls[0][1] as Context<
-      CustomContext
-    >
+    const { functions } = pingCallbackSpy.mock
+      .calls[0][1] as Context<CustomContext>
 
     expect(functions).toStrictEqual([
       expect.objectContaining({ name: 'help' }),
@@ -79,9 +77,8 @@ describe('context', () => {
   })
 
   it('should be able to persist the context between function calls', async () => {
-    const { getCount, setCount } = pingCallbackSpy.mock.calls[0][1] as Context<
-      CustomContext
-    >
+    const { getCount, setCount } = pingCallbackSpy.mock
+      .calls[0][1] as Context<CustomContext>
 
     expect(getCount()).toBe(0)
 

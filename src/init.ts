@@ -16,7 +16,14 @@ export const init = <T extends CustomContext = {}>(
     throw new Error('A function cannot have spaces in its name.')
   }
 
-  const client = new Discord.Client()
+  // @TODO: Allow passing an array of intents to this method.
+  // For now the intents are hard-coded.
+  const intents = [
+    Discord.Intents.FLAGS.GUILD_MESSAGES,
+    Discord.Intents.FLAGS.GUILDS,
+  ]
+
+  const client = new Discord.Client({ intents })
 
   const resolvedFns = helpCommand
     ? [getHelpFunction<T>(helpCommand), ...functions]
@@ -28,7 +35,7 @@ export const init = <T extends CustomContext = {}>(
     ...(options.context as T),
   }
 
-  client.on('message', (msg) => handleMessage(msg, context))
+  client.on('messageCreate', (msg) => handleMessage(msg, context))
 
   return client
 }

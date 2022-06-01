@@ -178,7 +178,7 @@ client.on('ready', () => {
   console.log(`Logged in as ${client.user?.tag}!`)
 })
 
-client.on('message', console.log)
+client.on('messageCreate', console.log)
 
 client.login('your.bot.token')
 ```

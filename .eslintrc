@@ -8,8 +8,7 @@
     "plugin:import/errors",
     "plugin:import/warnings",
     "plugin:jest/recommended",
-    "prettier",
-    "prettier/@typescript-eslint"
+    "prettier"
   ],
   "rules": {
     "@typescript-eslint/ban-types": [
