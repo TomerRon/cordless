@@ -11,9 +11,9 @@ describe('callback', () => {
 
   const pingCallbackSpy = jest.fn()
 
-  const testPing = uuidv4()
-  const testWrongPing = uuidv4()
-  const testPong = uuidv4()
+  const testPing = `[callback] ${uuidv4()}`
+  const testWrongPing = `[callback] ${uuidv4()}`
+  const testPong = `[callback] ${uuidv4()}`
 
   beforeEach(() => {
     receivedMessages = []

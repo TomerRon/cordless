@@ -14,7 +14,7 @@ describe('context', () => {
   let userClient: Client
   let sendMessageAndWaitForIt: (content: string) => Promise<Message>
 
-  const testPing = uuidv4()
+  const testPing = `[context] - ${uuidv4()}`
 
   const pingCallbackSpy = jest.fn()
   const ping: BotFunction<CustomContext> = {

@@ -8,7 +8,7 @@ describe('intents', () => {
   let userClient: Client
   let sendMessageAndWaitForIt: (content: string) => Promise<Message>
 
-  const testPing = uuidv4()
+  const testPing = `[intents] - ${uuidv4()}`
 
   const setupTest = async (intents?: InitOptions['intents']) => {
     const setup = await setupClients({
