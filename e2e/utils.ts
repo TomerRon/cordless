@@ -10,7 +10,7 @@ export const setupClients = async <T extends CustomContext>(
   cordlessClient: Client
   userClient: Client
   e2eChannel: TextBasedChannel
-  sendMessageAndWaitForIt: (content: string) => Promise<void>
+  sendMessageAndWaitForIt: (content: string) => Promise<Message>
 }> => {
   // Login as the cordless client
   const cordlessClient = init(options)
@@ -45,13 +45,21 @@ export const setupClients = async <T extends CustomContext>(
     throw new Error('The provided test channel is not a text channel.')
   }
 
-  // Sends a message as the user client, and waits until it is received by the cordless client
-  const sendMessageAndWaitForIt = (content: string) =>
-    new Promise<void>((resolve) => {
+  /**
+   * Sends a message as the user client, and waits until it is received by the cordless client.
+   * Throws an error if the message was not received after 1 second.
+   */
+  const sendMessageAndWaitForIt = (content: string): Promise<Message> =>
+    new Promise<Message>((resolve, reject) => {
+      const timeout = setTimeout(() => {
+        reject(new Error(`Message was not received by the client.`))
+      }, 1000)
+
       const resolveIfMatchesContent = (msg: Message) => {
         if (msg.content === content) {
           cordlessClient.off('messageCreate', resolveIfMatchesContent)
-          resolve()
+          clearTimeout(timeout)
+          resolve(msg)
         }
       }
 

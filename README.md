@@ -1,6 +1,6 @@
 [![cordless](assets/splash.png)](#)
 
-<h3 align="center">Opinionated framework for creating Discord bots with minimal boilerplate</h3>
+<h3 align="center">Simple framework for creating Discord bots with minimal boilerplate</h3>
 <p align="center">
   <a href="https://www.npmjs.com/package/cordless">
     <img alt="npm latest version" src="https://img.shields.io/npm/v/cordless/latest.svg">
@@ -56,6 +56,7 @@ cordless.init({ functions: [ping] }).login('your.bot.token')
   - [Automatic documentation](#automatic-documentation)
   - [Share business logic with Context](#share-business-logic-with-context)
   - [Using discord.js features](#using-discordjs-features)
+  - [Overriding the default Gateway Intents](#overriding-the-default-gateway-intents)
 - [Local development](#local-development)
 - [Special thanks](#special-thanks)
 - [License](#license)
@@ -167,7 +168,7 @@ const client = cordless.init({
 
 The `init` method returns a [discord.js Client](https://discord.js.org/#/docs/main/stable/class/Client).
 
-Read the [discord.js documentation](https://discord.js.org/#/docs/main/master/general/welcome) for more information about using the client.
+Read the [discord.js documentation](https://discord.js.org/#/docs) for more information about using the client.
 
 ```ts
 const client = init({
@@ -182,6 +183,35 @@ client.on('messageCreate', console.log)
 
 client.login('your.bot.token')
 ```
+
+### Overriding the default Gateway Intents
+
+By default, cordless initializes the discord.js client with the [Gateway Intents](https://discord.com/developers/docs/topics/gateway#gateway-intents) `[GUILDS, GUILD_MESSAGES]`. This should be sufficient for most bots that simply need to receive messages and do something in response.
+
+You can provide your own list of intents if you need additional functionality. For example, this bot can handle inviteCreate and inviteDelete events, in addition to handling messages as usual:
+
+```ts
+import { Intents } from 'discord.js'
+
+const client = init({
+  // ...
+  intents: [
+    Intents.FLAGS.GUILDS,
+    Intents.FLAGS.GUILD_MESSAGES,
+    Intents.FLAGS.GUILD_INVITES,
+  ],
+})
+
+// Without the GUILD_INVITES intent, these will not work
+client.on('inviteCreate', console.log)
+client.on('inviteDelete', console.log)
+
+client.login('your.bot.token')
+```
+
+For more information about Gateway Intents, see:
+https://discord.com/developers/docs/topics/gateway#gateway-intents
+https://discordjs.guide/popular-topics/intents.html
 
 ## Local development
 

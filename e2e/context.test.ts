@@ -1,4 +1,4 @@
-import { Client } from 'discord.js'
+import { Client, Message } from 'discord.js'
 import { v4 as uuidv4 } from 'uuid'
 import { BotFunction, Context } from '../src'
 import { setupClients } from './utils'
@@ -12,9 +12,9 @@ interface CustomContext {
 describe('context', () => {
   let cordlessClient: Client
   let userClient: Client
-  let sendMessageAndWaitForIt: (content: string) => Promise<void>
+  let sendMessageAndWaitForIt: (content: string) => Promise<Message>
 
-  const testPing = uuidv4()
+  const testPing = `[context] - ${uuidv4()}`
 
   const pingCallbackSpy = jest.fn()
   const ping: BotFunction<CustomContext> = {
