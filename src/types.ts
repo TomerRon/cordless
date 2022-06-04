@@ -1,4 +1,4 @@
-import Discord from 'discord.js'
+import Discord, { ClientOptions } from 'discord.js'
 
 /** Initialization options for your cordless bot */
 export type InitOptions<T extends CustomContext = {}> = {
@@ -6,6 +6,16 @@ export type InitOptions<T extends CustomContext = {}> = {
   functions: BotFunction<T>[]
   /** A custom context object which will extend the context passed to your functions' callbacks and conditions */
   context?: T
+  /**
+   * Override the default Gateway Intents of the discord.js client.
+   *
+   * By default, the discord.js client will initialize with the [GUILDS, GUILD_MESSAGES] intents.
+   * These default intents should be sufficient in most cases.
+   *
+   * @see https://discord.com/developers/docs/topics/gateway#gateway-intents
+   * @see https://discordjs.guide/popular-topics/intents.html
+   */
+  intents?: ClientOptions['intents']
   /**
    * Generate a help function for the bot, which will be triggered by the value.
    *

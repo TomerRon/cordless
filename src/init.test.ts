@@ -48,6 +48,19 @@ describe('init', () => {
     })
   })
 
+  it('should initialize the client with the provided intents', () => {
+    const intents = [
+      Intents.FLAGS.GUILD_BANS,
+      Intents.FLAGS.GUILD_EMOJIS_AND_STICKERS,
+    ]
+
+    setupTest({ intents })
+
+    expect(Client).toHaveBeenCalledWith({
+      intents,
+    })
+  })
+
   it('should subscribe to message events', () => {
     setupTest()
 
