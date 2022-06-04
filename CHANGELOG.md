@@ -1,3 +1,10 @@
+# [2.1.0](https://github.com/TomerRon/cordless/compare/v2.0.0...v2.1.0) (2022-06-04)
+
+
+### Features
+
+* **client:** add gateway intents ([bb79b53](https://github.com/TomerRon/cordless/commit/bb79b53f15bdb5339b1e6f279036adf425b6b1f0))
+
 # [2.0.0](https://github.com/TomerRon/cordless/compare/v1.3.1...v2.0.0) (2022-06-01)
 
 

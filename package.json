@@ -1,6 +1,6 @@
 {
   "name": "cordless",
-  "version": "2.0.0",
+  "version": "2.1.0",
   "description": "🤖 Create a Discord bot with 3 lines of code!",
   "engines": {
     "node": ">=16.15.0"
