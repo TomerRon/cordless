@@ -1,7 +1,7 @@
 import Discord, { ClientOptions, Intents } from 'discord.js'
 import getHelpFunction from './functions/help'
-import { Context, CustomContext, InitOptions } from './types'
-import handleMessage from './utils/handleMessage'
+import { BotFunction, Context, CustomContext, InitOptions } from './types'
+import handleEvent from './utils/handleEvent'
 
 const DEFAULT_INTENTS: ClientOptions['intents'] = [
   Intents.FLAGS.GUILD_MESSAGES,
@@ -12,28 +12,56 @@ const DEFAULT_INTENTS: ClientOptions['intents'] = [
  * Initializes a cordless bot with the given options.
  * Returns a discord.js client.
  */
-export const init = <T extends CustomContext = {}>(
-  options: InitOptions<T>,
+export const init = <C extends CustomContext = {}>(
+  options: InitOptions<C>,
 ): Discord.Client => {
-  const { functions, helpCommand, intents = DEFAULT_INTENTS } = options
+  const {
+    context = {} as C,
+    functions,
+    helpCommand,
+    intents = DEFAULT_INTENTS,
+  } = options
 
   if (functions.some((fn) => fn.name?.includes(' '))) {
     throw new Error('A function cannot have spaces in its name.')
   }
 
+  //
+  // Initialize Discord.js client
+  //
   const client = new Discord.Client({ intents })
 
+  //
+  // Resolve functions and context
+  //
   const resolvedFns = helpCommand
-    ? [getHelpFunction<T>(helpCommand), ...functions]
+    ? [getHelpFunction<C>(helpCommand), ...functions]
     : functions
 
-  const context: Context<T> = {
+  const resolvedContext: Context<C> = {
     client,
     functions: resolvedFns,
-    ...(options.context as T),
+    ...context,
   }
 
-  client.on('messageCreate', (msg) => handleMessage(msg, context))
+  //
+  // Subscribe functions to events
+  //
+  const eventFunctionsMap = resolvedFns.reduce<
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    Record<string, BotFunction<any, C>[]>
+  >((acc, curr) => {
+    const key = curr.event || 'messageCreate'
+
+    return {
+      ...acc,
+      [key]: [...(acc[key] || []), curr],
+    }
+  }, {})
+
+  Object.entries(eventFunctionsMap).forEach(([event, eventFns]) => {
+    client.on(event, (...args) => handleEvent(args, eventFns, resolvedContext))
+  })
 
   return client
 }

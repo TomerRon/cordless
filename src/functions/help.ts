@@ -1,8 +1,8 @@
 import { BotFunction, CustomContext } from '../types'
 
-const getHelpFunction = <T extends CustomContext>(
+const getHelpFunction = <C extends CustomContext>(
   command: string,
-): BotFunction<T> => ({
+): BotFunction<'messageCreate', C> => ({
   name: 'help',
   description: `Shows this help screen.\n\nUsage: ${command} or ${command} <function>`,
   condition: (msg) =>
