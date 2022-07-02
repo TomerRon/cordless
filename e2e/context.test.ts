@@ -17,7 +17,7 @@ describe('context', () => {
   const testPing = `[context] - ${uuidv4()}`
 
   const pingCallbackSpy = jest.fn()
-  const ping: BotFunction<CustomContext> = {
+  const ping: BotFunction<'messageCreate', CustomContext> = {
     condition: (msg) => msg.content === testPing,
     callback: pingCallbackSpy,
   }

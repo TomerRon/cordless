@@ -1,11 +1,11 @@
-import Discord, { ClientOptions } from 'discord.js'
+import Discord, { ClientEvents, ClientOptions } from 'discord.js'
 
 /** Initialization options for your cordless bot */
-export type InitOptions<T extends CustomContext = {}> = {
+export type InitOptions<C extends CustomContext = {}> = {
   /** The functions used by your bot */
-  functions: BotFunction<T>[]
+  functions: BotFunction<any, C>[] // eslint-disable-line @typescript-eslint/no-explicit-any
   /** A custom context object which will extend the context passed to your functions' callbacks and conditions */
-  context?: T
+  context?: C
   /**
    * Override the default Gateway Intents of the discord.js client.
    *
@@ -27,7 +27,10 @@ export type InitOptions<T extends CustomContext = {}> = {
   helpCommand?: string
 }
 
-export type BotFunction<T extends CustomContext = {}> = {
+export type BotFunction<
+  E extends keyof ClientEvents = 'messageCreate',
+  C extends CustomContext = {},
+> = {
   /**
    * The name of this function (no spaces allowed).
    * It will be displayed in the help function if there is a helpCommand.
@@ -38,19 +41,22 @@ export type BotFunction<T extends CustomContext = {}> = {
    * It will be displayed in the help function if there is a helpCommand.
    */
   description?: string
+  /**
+   * The event this function should subscribe to (default: "messageCreate").
+   */
+  event?: E
   /** Determines whether or not this function should run */
-  condition: (msg: Discord.Message, context: Context<T>) => boolean
+  condition: (...args: [...ClientEvents[E], Context<C>]) => boolean
   /** Called whenever this function should run */
   callback: (
-    msg: Discord.Message,
-    context: Context<T>,
+    ...args: [...ClientEvents[E], Context<C>]
   ) => void | Promise<Discord.Message | void>
 }
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export type CustomContext = Record<string, any>
 
-export type Context<T extends CustomContext = {}> = {
+export type Context<C extends CustomContext = {}> = {
   client: Discord.Client
-  functions: BotFunction<T>[]
-} & T
+  functions: BotFunction<any, C>[] // eslint-disable-line @typescript-eslint/no-explicit-any
+} & C

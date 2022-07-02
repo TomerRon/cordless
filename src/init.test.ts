@@ -2,7 +2,7 @@ import { Client, Intents, Message } from 'discord.js'
 import * as getHelpFunctionModule from './functions/help'
 import { init } from './init'
 import { BotFunction, InitOptions } from './types'
-import * as handleMessageModule from './utils/handleMessage'
+import * as handleEvent from './utils/handleEvent'
 
 const onSpy = jest.fn()
 const mockBaseClient = { on: onSpy } as unknown as Client
@@ -30,15 +30,21 @@ describe('init', () => {
 
   const mockOptions: InitOptions = { functions: [mockFunction] }
 
-  const handleMessageSpy = jest
-    .spyOn(handleMessageModule, 'default')
+  const handleEventSpy = jest
+    .spyOn(handleEvent, 'default')
     .mockResolvedValue(undefined)
 
   const setupTest = (options?: Partial<InitOptions>) => {
     init({ ...mockOptions, ...options })
-
-    return onSpy.mock.calls[0][1] as (msg: Message) => void
   }
+
+  it('should throw an error if a function has spaces in its name', () => {
+    const badFn: BotFunction = { ...mockFunction, name: 'bad name' }
+
+    expect(() => setupTest({ functions: [badFn] })).toThrow(
+      'A function cannot have spaces in its name.',
+    )
+  })
 
   it('should initialize the client with the default intents', () => {
     setupTest()
@@ -67,23 +73,84 @@ describe('init', () => {
     expect(onSpy).toHaveBeenCalledWith('messageCreate', expect.any(Function))
   })
 
-  it('should call handleMessage when a message was received', () => {
-    const onMessageHandler = setupTest()
+  it('should call handleEvent when an appropriate event was received', () => {
+    setupTest()
 
-    onMessageHandler(mockMsg)
+    const eventHandler = onSpy.mock.calls[0][1] as (msg: Message) => void
 
-    expect(handleMessageSpy).toHaveBeenCalledWith(mockMsg, {
+    eventHandler(mockMsg)
+
+    expect(handleEventSpy).toHaveBeenCalledWith([mockMsg], [mockFunction], {
       client: mockBaseClient,
       functions: mockOptions.functions,
     })
   })
 
-  it('should throw an error if a function has spaces in its name', () => {
-    const badFn: BotFunction = { ...mockFunction, name: 'bad name' }
+  it('should handle many functions and map each one to an event handler', () => {
+    // A function without an explicit event will map to a messageCreate handler
+    const fnA: BotFunction = {
+      name: 'Function1',
+      condition: jest.fn(),
+      callback: jest.fn(),
+    }
 
-    expect(() => setupTest({ functions: [badFn] })).toThrow(
-      'A function cannot have spaces in its name.',
-    )
+    const fnB: BotFunction<'channelCreate'> = {
+      event: 'channelCreate',
+      name: 'Function2',
+      condition: jest.fn(),
+      callback: jest.fn(),
+    }
+
+    const fnC: BotFunction<'messageCreate'> = {
+      event: 'messageCreate',
+      name: 'Function3',
+      condition: jest.fn(),
+      callback: jest.fn(),
+    }
+
+    const fnD: BotFunction<'messageDelete'> = {
+      event: 'messageDelete',
+      name: 'Function4',
+      condition: jest.fn(),
+      callback: jest.fn(),
+    }
+
+    const fnE: BotFunction<'channelCreate'> = {
+      event: 'channelCreate',
+      name: 'Function5',
+      condition: jest.fn(),
+      callback: jest.fn(),
+    }
+
+    const mockFunctions = [fnA, fnB, fnC, fnD, fnE]
+
+    setupTest({ functions: mockFunctions })
+
+    const expectedEvents = {
+      messageCreate: [fnA, fnC],
+      channelCreate: [fnB, fnE],
+      messageDelete: [fnD],
+    }
+
+    Object.entries(expectedEvents).forEach(([event, expectedFns], i) => {
+      expect(onSpy).toHaveBeenNthCalledWith(i + 1, event, expect.any(Function))
+
+      const eventHandler = onSpy.mock.calls[i][1] as (msg: Message) => void
+
+      eventHandler(mockMsg)
+
+      expect(handleEventSpy).toHaveBeenNthCalledWith(
+        i + 1,
+        [mockMsg],
+        expectedFns,
+        {
+          client: mockBaseClient,
+          functions: mockFunctions,
+        },
+      )
+    })
+
+    expect(handleEventSpy.mock.calls).toMatchSnapshot()
   })
 
   describe('helpCommand', () => {
@@ -99,11 +166,14 @@ describe('init', () => {
 
     it('should add a help function when helpCommand is passed', () => {
       const mockHelpCommand = 'foobar-help-command'
-      const onMessageHandler = setupTest({ helpCommand: mockHelpCommand })
 
-      onMessageHandler(mockMsg)
+      setupTest({ helpCommand: mockHelpCommand })
 
-      const context = handleMessageSpy.mock.calls[0][1]
+      const eventHandler = onSpy.mock.calls[0][1] as (msg: Message) => void
+
+      eventHandler(mockMsg)
+
+      const context = handleEventSpy.mock.calls[0][2]
 
       // The first function should be the one returned from getHelpFunction
       expect(context.functions[0]).toStrictEqual(mockHelpFunction)
@@ -111,11 +181,13 @@ describe('init', () => {
     })
 
     it('should not add a help function when helpCommand is not passed', () => {
-      const onMessageHandler = setupTest({ helpCommand: undefined })
+      setupTest({ helpCommand: undefined })
 
-      onMessageHandler(mockMsg)
+      const eventHandler = onSpy.mock.calls[0][1] as (msg: Message) => void
 
-      const context = handleMessageSpy.mock.calls[0][1]
+      eventHandler(mockMsg)
+
+      const context = handleEventSpy.mock.calls[0][2]
 
       expect(context.functions[0]).not.toStrictEqual(mockHelpFunction)
       expect(getHelpFunctionSpy).not.toHaveBeenCalled()

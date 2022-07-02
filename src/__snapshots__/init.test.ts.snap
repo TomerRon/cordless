@@ -1,0 +1,257 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`init should handle many functions and map each one to an event handler 1`] = `
+Array [
+  Array [
+    Array [
+      Object {
+        "content": "ping",
+      },
+    ],
+    Array [
+      Object {
+        "callback": [MockFunction],
+        "condition": [MockFunction],
+        "name": "Function1",
+      },
+      Object {
+        "callback": [MockFunction],
+        "condition": [MockFunction],
+        "event": "messageCreate",
+        "name": "Function3",
+      },
+    ],
+    Object {
+      "client": Object {
+        "on": [MockFunction] {
+          "calls": Array [
+            Array [
+              "messageCreate",
+              [Function],
+            ],
+            Array [
+              "channelCreate",
+              [Function],
+            ],
+            Array [
+              "messageDelete",
+              [Function],
+            ],
+          ],
+          "results": Array [
+            Object {
+              "type": "return",
+              "value": undefined,
+            },
+            Object {
+              "type": "return",
+              "value": undefined,
+            },
+            Object {
+              "type": "return",
+              "value": undefined,
+            },
+          ],
+        },
+      },
+      "functions": Array [
+        Object {
+          "callback": [MockFunction],
+          "condition": [MockFunction],
+          "name": "Function1",
+        },
+        Object {
+          "callback": [MockFunction],
+          "condition": [MockFunction],
+          "event": "channelCreate",
+          "name": "Function2",
+        },
+        Object {
+          "callback": [MockFunction],
+          "condition": [MockFunction],
+          "event": "messageCreate",
+          "name": "Function3",
+        },
+        Object {
+          "callback": [MockFunction],
+          "condition": [MockFunction],
+          "event": "messageDelete",
+          "name": "Function4",
+        },
+        Object {
+          "callback": [MockFunction],
+          "condition": [MockFunction],
+          "event": "channelCreate",
+          "name": "Function5",
+        },
+      ],
+    },
+  ],
+  Array [
+    Array [
+      Object {
+        "content": "ping",
+      },
+    ],
+    Array [
+      Object {
+        "callback": [MockFunction],
+        "condition": [MockFunction],
+        "event": "channelCreate",
+        "name": "Function2",
+      },
+      Object {
+        "callback": [MockFunction],
+        "condition": [MockFunction],
+        "event": "channelCreate",
+        "name": "Function5",
+      },
+    ],
+    Object {
+      "client": Object {
+        "on": [MockFunction] {
+          "calls": Array [
+            Array [
+              "messageCreate",
+              [Function],
+            ],
+            Array [
+              "channelCreate",
+              [Function],
+            ],
+            Array [
+              "messageDelete",
+              [Function],
+            ],
+          ],
+          "results": Array [
+            Object {
+              "type": "return",
+              "value": undefined,
+            },
+            Object {
+              "type": "return",
+              "value": undefined,
+            },
+            Object {
+              "type": "return",
+              "value": undefined,
+            },
+          ],
+        },
+      },
+      "functions": Array [
+        Object {
+          "callback": [MockFunction],
+          "condition": [MockFunction],
+          "name": "Function1",
+        },
+        Object {
+          "callback": [MockFunction],
+          "condition": [MockFunction],
+          "event": "channelCreate",
+          "name": "Function2",
+        },
+        Object {
+          "callback": [MockFunction],
+          "condition": [MockFunction],
+          "event": "messageCreate",
+          "name": "Function3",
+        },
+        Object {
+          "callback": [MockFunction],
+          "condition": [MockFunction],
+          "event": "messageDelete",
+          "name": "Function4",
+        },
+        Object {
+          "callback": [MockFunction],
+          "condition": [MockFunction],
+          "event": "channelCreate",
+          "name": "Function5",
+        },
+      ],
+    },
+  ],
+  Array [
+    Array [
+      Object {
+        "content": "ping",
+      },
+    ],
+    Array [
+      Object {
+        "callback": [MockFunction],
+        "condition": [MockFunction],
+        "event": "messageDelete",
+        "name": "Function4",
+      },
+    ],
+    Object {
+      "client": Object {
+        "on": [MockFunction] {
+          "calls": Array [
+            Array [
+              "messageCreate",
+              [Function],
+            ],
+            Array [
+              "channelCreate",
+              [Function],
+            ],
+            Array [
+              "messageDelete",
+              [Function],
+            ],
+          ],
+          "results": Array [
+            Object {
+              "type": "return",
+              "value": undefined,
+            },
+            Object {
+              "type": "return",
+              "value": undefined,
+            },
+            Object {
+              "type": "return",
+              "value": undefined,
+            },
+          ],
+        },
+      },
+      "functions": Array [
+        Object {
+          "callback": [MockFunction],
+          "condition": [MockFunction],
+          "name": "Function1",
+        },
+        Object {
+          "callback": [MockFunction],
+          "condition": [MockFunction],
+          "event": "channelCreate",
+          "name": "Function2",
+        },
+        Object {
+          "callback": [MockFunction],
+          "condition": [MockFunction],
+          "event": "messageCreate",
+          "name": "Function3",
+        },
+        Object {
+          "callback": [MockFunction],
+          "condition": [MockFunction],
+          "event": "messageDelete",
+          "name": "Function4",
+        },
+        Object {
+          "callback": [MockFunction],
+          "condition": [MockFunction],
+          "event": "channelCreate",
+          "name": "Function5",
+        },
+      ],
+    },
+  ],
+]
+`;
