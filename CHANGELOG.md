@@ -1,3 +1,10 @@
+# [2.2.0](https://github.com/TomerRon/cordless/compare/v2.1.0...v2.2.0) (2022-07-02)
+
+
+### Features
+
+* **functions:** allow functions to subscribe to any Discord event, not just messageCreate ([cd2887b](https://github.com/TomerRon/cordless/commit/cd2887b1cd192af137e3d6edb25baa3e7a186586))
+
 # [2.1.0](https://github.com/TomerRon/cordless/compare/v2.0.0...v2.1.0) (2022-06-04)
 
 
