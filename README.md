@@ -51,41 +51,19 @@ const ping = {
 cordless.init({ functions: [ping] }).login('your.bot.token')
 ```
 
-## Table of Contents
-
-- [Advanced Usage](#advanced-usage)
-  - [Subscribing to other Discord events](#subscribing-to-other-discord-events)
-  - [Automatic documentation](#automatic-documentation)
-  - [Share business logic with Context](#share-business-logic-with-context)
-  - [Using discord.js features](#using-discordjs-features)
-  - [Overriding the default Gateway Intents](#overriding-the-default-gateway-intents)
-- [Local development](#local-development)
-- [Special thanks](#special-thanks)
-- [License](#license)
-
 ## Advanced Usage
 
-### Subscribing to other Discord events
+### Subscribe to Gateway Events
 
-By default, bot functions respond to `messageCreate` events, like in the ping example above.
+By default, cordless functions subscribe to `messageCreate` events, like in the ping example above. You can also create functions that subscribe to any other event (e.g., user joined, channel created, etc).
 
-You can create functions that subscribe to other events by passing an `event` key.
+See: [docs/gateway-events.md](docs/gateway-events.md)
 
-For example, this function reacts to a new channel being created:
+### Override the default Gateway Intents
 
-```ts
-const channelGreeter: BotFunction<'channelCreate'> = {
-  event: 'channelCreate',
-  condition: () => true,
-  callback: (channel) => {
-    if (channel.isText()) {
-      channel.send(`Hello world! This is ${channel.name}`)
-    }
-  },
-}
-```
+By default, cordless initializes the discord.js client with the [Gateway Intents](https://discord.com/developers/docs/topics/gateway#gateway-intents) `[GUILDS, GUILD_MESSAGES]`. This should be sufficient for bots that simply need to receive messages and do something in response. You can provide your own list of intents if you need additional functionality.
 
-Note: certain events, like `guildMemberAdd`, may require additional [Gateway Intents](https://discord.com/developers/docs/topics/gateway#gateway-intents) to work. See: [Overriding the default Gateway Intents](#overriding-the-default-gateway-intents)
+See: [docs/gateway-intents.md](docs/gateway-intents.md)
 
 ### Automatic documentation
 
@@ -207,43 +185,6 @@ client.on('messageCreate', console.log)
 
 client.login('your.bot.token')
 ```
-
-### Overriding the default Gateway Intents
-
-By default, cordless initializes the discord.js client with the [Gateway Intents](https://discord.com/developers/docs/topics/gateway#gateway-intents) `[GUILDS, GUILD_MESSAGES]`. This should be sufficient for most bots that simply need to receive messages and do something in response. You can provide your own list of intents if you need additional functionality.
-
-For example, let's say we have a function that should log something when a guild invite is created, in addition to handling messages as usual. We will have to pass the `GUILD_INVITES` intent:
-
-```ts
-import { Intents } from 'discord.js'
-
-const inviteLogger: BotFunction<'inviteCreate'> = {
-  event: 'inviteCreate',
-  condition: () => true,
-  callback: (invite) => {
-    console.log(
-      `Invite created by ${invite.inviter?.username}. Invite url: ${invite.url}`,
-    )
-  },
-}
-
-init({
-  functions: [
-    inviteLogger,
-    // ...
-  ],
-  intents: [
-    Intents.FLAGS.GUILDS,
-    Intents.FLAGS.GUILD_MESSAGES,
-    Intents.FLAGS.GUILD_INVITES,
-  ],
-}).login('your.bot.token')
-```
-
-For more information about Gateway Intents, see:
-
-- https://discord.com/developers/docs/topics/gateway#gateway-intents
-- https://discordjs.guide/popular-topics/intents.html
 
 ## Local development
 
