@@ -47,13 +47,13 @@ export const setupClients = async <T extends CustomContext>(
 
   /**
    * Sends a message as the user client, and waits until it is received by the cordless client.
-   * Throws an error if the message was not received after 1 second.
+   * Throws an error if the message was not received after 2 seconds.
    */
   const sendMessageAndWaitForIt = (content: string): Promise<Message> =>
     new Promise<Message>((resolve, reject) => {
       const timeout = setTimeout(() => {
         reject(new Error(`Message was not received by the client.`))
-      }, 1000)
+      }, 2000)
 
       const resolveIfMatchesContent = (msg: Message) => {
         if (msg.content === content) {
