@@ -20,13 +20,15 @@ yarn add cordless
 npm i cordless
 ```
 
-## Basic Usage
+## Quick Start
 
-Follow [this guide](https://discordjs.guide/preparations/setting-up-a-bot-application.html#creating-your-bot) to create a Discord bot in the Discord developer portal.
+⏲️ Estimated time: **5 minutes**
 
-TypeScript:
+1. Follow [docs/setup.md](docs/setup.md) to create a new bot in the Discord developer portal.
+2. Write your first bot code:
 
 ```ts
+// TypeScript
 import { init, BotFunction } from 'cordless'
 
 const ping: BotFunction = {
@@ -37,9 +39,8 @@ const ping: BotFunction = {
 init({ functions: [ping] }).login('your.bot.token')
 ```
 
-JavaScript:
-
 ```js
+// JavaScript
 const cordless = require('cordless')
 
 const ping = {
