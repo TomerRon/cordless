@@ -50,6 +50,30 @@ const channelGreeter = {
 }
 ```
 
+This function logs when the bot is ready:
+
+```ts
+// TypeScript
+const ready: BotFunction<'ready'> = {
+  event: 'ready',
+  condition: () => true,
+  callback: (client) => {
+    console.log(`Logged in as ${client.user.tag}`)
+  },
+}
+```
+
+```js
+// JavaScript
+const ready = {
+  event: 'ready',
+  condition: () => true,
+  callback: (client) => {
+    console.log(`Logged in as ${client.user.tag}`)
+  },
+}
+```
+
 #### Events and Intents
 
 By default, cordless initializes the discord.js client with the [Gateway Intents](https://discord.com/developers/docs/topics/gateway#gateway-intents) `[GUILDS, GUILD_MESSAGES]`. When you start subscribing to other events, you may need to specify additional intents in your bot.

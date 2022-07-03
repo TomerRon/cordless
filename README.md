@@ -25,7 +25,7 @@ npm i cordless
 ⏲️ Estimated time: **5 minutes**
 
 1. Follow [docs/setup.md](docs/setup.md) to create a new bot in the Discord developer portal.
-2. Write your first bot code:
+2. Write your first bot function and initialize your bot:
 
 ```ts
 // TypeScript
@@ -59,6 +59,12 @@ By default, cordless functions subscribe to `messageCreate` events, like in the 
 
 See: [docs/gateway-events.md](docs/gateway-events.md)
 
+### Context and State Management
+
+You can share business logic and state between your different functions using context. By default, the context contains the `discord.js` client and the current list of functions. You can also extend the context with your own custom context to share additional business logic and even implement state management.
+
+See: [docs/context.md](docs/context.md)
+
 ### Override the default Gateway Intents
 
 By default, cordless initializes the discord.js client with the [Gateway Intents](https://discord.com/developers/docs/topics/gateway#gateway-intents) `[GUILDS, GUILD_MESSAGES]`. This should be sufficient for bots that simply need to receive messages and do something in response. You can provide your own list of intents if you need additional functionality.
@@ -91,80 +97,6 @@ client.login('your.bot.token')
 Now your bot can respond to `!help`:
 
 ![Automatic documentation](https://i.imgur.com/kqBnZ5M.png)
-
-### Share business logic with Context
-
-You can share business logic and state between your different functions using context. By default, the context contains the `discord.js` client and the current list of functions.
-
-For example, here is a function that uses context to display the number of functions available:
-
-```ts
-const numberOfFunctions: BotFunction = {
-  condition: (msg) => msg.content === 'How many functions?',
-  callback: (msg, context) => {
-    msg.reply(`There are ${context.functions.length} functions.`)
-  },
-}
-```
-
-You can also extend the context with your own custom context.
-
-Here's a basic implementation of state management - the `count` will be shared between function calls and its value will be persisted:
-
-TypeScript:
-
-```ts
-const state = {
-  count: 0,
-  increment: () => {
-    state.count++
-  },
-}
-
-type MyCustomContext = {
-  state: {
-    count: number
-    increment: () => void
-  }
-}
-
-const counter: BotFunction<'messageCreate', MyCustomContext> = {
-  condition: (msg) => msg.content === 'count',
-  callback: (msg, context) => {
-    context.state.increment()
-    msg.reply(`The count is ${context.state.count}`)
-  },
-}
-
-const client = init<MyCustomContext>({
-  functions: [counter],
-  context: { state },
-})
-```
-
-JavaScript:
-
-```js
-const state = {
-  count: 0,
-  increment: () => {
-    state.count++
-  },
-}
-
-const counter = {
-  condition: (msg) => msg.content === 'count',
-  callback: (msg, context) => {
-    context.state.increment()
-    msg.reply(`The count is ${context.state.count}`)
-  },
-}
-
-const client = cordless.init({
-  functions: [counter],
-  context: { state },
-})
-```
 
 ### Using discord.js features
 
