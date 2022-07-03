@@ -53,56 +53,33 @@ cordless.init({ functions: [ping] }).login('your.bot.token')
 
 ## Advanced Usage
 
-### Subscribe to Gateway Events
+#### Subscribe to Gateway Events
 
 By default, cordless functions subscribe to `messageCreate` events, like in the ping example above. You can also create functions that subscribe to any other event (e.g., user joined, channel created, etc).
 
 See: [docs/gateway-events.md](docs/gateway-events.md)
 
-### Context and State Management
+#### Context and State Management
 
 You can share business logic and state between your different functions using context. By default, the context contains the `discord.js` client and the current list of functions. You can also extend the context with your own custom context to share additional business logic and even implement state management.
 
 See: [docs/context.md](docs/context.md)
 
-### Override the default Gateway Intents
+#### Override the default Gateway Intents
 
 By default, cordless initializes the discord.js client with the [Gateway Intents](https://discord.com/developers/docs/topics/gateway#gateway-intents) `[GUILDS, GUILD_MESSAGES]`. This should be sufficient for bots that simply need to receive messages and do something in response. You can provide your own list of intents if you need additional functionality.
 
 See: [docs/gateway-intents.md](docs/gateway-intents.md)
 
-### Automatic documentation
+#### Help command / Automatic documentation
 
-Auto-generate a help function for your bot by passing a `helpCommand`.
-Make sure you give your functions a name and description if you want to use them with the generated help function.
+You can specify a help command to generate a help function for your bot. This function will describe the different functions of your bot.
 
-For example, let's generate a `!help` command:
+See: [docs/help-command.md](docs/help-command.md)
 
-```ts
-const ping: BotFunction = {
-  name: 'ping',
-  description: 'Responds to your ping with a pong!\n\nUsage: ping',
-  condition: (msg) => msg.content === 'ping',
-  callback: (msg) => msg.reply('pong'),
-}
-
-const client = init({
-  functions: [ping],
-  helpCommand: '!help',
-})
-
-client.login('your.bot.token')
-```
-
-Now your bot can respond to `!help`:
-
-![Automatic documentation](https://i.imgur.com/kqBnZ5M.png)
-
-### Using discord.js features
+#### Using discord.js features
 
 The `init` method returns a [discord.js Client](https://discord.js.org/#/docs/main/stable/class/Client).
-
-Read the [discord.js documentation](https://discord.js.org/#/docs) for more information about using the client.
 
 ```ts
 const client = init({
@@ -113,10 +90,10 @@ client.on('ready', () => {
   console.log(`Logged in as ${client.user?.tag}!`)
 })
 
-client.on('messageCreate', console.log)
-
 client.login('your.bot.token')
 ```
+
+See [discord.js documentation](https://discord.js.org/#/docs) for more information about using the client.
 
 ## Local development
 
