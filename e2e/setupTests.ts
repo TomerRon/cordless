@@ -7,4 +7,4 @@ beforeEach(async () => {
   await new Promise<void>((resolve) => setTimeout(resolve, 2000))
 })
 
-jest.setTimeout(10000)
+jest.setTimeout(30000)
