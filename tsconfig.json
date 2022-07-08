@@ -15,8 +15,10 @@
     "node_modules",
     "dist",
     "e2e",
+    "sample",
     "jest.config.ts",
     "jest.e2e.config.ts",
+    "jest.sample.config.ts",
     "**/*.test.ts"
   ]
 }
