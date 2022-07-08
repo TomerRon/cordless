@@ -1,0 +1,26 @@
+{
+  "name": "02-basic-javascript",
+  "version": "1.0.0",
+  "description": "Sample bot",
+  "engines": {
+    "node": ">=16.15.0"
+  },
+  "main": "index.js",
+  "license": "ISC",
+  "type": "module",
+  "scripts": {
+    "start": "node index.js",
+    "test": "NODE_OPTIONS=--experimental-vm-modules jest"
+  },
+  "dependencies": {
+    "cordless": "^2.2.0",
+    "dotenv": "^16.0.1"
+  },
+  "devDependencies": {
+    "jest": "^28.1.2"
+  },
+  "jest": {
+    "testEnvironment": "jest-environment-node",
+    "transform": {}
+  }
+}
