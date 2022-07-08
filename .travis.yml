@@ -15,5 +15,7 @@ jobs:
 script:
   - yarn lint
   - yarn test
+  - for dir in sample/*/; do yarn --cwd $dir; done
+  - yarn test:sample
   - yarn e2e
   - yarn build
