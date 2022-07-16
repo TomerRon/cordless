@@ -5,7 +5,7 @@ import { CustomContext, init, InitOptions } from '../src'
 dotenv.config()
 
 export const setupClients = async <T extends CustomContext>(
-  options: InitOptions<T>,
+  options: Omit<InitOptions<T>, 'token'>,
 ): Promise<{
   cordlessClient: Client
   userClient: Client
@@ -13,12 +13,13 @@ export const setupClients = async <T extends CustomContext>(
   sendMessageAndWaitForIt: (content: string) => Promise<Message>
 }> => {
   // Login as the cordless client
-  const cordlessClient = init(options)
+  const cordlessClient = init({
+    ...options,
+    token: process.env.E2E_CLIENT_TOKEN || '',
+  })
 
   await new Promise<void>((resolve) => {
     cordlessClient.on('ready', () => resolve())
-
-    cordlessClient.login(process.env.E2E_CLIENT_TOKEN)
   })
 
   // Login as the test user
