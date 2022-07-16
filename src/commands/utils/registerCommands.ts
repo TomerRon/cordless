@@ -2,20 +2,20 @@ import { SlashCommandBuilder } from '@discordjs/builders'
 import { REST } from '@discordjs/rest'
 import { Routes } from 'discord-api-types/v9'
 
-type StartRestClientArgs = {
+type RegisterCommandsArgs = {
   applicationId: string
   commands: SlashCommandBuilder[]
   token: string
 }
 
 /**
- * Starts a REST client and registers the application commands.
+ * Registers the given application commands with Discord API.
  */
-const startRestClient = ({
+const registerCommands = ({
   applicationId,
   commands,
   token,
-}: StartRestClientArgs) => {
+}: RegisterCommandsArgs) => {
   const rest = new REST({ version: '10' }).setToken(token)
 
   rest
@@ -23,4 +23,4 @@ const startRestClient = ({
     .catch(console.error)
 }
 
-export default startRestClient
+export default registerCommands

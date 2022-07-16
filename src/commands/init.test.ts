@@ -4,7 +4,7 @@ import { BotCommand, Context } from '../types'
 import initCommands, { InitCommandsArgs } from './init'
 import * as buildModule from './utils/build'
 import * as handleCommandModule from './utils/handleCommand'
-import * as startRestClientModule from './utils/startRestClient'
+import * as registerCommandsModule from './utils/registerCommands'
 
 describe('initCommands', () => {
   beforeEach(jest.clearAllMocks)
@@ -31,8 +31,8 @@ describe('initCommands', () => {
     .spyOn(buildModule, 'default')
     .mockReturnValue(mockResolvedCommands)
 
-  const startRestClientSpy = jest
-    .spyOn(startRestClientModule, 'default')
+  const registerCommandsSpy = jest
+    .spyOn(registerCommandsModule, 'default')
     .mockReturnValue(undefined)
 
   describe('when the commands are successfully initialized', () => {
@@ -40,9 +40,9 @@ describe('initCommands', () => {
       initCommands(mockArgs)
     })
 
-    it('starts a REST client and subscribes to interactionCreate', () => {
+    it('registers the commands and subscribes to interactionCreate', () => {
       expect(buildSpy).toHaveBeenCalledWith(mockCommands)
-      expect(startRestClientSpy).toHaveBeenCalledWith({
+      expect(registerCommandsSpy).toHaveBeenCalledWith({
         applicationId: mockApplicationId,
         commands: mockResolvedCommands,
         token: mockToken,
@@ -112,7 +112,7 @@ describe('initCommands', () => {
       initCommands({ ...mockArgs, commands: [] })
 
       expect(buildSpy).toHaveBeenCalledWith([])
-      expect(startRestClientSpy).not.toHaveBeenCalled()
+      expect(registerCommandsSpy).not.toHaveBeenCalled()
       expect(mockClient.on).not.toHaveBeenCalled()
     })
 
@@ -120,7 +120,7 @@ describe('initCommands', () => {
       initCommands({ ...mockArgs, commands: [], applicationId: undefined })
 
       expect(buildSpy).toHaveBeenCalledWith([])
-      expect(startRestClientSpy).not.toHaveBeenCalled()
+      expect(registerCommandsSpy).not.toHaveBeenCalled()
       expect(mockClient.on).not.toHaveBeenCalled()
     })
   })
@@ -148,7 +148,7 @@ describe('initCommands', () => {
       expect(exitSpy).toHaveBeenCalledWith(1)
 
       expect(buildSpy).toHaveBeenCalledWith(mockCommands)
-      expect(startRestClientSpy).not.toHaveBeenCalled()
+      expect(registerCommandsSpy).not.toHaveBeenCalled()
       expect(mockClient.on).not.toHaveBeenCalled()
     })
   })

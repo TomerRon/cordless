@@ -1,7 +1,7 @@
 import { SlashCommandBuilder } from '@discordjs/builders'
 import { REST } from '@discordjs/rest'
 import { Routes } from 'discord-api-types/v9'
-import startRestClient from './startRestClient'
+import registerCommands from './registerCommands'
 
 const mockRest = {
   setToken: jest.fn().mockReturnThis(),
@@ -12,13 +12,13 @@ jest.mock('@discordjs/rest', () => ({
   REST: jest.fn().mockImplementation(() => mockRest),
 }))
 
-describe('startRestClient', () => {
+describe('registerCommands', () => {
   const mockCommands = ['botCommand' as unknown as SlashCommandBuilder]
   const mockToken = 'mock-token'
   const mockApplicationId = 'mock-application-id'
 
-  it('starts a REST client and registers the commands', () => {
-    startRestClient({
+  it('registers the commands', () => {
+    registerCommands({
       applicationId: mockApplicationId,
       commands: mockCommands,
       token: mockToken,

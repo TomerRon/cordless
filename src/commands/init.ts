@@ -2,7 +2,7 @@ import { Client } from 'discord.js'
 import { BotCommand, Context, CustomContext } from '../types'
 import build from './utils/build'
 import handleCommand from './utils/handleCommand'
-import startRestClient from './utils/startRestClient'
+import registerCommands from './utils/registerCommands'
 
 export type InitCommandsArgs<C extends CustomContext> = {
   applicationId?: string
@@ -31,7 +31,7 @@ const initCommands = <C extends CustomContext>({
     return process.exit(1)
   }
 
-  startRestClient({
+  registerCommands({
     applicationId,
     commands: resolvedCommands,
     token,
