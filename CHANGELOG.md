@@ -1,3 +1,16 @@
+# [3.0.0-beta.1](https://github.com/TomerRon/cordless/compare/v2.2.0...v3.0.0-beta.1) (2022-07-16)
+
+
+### Features
+
+* **commands:** Add Application Commands integration ([cb3a55f](https://github.com/TomerRon/cordless/commit/cb3a55fdc27bf4068172eb01190c6ed4884d72b2))
+
+
+### BREAKING CHANGES
+
+* **commands:** With the introduction of Application Commands, the bot token must now be passed into the initialization method (even if you are not using commands).
+Also, the client now logs in automatically, so you should not call `.login(token)` anymore.
+
 # [2.2.0](https://github.com/TomerRon/cordless/compare/v2.1.0...v2.2.0) (2022-07-02)
 
 
