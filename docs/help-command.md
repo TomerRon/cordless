@@ -6,7 +6,7 @@ Enable the help function for your bot by passing a `helpCommand`:
 
 ```ts
 init({
-  functions: [...],
+  // ...
   helpCommand: '!help',
 })
 ```
@@ -37,7 +37,8 @@ const ping: BotFunction = {
 init({
   functions: [ping],
   helpCommand: '!help',
-}).login('your.bot.token')
+  token: 'your.bot.token',
+})
 ```
 
 Now your bot can respond to `!help`:

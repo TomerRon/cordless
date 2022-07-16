@@ -1,10 +1,29 @@
-import Discord, { ClientEvents, ClientOptions } from 'discord.js'
+import Discord, {
+  ClientEvents,
+  ClientOptions,
+  CommandInteraction,
+} from 'discord.js'
 
 /** Initialization options for your cordless bot */
 export type InitOptions<C extends CustomContext = {}> = {
+  /** The commands used by your bot. */
+  commands?: BotCommand<C>[]
   /** The functions used by your bot */
   functions: BotFunction<any, C>[] // eslint-disable-line @typescript-eslint/no-explicit-any
-  /** A custom context object which will extend the context passed to your functions' callbacks and conditions */
+  /**
+   * Your bot token.
+   *
+   * @see https://discordjs.guide/preparations/setting-up-a-bot-application.html#your-bot-s-token
+   */
+  token: string
+  /**
+   * Your application ID.
+   * Required to register commands.
+   *
+   * @see https://discordjs.guide/creating-your-bot/creating-commands.html#registering-commands
+   */
+  applicationId?: string
+  /** A custom context object which will extend the context passed to your commands and functions */
   context?: C
   /**
    * Override the default Gateway Intents of the discord.js client.
@@ -25,6 +44,17 @@ export type InitOptions<C extends CustomContext = {}> = {
    * - !help <function-name> (shows a description and usage instructions for the given function)
    */
   helpCommand?: string
+}
+
+export type BotCommand<C extends CustomContext = {}> = {
+  name: string
+  description: string
+  handler: (args: BotCommandHandlerArgs<C>) => void | Promise<void>
+}
+
+export type BotCommandHandlerArgs<C extends CustomContext = {}> = {
+  interaction: CommandInteraction
+  context: Context<C>
 }
 
 export type BotFunction<

@@ -1,4 +1,5 @@
 import Discord, { ClientOptions, Intents } from 'discord.js'
+import initCommands from './commands/init'
 import getHelpFunction from './functions/help'
 import { BotFunction, Context, CustomContext, InitOptions } from './types'
 import handleEvent from './utils/handleEvent'
@@ -16,10 +17,13 @@ export const init = <C extends CustomContext = {}>(
   options: InitOptions<C>,
 ): Discord.Client => {
   const {
+    applicationId,
+    commands = [],
     context = {} as C,
     functions,
     helpCommand,
     intents = DEFAULT_INTENTS,
+    token,
   } = options
 
   if (functions.some((fn) => fn.name?.includes(' '))) {
@@ -62,6 +66,16 @@ export const init = <C extends CustomContext = {}>(
   Object.entries(eventFunctionsMap).forEach(([event, eventFns]) => {
     client.on(event, (...args) => handleEvent(args, eventFns, resolvedContext))
   })
+
+  initCommands<C>({
+    applicationId,
+    client,
+    commands,
+    context: resolvedContext,
+    token,
+  })
+
+  client.login(token)
 
   return client
 }

@@ -68,6 +68,7 @@ const getFoo: BotFunction<'messageCreate', MyCustomContext> = {
 init<MyCustomContext>({
   context: customContext,
   functions: [getFoo],
+  token: 'token',
 })
 ```
 
@@ -89,6 +90,7 @@ const getFoo = {
 cordless.init({
   context: customContext,
   functions: [getFoo],
+  token: 'token',
 })
 ```
 
@@ -130,5 +132,6 @@ const increment: BotFunction<'messageCreate', CounterState> = {
 init<CounterState>({
   context: state,
   functions: [getTheCount, increment],
+  token: 'token',
 })
 ```
