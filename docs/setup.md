@@ -15,10 +15,13 @@ Setting up a Discord bot can be broken down to 3 steps:
 
 #### Step 2: Generate a bot token
 
-After creating your bot, click on "Reset Token" and confirm. You will then see the new token that was generated. Copy this token to your code.
+After creating your bot, click on "Reset Token" and confirm. You will then see the new token that was generated. Copy this token to your code (or hold onto it for now, if you didn't write any code yet).
 
 ```ts
-init({ ... }).login('your.bot.token');
+init({
+  // ...
+  token: 'your.bot.token',
+})
 ```
 
 ⚠️ **Important!** Do not share this token with anyone. It's best to store it in your environment variables and load it with [dotenv](https://github.com/motdotla/dotenv) or another env loader.
@@ -26,7 +29,10 @@ init({ ... }).login('your.bot.token');
 ```ts
 dotenv.config()
 
-init({ ... }).login(process.env.BOT_TOKEN);
+init({
+  // ...
+  token: process.env.BOT_TOKEN || '',
+})
 ```
 
 #### Step 3: Add the bot to a server

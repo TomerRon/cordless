@@ -36,7 +36,7 @@ const ping: BotFunction = {
   callback: (msg) => msg.reply('pong'),
 }
 
-init({ functions: [ping] }).login('your.bot.token')
+init({ functions: [ping], token: 'your.bot.token' })
 ```
 
 ```js
@@ -48,7 +48,7 @@ const ping = {
   callback: (msg) => msg.reply('pong'),
 }
 
-cordless.init({ functions: [ping] }).login('your.bot.token')
+cordless.init({ functions: [ping], token: 'your.bot.token' })
 ```
 
 You can also check out the [code samples](sample) for ready-to-go solutions. See: [sample/01-basic-typescript](sample/01-basic-typescript) or [sample/02-basic-javascript](sample/02-basic-javascript)
@@ -91,8 +91,6 @@ const client = init({
 client.on('ready', () => {
   console.log(`Logged in as ${client.user?.tag}!`)
 })
-
-client.login('your.bot.token')
 ```
 
 See [discord.js documentation](https://discord.js.org/#/docs) for more information about using the client.

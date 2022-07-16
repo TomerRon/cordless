@@ -33,7 +33,8 @@ init({
     Intents.FLAGS.GUILD_MESSAGES,
     Intents.FLAGS.GUILD_INVITES,
   ],
-}).login('your.bot.token')
+  token: 'your.bot.token',
+})
 ```
 
 #### Gateway Intents reference
