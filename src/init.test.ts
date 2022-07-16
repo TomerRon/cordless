@@ -1,38 +1,60 @@
 import { Client, Intents, Message } from 'discord.js'
+import * as initCommandsModule from './commands/init'
 import * as getHelpFunctionModule from './functions/help'
 import { init } from './init'
-import { BotFunction, InitOptions } from './types'
+import { BotCommand, BotFunction, InitOptions } from './types'
 import * as handleEvent from './utils/handleEvent'
 
 const onSpy = jest.fn()
-const mockBaseClient = { on: onSpy } as unknown as Client
+const loginSpy = jest.fn()
+const mockClient = { on: onSpy, login: loginSpy } as unknown as Client
 
 jest.mock('discord.js', () => {
   const originalModule = jest.requireActual('discord.js')
 
   return {
     ...originalModule,
-    Client: jest.fn().mockImplementation(() => mockBaseClient),
+    Client: jest.fn().mockImplementation(() => mockClient),
   }
 })
 
 describe('init', () => {
   beforeEach(jest.clearAllMocks)
 
+  const mockApplicationId = 'mock-application-id'
+  const mockToken = 'mock-token'
+
   const mockMsg = {
     content: 'ping',
   } as Message
+
+  const mockCommands: BotCommand[] = [
+    {
+      name: 'ping',
+      description: 'ping-desc',
+      handler: jest.fn(),
+    },
+  ]
 
   const mockFunction: BotFunction = {
     condition: (msg) => msg.content === 'ping',
     callback: jest.fn(),
   }
 
-  const mockOptions: InitOptions = { functions: [mockFunction] }
+  const mockOptions: InitOptions = {
+    applicationId: mockApplicationId,
+    commands: mockCommands,
+    functions: [mockFunction],
+    token: mockToken,
+  }
 
   const handleEventSpy = jest
     .spyOn(handleEvent, 'default')
     .mockResolvedValue(undefined)
+
+  const initCommandsSpy = jest
+    .spyOn(initCommandsModule, 'default')
+    .mockReturnValue(undefined)
 
   const setupTest = (options?: Partial<InitOptions>) => {
     init({ ...mockOptions, ...options })
@@ -44,6 +66,8 @@ describe('init', () => {
     expect(() => setupTest({ functions: [badFn] })).toThrow(
       'A function cannot have spaces in its name.',
     )
+    expect(loginSpy).not.toHaveBeenCalled()
+    expect(initCommandsSpy).not.toHaveBeenCalled()
   })
 
   it('should initialize the client with the default intents', () => {
@@ -73,6 +97,42 @@ describe('init', () => {
     expect(onSpy).toHaveBeenCalledWith('messageCreate', expect.any(Function))
   })
 
+  it('should call initCommands with the given commands', () => {
+    setupTest()
+
+    expect(initCommandsSpy).toHaveBeenCalledWith({
+      applicationId: mockApplicationId,
+      client: mockClient,
+      commands: mockCommands,
+      context: {
+        client: mockClient,
+        functions: mockOptions.functions,
+      },
+      token: mockToken,
+    })
+  })
+
+  it('should call initCommands with an empty list of commands by default', () => {
+    setupTest({ commands: undefined })
+
+    expect(initCommandsSpy).toHaveBeenCalledWith({
+      applicationId: mockApplicationId,
+      client: mockClient,
+      commands: [],
+      context: {
+        client: mockClient,
+        functions: mockOptions.functions,
+      },
+      token: mockToken,
+    })
+  })
+
+  it('should login the client', () => {
+    setupTest()
+
+    expect(loginSpy).toHaveBeenCalledWith(mockToken)
+  })
+
   it('should call handleEvent when an appropriate event was received', () => {
     setupTest()
 
@@ -81,7 +141,7 @@ describe('init', () => {
     eventHandler(mockMsg)
 
     expect(handleEventSpy).toHaveBeenCalledWith([mockMsg], [mockFunction], {
-      client: mockBaseClient,
+      client: mockClient,
       functions: mockOptions.functions,
     })
   })
@@ -144,7 +204,7 @@ describe('init', () => {
         [mockMsg],
         expectedFns,
         {
-          client: mockBaseClient,
+          client: mockClient,
           functions: mockFunctions,
         },
       )
