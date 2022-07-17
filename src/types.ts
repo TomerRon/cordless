@@ -19,13 +19,6 @@ export type InitOptions<C extends CustomContext = {}> = {
    * @see https://discordjs.guide/preparations/setting-up-a-bot-application.html#your-bot-s-token
    */
   token: string
-  /**
-   * Your application ID.
-   * Required to register commands.
-   *
-   * @see https://discordjs.guide/creating-your-bot/creating-commands.html#registering-commands
-   */
-  applicationId?: string
   /** A custom context object which will extend the context passed to your commands and functions */
   context?: C
   /**
@@ -153,6 +146,6 @@ export type BotFunction<
 export type CustomContext = Record<string, any>
 
 export type Context<C extends CustomContext = {}> = {
-  client: Discord.Client
+  client: Discord.Client<true>
   functions: BotFunction<any, C>[] // eslint-disable-line @typescript-eslint/no-explicit-any
 } & C

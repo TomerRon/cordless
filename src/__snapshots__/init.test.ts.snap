@@ -23,18 +23,8 @@ Array [
     ],
     Object {
       "client": Object {
-        "login": [MockFunction] {
-          "calls": Array [
-            Array [
-              "mock-token",
-            ],
-          ],
-          "results": Array [
-            Object {
-              "type": "return",
-              "value": undefined,
-            },
-          ],
+        "application": Object {
+          "id": "mock-application-id",
         },
         "on": [MockFunction] {
           "calls": Array [
@@ -122,18 +112,8 @@ Array [
     ],
     Object {
       "client": Object {
-        "login": [MockFunction] {
-          "calls": Array [
-            Array [
-              "mock-token",
-            ],
-          ],
-          "results": Array [
-            Object {
-              "type": "return",
-              "value": undefined,
-            },
-          ],
+        "application": Object {
+          "id": "mock-application-id",
         },
         "on": [MockFunction] {
           "calls": Array [
@@ -215,18 +195,8 @@ Array [
     ],
     Object {
       "client": Object {
-        "login": [MockFunction] {
-          "calls": Array [
-            Array [
-              "mock-token",
-            ],
-          ],
-          "results": Array [
-            Object {
-              "type": "return",
-              "value": undefined,
-            },
-          ],
+        "application": Object {
+          "id": "mock-application-id",
         },
         "on": [MockFunction] {
           "calls": Array [

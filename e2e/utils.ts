@@ -7,19 +7,15 @@ dotenv.config()
 export const setupClients = async <T extends CustomContext>(
   options: Omit<InitOptions<T>, 'token'>,
 ): Promise<{
-  cordlessClient: Client
-  userClient: Client
+  cordlessClient: Client<true>
+  userClient: Client<true>
   e2eChannel: TextBasedChannel
   sendMessageAndWaitForIt: (content: string) => Promise<Message>
 }> => {
   // Login as the cordless client
-  const cordlessClient = init({
+  const cordlessClient = await init({
     ...options,
     token: process.env.E2E_CLIENT_TOKEN || '',
-  })
-
-  await new Promise<void>((resolve) => {
-    cordlessClient.on('ready', () => resolve())
   })
 
   // Login as the test user
@@ -28,7 +24,7 @@ export const setupClients = async <T extends CustomContext>(
   })
 
   await new Promise<void>((resolve) => {
-    userClient.on('ready', () => resolve())
+    userClient.once('ready', () => resolve())
 
     userClient.login(process.env.E2E_USER_TOKEN)
   })

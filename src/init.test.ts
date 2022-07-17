@@ -5,23 +5,35 @@ import { init } from './init'
 import { BotCommand, BotFunction, InitOptions } from './types'
 import * as handleEvent from './utils/handleEvent'
 
-const onSpy = jest.fn()
+const onceSpy = jest.fn()
 const loginSpy = jest.fn()
-const mockClient = { on: onSpy, login: loginSpy } as unknown as Client
+const mockNotLoggedInClient = {
+  once: onceSpy,
+  login: loginSpy,
+} as unknown as Client<false>
+
+const onSpy = jest.fn()
+const mockLoggedInClient = {
+  on: onSpy,
+  application: {
+    id: 'mock-application-id',
+  },
+} as unknown as Client<true>
+
+onceSpy.mockImplementation((_, callback) => callback(mockLoggedInClient))
 
 jest.mock('discord.js', () => {
   const originalModule = jest.requireActual('discord.js')
 
   return {
     ...originalModule,
-    Client: jest.fn().mockImplementation(() => mockClient),
+    Client: jest.fn().mockImplementation(() => mockNotLoggedInClient),
   }
 })
 
 describe('init', () => {
   beforeEach(jest.clearAllMocks)
 
-  const mockApplicationId = 'mock-application-id'
   const mockToken = 'mock-token'
 
   const mockMsg = {
@@ -42,7 +54,6 @@ describe('init', () => {
   }
 
   const mockOptions: InitOptions = {
-    applicationId: mockApplicationId,
     commands: mockCommands,
     functions: [mockFunction],
     token: mockToken,
@@ -56,97 +67,96 @@ describe('init', () => {
     .spyOn(initCommandsModule, 'default')
     .mockReturnValue(undefined)
 
-  const setupTest = (options?: Partial<InitOptions>) => {
+  const setupTest = (options?: Partial<InitOptions>) =>
     init({ ...mockOptions, ...options })
-  }
 
-  it('should throw an error if a function has spaces in its name', () => {
+  it('should throw an error if a function has spaces in its name', async () => {
     const badFn: BotFunction = { ...mockFunction, name: 'bad name' }
 
-    expect(() => setupTest({ functions: [badFn] })).toThrow(
+    await expect(() => setupTest({ functions: [badFn] })).rejects.toThrow(
       'A function cannot have spaces in its name.',
     )
     expect(loginSpy).not.toHaveBeenCalled()
     expect(initCommandsSpy).not.toHaveBeenCalled()
   })
 
-  it('should initialize the client with the default intents', () => {
-    setupTest()
+  it('should initialize the client with the default intents', async () => {
+    await setupTest()
 
     expect(Client).toHaveBeenCalledWith({
       intents: [Intents.FLAGS.GUILD_MESSAGES, Intents.FLAGS.GUILDS],
     })
   })
 
-  it('should initialize the client with the provided intents', () => {
+  it('should initialize the client with the provided intents', async () => {
     const intents = [
       Intents.FLAGS.GUILD_BANS,
       Intents.FLAGS.GUILD_EMOJIS_AND_STICKERS,
     ]
 
-    setupTest({ intents })
+    await setupTest({ intents })
 
     expect(Client).toHaveBeenCalledWith({
       intents,
     })
   })
 
-  it('should subscribe to message events', () => {
-    setupTest()
+  it('should subscribe to message events', async () => {
+    await setupTest()
 
     expect(onSpy).toHaveBeenCalledWith('messageCreate', expect.any(Function))
   })
 
-  it('should call initCommands with the given commands', () => {
-    setupTest()
+  it('should call initCommands with the given commands', async () => {
+    await setupTest()
 
     expect(initCommandsSpy).toHaveBeenCalledWith({
-      applicationId: mockApplicationId,
-      client: mockClient,
+      client: mockLoggedInClient,
       commands: mockCommands,
       context: {
-        client: mockClient,
+        client: mockLoggedInClient,
         functions: mockOptions.functions,
       },
       token: mockToken,
     })
   })
 
-  it('should call initCommands with an empty list of commands by default', () => {
-    setupTest({ commands: undefined })
+  it('should call initCommands with an empty list of commands by default', async () => {
+    await setupTest({ commands: undefined })
 
     expect(initCommandsSpy).toHaveBeenCalledWith({
-      applicationId: mockApplicationId,
-      client: mockClient,
+      client: mockLoggedInClient,
       commands: [],
       context: {
-        client: mockClient,
+        client: mockLoggedInClient,
         functions: mockOptions.functions,
       },
       token: mockToken,
     })
   })
 
-  it('should login the client', () => {
-    setupTest()
+  it('should return a logged-in client', async () => {
+    const client = await setupTest()
 
+    expect(client).toStrictEqual(mockLoggedInClient)
     expect(loginSpy).toHaveBeenCalledWith(mockToken)
+    expect(onceSpy).toHaveBeenCalledWith('ready', expect.any(Function))
   })
 
-  it('should call handleEvent when an appropriate event was received', () => {
-    setupTest()
+  it('should call handleEvent when an appropriate event was received', async () => {
+    await setupTest()
 
     const eventHandler = onSpy.mock.calls[0][1] as (msg: Message) => void
 
     eventHandler(mockMsg)
 
     expect(handleEventSpy).toHaveBeenCalledWith([mockMsg], [mockFunction], {
-      client: mockClient,
+      client: mockLoggedInClient,
       functions: mockOptions.functions,
     })
   })
 
-  it('should handle many functions and map each one to an event handler', () => {
+  it('should handle many functions and map each one to an event handler', async () => {
     // A function without an explicit event will map to a messageCreate handler
     const fnA: BotFunction = {
       name: 'Function1',
@@ -184,7 +194,7 @@ describe('init', () => {
 
     const mockFunctions = [fnA, fnB, fnC, fnD, fnE]
 
-    setupTest({ functions: mockFunctions })
+    await setupTest({ functions: mockFunctions })
 
     const expectedEvents = {
       messageCreate: [fnA, fnC],
@@ -204,7 +214,7 @@ describe('init', () => {
         [mockMsg],
         expectedFns,
         {
-          client: mockClient,
+          client: mockLoggedInClient,
           functions: mockFunctions,
         },
       )
@@ -224,10 +234,10 @@ describe('init', () => {
       .spyOn(getHelpFunctionModule, 'default')
       .mockReturnValue(mockHelpFunction)
 
-    it('should add a help function when helpCommand is passed', () => {
+    it('should add a help function when helpCommand is passed', async () => {
       const mockHelpCommand = 'foobar-help-command'
 
-      setupTest({ helpCommand: mockHelpCommand })
+      await setupTest({ helpCommand: mockHelpCommand })
 
       const eventHandler = onSpy.mock.calls[0][1] as (msg: Message) => void
 
@@ -240,8 +250,8 @@ describe('init', () => {
       expect(getHelpFunctionSpy).toHaveBeenCalledWith(mockHelpCommand)
     })
 
-    it('should not add a help function when helpCommand is not passed', () => {
-      setupTest({ helpCommand: undefined })
+    it('should not add a help function when helpCommand is not passed', async () => {
+      await setupTest({ helpCommand: undefined })
 
       const eventHandler = onSpy.mock.calls[0][1] as (msg: Message) => void
 
