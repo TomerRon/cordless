@@ -1,0 +1,244 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`addOptionsToCmd snapshots matches the snapshot: addChannelTypes 1`] = `
+Array [
+  Array [
+    0,
+    2,
+  ],
+]
+`;
+
+exports[`addOptionsToCmd snapshots matches the snapshot: addChoices 1`] = `
+Array [
+  Array [
+    Object {
+      "name": "choice-1-name",
+      "value": "choice-1-value",
+    },
+    Object {
+      "name": "choice-2-name",
+      "value": "choice-2-value",
+    },
+  ],
+  Array [
+    Object {
+      "name": "choice-1-name",
+      "value": 12,
+    },
+    Object {
+      "name": "choice-2-name",
+      "value": 345,
+    },
+  ],
+  Array [
+    Object {
+      "name": "choice-1-name",
+      "value": 12,
+    },
+    Object {
+      "name": "choice-2-name",
+      "value": 345,
+    },
+  ],
+]
+`;
+
+exports[`addOptionsToCmd snapshots matches the snapshot: setDescription 1`] = `
+Array [
+  Array [
+    "No description",
+  ],
+  Array [
+    "mock-descrption-b",
+  ],
+  Array [
+    "No description",
+  ],
+  Array [
+    "mock-descrption-d",
+  ],
+  Array [
+    "No description",
+  ],
+  Array [
+    "mock-descrption-f",
+  ],
+  Array [
+    "No description",
+  ],
+  Array [
+    "mock-descrption-h",
+  ],
+  Array [
+    "No description",
+  ],
+  Array [
+    "mock-descrption-j",
+  ],
+  Array [
+    "No description",
+  ],
+  Array [
+    "mock-descrption-l",
+  ],
+  Array [
+    "No description",
+  ],
+  Array [
+    "mock-descrption-n",
+  ],
+  Array [
+    "No description",
+  ],
+  Array [
+    "mock-descrption-p",
+  ],
+  Array [
+    "No description",
+  ],
+  Array [
+    "mock-descrption-r",
+  ],
+]
+`;
+
+exports[`addOptionsToCmd snapshots matches the snapshot: setMaxValue 1`] = `
+Array [
+  Array [
+    1337,
+  ],
+  Array [
+    1337,
+  ],
+]
+`;
+
+exports[`addOptionsToCmd snapshots matches the snapshot: setMinValue 1`] = `
+Array [
+  Array [
+    10,
+  ],
+  Array [
+    10,
+  ],
+]
+`;
+
+exports[`addOptionsToCmd snapshots matches the snapshot: setName 1`] = `
+Array [
+  Array [
+    "mock-option-a",
+  ],
+  Array [
+    "mock-option-b",
+  ],
+  Array [
+    "mock-option-c",
+  ],
+  Array [
+    "mock-option-d",
+  ],
+  Array [
+    "mock-option-e",
+  ],
+  Array [
+    "mock-option-f",
+  ],
+  Array [
+    "mock-option-g",
+  ],
+  Array [
+    "mock-option-h",
+  ],
+  Array [
+    "mock-option-i",
+  ],
+  Array [
+    "mock-option-j",
+  ],
+  Array [
+    "mock-option-k",
+  ],
+  Array [
+    "mock-option-l",
+  ],
+  Array [
+    "mock-option-m",
+  ],
+  Array [
+    "mock-option-n",
+  ],
+  Array [
+    "mock-option-o",
+  ],
+  Array [
+    "mock-option-p",
+  ],
+  Array [
+    "mock-option-q",
+  ],
+  Array [
+    "mock-option-r",
+  ],
+]
+`;
+
+exports[`addOptionsToCmd snapshots matches the snapshot: setRequired 1`] = `
+Array [
+  Array [
+    false,
+  ],
+  Array [
+    true,
+  ],
+  Array [
+    false,
+  ],
+  Array [
+    true,
+  ],
+  Array [
+    false,
+  ],
+  Array [
+    true,
+  ],
+  Array [
+    false,
+  ],
+  Array [
+    true,
+  ],
+  Array [
+    false,
+  ],
+  Array [
+    true,
+  ],
+  Array [
+    false,
+  ],
+  Array [
+    true,
+  ],
+  Array [
+    false,
+  ],
+  Array [
+    true,
+  ],
+  Array [
+    false,
+  ],
+  Array [
+    true,
+  ],
+  Array [
+    false,
+  ],
+  Array [
+    true,
+  ],
+]
+`;
