@@ -81,16 +81,14 @@ See: [docs/help-command.md](docs/help-command.md)
 
 #### Using discord.js features
 
-The `init` method returns a [discord.js Client](https://discord.js.org/#/docs/main/stable/class/Client).
+The `init` method returns a logged-in [discord.js Client](https://discord.js.org/#/docs/main/stable/class/Client).
 
 ```ts
-const client = init({
+const client = await init({
   // ...
 })
 
-client.on('ready', () => {
-  console.log(`Logged in as ${client.user?.tag}!`)
-})
+console.log(`Logged in as ${client.user.tag}!`)
 ```
 
 See [discord.js documentation](https://discord.js.org/#/docs) for more information about using the client.

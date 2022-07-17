@@ -13,11 +13,10 @@ const DEFAULT_INTENTS: ClientOptions['intents'] = [
  * Initializes a cordless bot with the given options.
  * Returns a discord.js client.
  */
-export const init = <C extends CustomContext = {}>(
+export const init = async <C extends CustomContext = {}>(
   options: InitOptions<C>,
-): Discord.Client => {
+): Promise<Discord.Client<true>> => {
   const {
-    applicationId,
     commands = [],
     context = {} as C,
     functions,
@@ -31,9 +30,15 @@ export const init = <C extends CustomContext = {}>(
   }
 
   //
-  // Initialize Discord.js client
+  // Initialize Discord.js client and login
   //
-  const client = new Discord.Client({ intents })
+  const client = await new Promise<Discord.Client<true>>((resolve) => {
+    const c = new Discord.Client({ intents })
+
+    c.once('ready', resolve)
+
+    c.login(token)
+  })
 
   //
   // Resolve functions and context
@@ -68,14 +73,11 @@ export const init = <C extends CustomContext = {}>(
   })
 
   initCommands<C>({
-    applicationId,
     client,
     commands,
     context: resolvedContext,
     token,
   })
-
-  client.login(token)
 
   return client
 }

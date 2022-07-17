@@ -5,15 +5,13 @@ import handleCommand from './utils/handleCommand'
 import registerCommands from './utils/registerCommands'
 
 export type InitCommandsArgs<C extends CustomContext> = {
-  applicationId?: string
-  client: Client
+  client: Client<true>
   commands: BotCommand<C>[]
   context: Context<C>
   token: string
 }
 
 const initCommands = <C extends CustomContext>({
-  applicationId,
   client,
   commands,
   context,
@@ -25,14 +23,8 @@ const initCommands = <C extends CustomContext>({
     return
   }
 
-  if (!applicationId) {
-    console.error('You must provide an application ID to use commands.')
-
-    return process.exit(1)
-  }
-
   registerCommands({
-    applicationId,
+    applicationId: client.application.id,
     commands: resolvedCommands,
     token,
   })

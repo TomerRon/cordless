@@ -10,13 +10,15 @@ describe('initCommands', () => {
   beforeEach(jest.clearAllMocks)
 
   const mockApplicationId = 'mock-application-id'
-  const mockClient: Client = { on: jest.fn() } as unknown as Client
+  const mockClient: Client<true> = {
+    on: jest.fn(),
+    application: { id: mockApplicationId },
+  } as unknown as Client<true>
   const mockCommands: BotCommand[] = ['botCommand' as unknown as BotCommand]
   const mockContext: Context = { client: mockClient, functions: [] }
   const mockToken = 'mock-token'
 
   const mockArgs: InitCommandsArgs<{}> = {
-    applicationId: mockApplicationId,
     client: mockClient,
     commands: mockCommands,
     context: mockContext,
@@ -112,42 +114,6 @@ describe('initCommands', () => {
       initCommands({ ...mockArgs, commands: [] })
 
       expect(buildSpy).toHaveBeenCalledWith([])
-      expect(registerCommandsSpy).not.toHaveBeenCalled()
-      expect(mockClient.on).not.toHaveBeenCalled()
-    })
-
-    it('does nothing even when applicationId was not provided', () => {
-      initCommands({ ...mockArgs, commands: [], applicationId: undefined })
-
-      expect(buildSpy).toHaveBeenCalledWith([])
-      expect(registerCommandsSpy).not.toHaveBeenCalled()
-      expect(mockClient.on).not.toHaveBeenCalled()
-    })
-  })
-
-  describe('when there are commands but the applicationId was not provided', () => {
-    let errorSpy: jest.SpyInstance
-    let exitSpy: jest.SpyInstance
-
-    beforeEach(() => {
-      errorSpy = jest.spyOn(console, 'error').mockReturnValue(undefined)
-      exitSpy = jest.spyOn(process, 'exit').mockReturnValue(undefined as never)
-    })
-
-    afterAll(() => {
-      errorSpy.mockRestore()
-      exitSpy.mockRestore()
-    })
-
-    it('exits with an error', () => {
-      initCommands({ ...mockArgs, applicationId: undefined })
-
-      expect(errorSpy).toHaveBeenCalledWith(
-        'You must provide an application ID to use commands.',
-      )
-      expect(exitSpy).toHaveBeenCalledWith(1)
-
-      expect(buildSpy).toHaveBeenCalledWith(mockCommands)
       expect(registerCommandsSpy).not.toHaveBeenCalled()
       expect(mockClient.on).not.toHaveBeenCalled()
     })
