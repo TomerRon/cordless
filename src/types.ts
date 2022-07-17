@@ -1,4 +1,7 @@
+import { ApplicationCommandOptionAllowedChannelTypes } from '@discordjs/builders'
+import { APIApplicationCommandOptionChoice } from 'discord-api-types/v10'
 import Discord, {
+  ApplicationCommandOptionType,
   ClientEvents,
   ClientOptions,
   CommandInteraction,
@@ -50,11 +53,74 @@ export type BotCommand<C extends CustomContext = {}> = {
   name: string
   description: string
   handler: (args: BotCommandHandlerArgs<C>) => void | Promise<void>
+  options?: BotCommandOption[]
 }
 
 export type BotCommandHandlerArgs<C extends CustomContext = {}> = {
   interaction: CommandInteraction
   context: Context<C>
+}
+
+export type BotCommandOption =
+  | BotCommandStringOption
+  | BotCommandIntegerOption
+  | BotCommandBooleanOption
+  | BotCommandUserOption
+  | BotCommandChannelOption
+  | BotCommandRoleOption
+  | BotCommandMentionableOption
+  | BotCommandNumberOption
+  | BotCommandAttachmentOption
+
+export interface BotCommandStringOption extends BotCommandOptionBase {
+  type: 'STRING'
+  choices?: APIApplicationCommandOptionChoice<string>[]
+}
+
+export interface BotCommandIntegerOption extends BotCommandOptionBase {
+  type: 'INTEGER'
+  choices?: APIApplicationCommandOptionChoice<number>[]
+  min?: number
+  max?: number
+}
+
+export interface BotCommandBooleanOption extends BotCommandOptionBase {
+  type: 'BOOLEAN'
+}
+
+export interface BotCommandUserOption extends BotCommandOptionBase {
+  type: 'USER'
+}
+
+export interface BotCommandChannelOption extends BotCommandOptionBase {
+  type: 'CHANNEL'
+  channelTypes?: ApplicationCommandOptionAllowedChannelTypes[]
+}
+
+export interface BotCommandRoleOption extends BotCommandOptionBase {
+  type: 'ROLE'
+}
+
+export interface BotCommandMentionableOption extends BotCommandOptionBase {
+  type: 'MENTIONABLE'
+}
+
+export interface BotCommandNumberOption extends BotCommandOptionBase {
+  type: 'NUMBER'
+  choices?: APIApplicationCommandOptionChoice<number>[]
+  min?: number
+  max?: number
+}
+
+export interface BotCommandAttachmentOption extends BotCommandOptionBase {
+  type: 'ATTACHMENT'
+}
+
+type BotCommandOptionBase = {
+  type: ApplicationCommandOptionType
+  name: string
+  description?: string
+  required?: boolean
 }
 
 export type BotFunction<
