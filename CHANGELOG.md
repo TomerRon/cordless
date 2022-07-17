@@ -1,3 +1,15 @@
+# [3.0.0-beta.3](https://github.com/TomerRon/cordless/compare/v3.0.0-beta.2...v3.0.0-beta.3) (2022-07-17)
+
+
+### Features
+
+* **client:** modify initialization behavior to return a logged-in client ([bdc902a](https://github.com/TomerRon/cordless/commit/bdc902a3c222dd7c98ae2f811976270f387f4980))
+
+
+### BREAKING CHANGES
+
+* **client:** The init method now returns a `Promise<Discord.Client<true>>`. You now need to `await init()` if you want to use the returned client.
+
 # [3.0.0-beta.2](https://github.com/TomerRon/cordless/compare/v3.0.0-beta.1...v3.0.0-beta.2) (2022-07-17)
 
 
