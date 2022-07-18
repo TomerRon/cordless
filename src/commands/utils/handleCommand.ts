@@ -1,5 +1,6 @@
 import { CommandInteraction } from 'discord.js'
 import { BotCommand, Context, CustomContext } from '../../types'
+import isCommandWithHandler from './isCommandWithHandler'
 
 type HandleCommandArgs<C extends CustomContext> = {
   commands: BotCommand<C>[]
@@ -18,7 +19,21 @@ const handleCommand = async <C extends CustomContext = {}>({
     return
   }
 
-  await command.handler({ context, interaction })
+  if (isCommandWithHandler(command)) {
+    return command.handler({ context, interaction })
+  }
+
+  const subcommandName = interaction.options.getSubcommand()
+
+  const subcommand = command.subcommands.find(
+    ({ name }) => subcommandName === name,
+  )
+
+  if (!subcommand) {
+    return
+  }
+
+  return subcommand.handler({ context, interaction })
 }
 
 export default handleCommand
