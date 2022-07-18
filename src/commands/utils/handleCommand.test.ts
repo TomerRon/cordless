@@ -88,7 +88,7 @@ describe('handleCommand', () => {
   })
 
   describe('when a BotCommandWithSubcommands matches the interaction', () => {
-    describe('when none of the subcommands matche the interaction', () => {
+    describe('when none of the subcommands match the interaction', () => {
       const mockInteraction = {
         commandName: mockCommandWithSubcommands.name,
         options: {

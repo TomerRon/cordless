@@ -8,7 +8,7 @@ describe('isCommandWithHandler', () => {
   }
 
   const mockBotCommandWithSubcommands: BotCommandWithSubcommands = {
-    name: 'mock-command-with-handler',
+    name: 'mock-command-with-subcommands',
     subcommands: [],
   }
 
