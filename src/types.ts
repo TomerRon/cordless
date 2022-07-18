@@ -42,11 +42,27 @@ export type InitOptions<C extends CustomContext = {}> = {
   helpCommand?: string
 }
 
-export type BotCommand<C extends CustomContext = {}> = {
-  name: string
-  description: string
+export type BotCommand<C extends CustomContext = {}> =
+  | BotCommandWithHandler<C>
+  | BotCommandWithSubcommands<C>
+
+export interface BotCommandWithHandler<C extends CustomContext = {}>
+  extends BotCommandBase {
   handler: (args: BotCommandHandlerArgs<C>) => void | Promise<void>
   options?: BotCommandOption[]
+  subcommands?: never
+}
+
+export interface BotCommandWithSubcommands<C extends CustomContext = {}>
+  extends BotCommandBase {
+  subcommands: BotCommandWithHandler<C>[]
+  handler?: never
+  options?: never
+}
+
+type BotCommandBase = {
+  name: string
+  description?: string
 }
 
 export type BotCommandHandlerArgs<C extends CustomContext = {}> = {
