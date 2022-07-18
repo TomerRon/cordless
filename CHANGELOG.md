@@ -1,3 +1,10 @@
+# [3.0.0-beta.4](https://github.com/TomerRon/cordless/compare/v3.0.0-beta.3...v3.0.0-beta.4) (2022-07-18)
+
+
+### Features
+
+* **commands:** allow commands to receive subcommands ([14449ae](https://github.com/TomerRon/cordless/commit/14449aee71eda44a922c0b26ee00b5632bfa87de))
+
 # [3.0.0-beta.3](https://github.com/TomerRon/cordless/compare/v3.0.0-beta.2...v3.0.0-beta.3) (2022-07-17)
 
 
