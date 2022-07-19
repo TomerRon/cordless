@@ -1,7 +1,7 @@
 import Discord, { ClientOptions, Intents } from 'discord.js'
 import initCommands from './commands/init'
-import { BotFunction, Context, CustomContext, InitOptions } from './types'
-import handleEvent from './utils/handleEvent'
+import initEvents from './events/init'
+import { Context, CustomContext, InitOptions } from './types'
 
 const DEFAULT_INTENTS: ClientOptions['intents'] = [
   Intents.FLAGS.GUILD_MESSAGES,
@@ -40,30 +40,17 @@ export const init = async <C extends CustomContext = {}>(
     ...context,
   }
 
-  //
-  // Subscribe functions to events
-  //
-  const eventFunctionsMap = functions.reduce<
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    Record<string, BotFunction<any, C>[]>
-  >((acc, curr) => {
-    const key = curr.event || 'messageCreate'
-
-    return {
-      ...acc,
-      [key]: [...(acc[key] || []), curr],
-    }
-  }, {})
-
-  Object.entries(eventFunctionsMap).forEach(([event, eventFns]) => {
-    client.on(event, (...args) => handleEvent(args, eventFns, resolvedContext))
-  })
-
   initCommands<C>({
     client,
     commands,
     context: resolvedContext,
     token,
+  })
+
+  initEvents<C>({
+    client,
+    functions,
+    context: resolvedContext,
   })
 
   return client

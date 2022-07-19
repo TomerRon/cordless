@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`init should handle many functions and map each one to an event handler 1`] = `
+exports[`initEvents should handle many functions and map each one to an event handler 1`] = `
 Array [
   Array [
     Array [
@@ -21,9 +21,6 @@ Array [
     ],
     Object {
       "client": Object {
-        "application": Object {
-          "id": "mock-application-id",
-        },
         "on": [MockFunction] {
           "calls": Array [
             Array [
@@ -55,32 +52,7 @@ Array [
           ],
         },
       },
-      "functions": Array [
-        Object {
-          "callback": [MockFunction],
-          "condition": [MockFunction],
-        },
-        Object {
-          "callback": [MockFunction],
-          "condition": [MockFunction],
-          "event": "channelCreate",
-        },
-        Object {
-          "callback": [MockFunction],
-          "condition": [MockFunction],
-          "event": "messageCreate",
-        },
-        Object {
-          "callback": [MockFunction],
-          "condition": [MockFunction],
-          "event": "messageDelete",
-        },
-        Object {
-          "callback": [MockFunction],
-          "condition": [MockFunction],
-          "event": "channelCreate",
-        },
-      ],
+      "functions": Array [],
     },
   ],
   Array [
@@ -103,9 +75,6 @@ Array [
     ],
     Object {
       "client": Object {
-        "application": Object {
-          "id": "mock-application-id",
-        },
         "on": [MockFunction] {
           "calls": Array [
             Array [
@@ -137,32 +106,7 @@ Array [
           ],
         },
       },
-      "functions": Array [
-        Object {
-          "callback": [MockFunction],
-          "condition": [MockFunction],
-        },
-        Object {
-          "callback": [MockFunction],
-          "condition": [MockFunction],
-          "event": "channelCreate",
-        },
-        Object {
-          "callback": [MockFunction],
-          "condition": [MockFunction],
-          "event": "messageCreate",
-        },
-        Object {
-          "callback": [MockFunction],
-          "condition": [MockFunction],
-          "event": "messageDelete",
-        },
-        Object {
-          "callback": [MockFunction],
-          "condition": [MockFunction],
-          "event": "channelCreate",
-        },
-      ],
+      "functions": Array [],
     },
   ],
   Array [
@@ -180,9 +124,6 @@ Array [
     ],
     Object {
       "client": Object {
-        "application": Object {
-          "id": "mock-application-id",
-        },
         "on": [MockFunction] {
           "calls": Array [
             Array [
@@ -214,32 +155,7 @@ Array [
           ],
         },
       },
-      "functions": Array [
-        Object {
-          "callback": [MockFunction],
-          "condition": [MockFunction],
-        },
-        Object {
-          "callback": [MockFunction],
-          "condition": [MockFunction],
-          "event": "channelCreate",
-        },
-        Object {
-          "callback": [MockFunction],
-          "condition": [MockFunction],
-          "event": "messageCreate",
-        },
-        Object {
-          "callback": [MockFunction],
-          "condition": [MockFunction],
-          "event": "messageDelete",
-        },
-        Object {
-          "callback": [MockFunction],
-          "condition": [MockFunction],
-          "event": "channelCreate",
-        },
-      ],
+      "functions": Array [],
     },
   ],
 ]
