@@ -1,3 +1,10 @@
+# [3.0.0-beta.5](https://github.com/TomerRon/cordless/compare/v3.0.0-beta.4...v3.0.0-beta.5) (2022-07-19)
+
+
+### Features
+
+* **commands:** allow commands to receive components ([2569f9a](https://github.com/TomerRon/cordless/commit/2569f9a184e9f05a7a72889c29d160a843a57fb4))
+
 # [3.0.0-beta.4](https://github.com/TomerRon/cordless/compare/v3.0.0-beta.3...v3.0.0-beta.4) (2022-07-18)
 
 
