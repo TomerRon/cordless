@@ -23,16 +23,12 @@ describe('commands type guards', () => {
   })
 
   describe('isCommandWithSubcommands', () => {
-    describe('isCommandWithSubcommands', () => {
-      it('returns true when the given BotCommand is a BotCommandWithSubcommands', () => {
-        expect(isCommandWithSubcommands(mockBotCommandWithSubcommands)).toBe(
-          true,
-        )
-      })
+    it('returns true when the given BotCommand is a BotCommandWithSubcommands', () => {
+      expect(isCommandWithSubcommands(mockBotCommandWithSubcommands)).toBe(true)
+    })
 
-      it('returns false when the given BotCommand is not a BotCommandWithSubcommands', () => {
-        expect(isCommandWithSubcommands(mockBotCommandWithHandler)).toBe(false)
-      })
+    it('returns false when the given BotCommand is not a BotCommandWithSubcommands', () => {
+      expect(isCommandWithSubcommands(mockBotCommandWithHandler)).toBe(false)
     })
   })
 })
