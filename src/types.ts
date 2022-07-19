@@ -34,15 +34,6 @@ export type InitOptions<C extends CustomContext = {}> = {
    * @see https://discordjs.guide/popular-topics/intents.html
    */
   intents?: ClientOptions['intents']
-  /**
-   * Generate a help function for the bot, which will be triggered by the value.
-   *
-   * For example, given a value of "!help", the following commands will be available:
-   *
-   * - !help (shows a list of available functions)
-   * - !help <function-name> (shows a description and usage instructions for the given function)
-   */
-  helpCommand?: string
 }
 
 export type BotCommand<C extends CustomContext = {}> =
@@ -175,16 +166,6 @@ export type BotFunction<
   E extends keyof ClientEvents = 'messageCreate',
   C extends CustomContext = {},
 > = {
-  /**
-   * The name of this function (no spaces allowed).
-   * It will be displayed in the help function if there is a helpCommand.
-   */
-  name?: string
-  /**
-   * The description of this function and usage instructions.
-   * It will be displayed in the help function if there is a helpCommand.
-   */
-  description?: string
   /**
    * The event this function should subscribe to (default: "messageCreate").
    */

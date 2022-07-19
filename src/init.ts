@@ -1,6 +1,5 @@
 import Discord, { ClientOptions, Intents } from 'discord.js'
 import initCommands from './commands/init'
-import getHelpFunction from './functions/help'
 import { BotFunction, Context, CustomContext, InitOptions } from './types'
 import handleEvent from './utils/handleEvent'
 
@@ -20,14 +19,9 @@ export const init = async <C extends CustomContext = {}>(
     commands = [],
     context = {} as C,
     functions,
-    helpCommand,
     intents = DEFAULT_INTENTS,
     token,
   } = options
-
-  if (functions.some((fn) => fn.name?.includes(' '))) {
-    throw new Error('A function cannot have spaces in its name.')
-  }
 
   //
   // Initialize Discord.js client and login
@@ -40,23 +34,16 @@ export const init = async <C extends CustomContext = {}>(
     c.login(token)
   })
 
-  //
-  // Resolve functions and context
-  //
-  const resolvedFns = helpCommand
-    ? [getHelpFunction<C>(helpCommand), ...functions]
-    : functions
-
   const resolvedContext: Context<C> = {
     client,
-    functions: resolvedFns,
+    functions,
     ...context,
   }
 
   //
   // Subscribe functions to events
   //
-  const eventFunctionsMap = resolvedFns.reduce<
+  const eventFunctionsMap = functions.reduce<
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     Record<string, BotFunction<any, C>[]>
   >((acc, curr) => {

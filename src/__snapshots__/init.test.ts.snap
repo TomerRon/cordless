@@ -12,13 +12,11 @@ Array [
       Object {
         "callback": [MockFunction],
         "condition": [MockFunction],
-        "name": "Function1",
       },
       Object {
         "callback": [MockFunction],
         "condition": [MockFunction],
         "event": "messageCreate",
-        "name": "Function3",
       },
     ],
     Object {
@@ -61,31 +59,26 @@ Array [
         Object {
           "callback": [MockFunction],
           "condition": [MockFunction],
-          "name": "Function1",
         },
         Object {
           "callback": [MockFunction],
           "condition": [MockFunction],
           "event": "channelCreate",
-          "name": "Function2",
         },
         Object {
           "callback": [MockFunction],
           "condition": [MockFunction],
           "event": "messageCreate",
-          "name": "Function3",
         },
         Object {
           "callback": [MockFunction],
           "condition": [MockFunction],
           "event": "messageDelete",
-          "name": "Function4",
         },
         Object {
           "callback": [MockFunction],
           "condition": [MockFunction],
           "event": "channelCreate",
-          "name": "Function5",
         },
       ],
     },
@@ -101,13 +94,11 @@ Array [
         "callback": [MockFunction],
         "condition": [MockFunction],
         "event": "channelCreate",
-        "name": "Function2",
       },
       Object {
         "callback": [MockFunction],
         "condition": [MockFunction],
         "event": "channelCreate",
-        "name": "Function5",
       },
     ],
     Object {
@@ -150,31 +141,26 @@ Array [
         Object {
           "callback": [MockFunction],
           "condition": [MockFunction],
-          "name": "Function1",
         },
         Object {
           "callback": [MockFunction],
           "condition": [MockFunction],
           "event": "channelCreate",
-          "name": "Function2",
         },
         Object {
           "callback": [MockFunction],
           "condition": [MockFunction],
           "event": "messageCreate",
-          "name": "Function3",
         },
         Object {
           "callback": [MockFunction],
           "condition": [MockFunction],
           "event": "messageDelete",
-          "name": "Function4",
         },
         Object {
           "callback": [MockFunction],
           "condition": [MockFunction],
           "event": "channelCreate",
-          "name": "Function5",
         },
       ],
     },
@@ -190,7 +176,6 @@ Array [
         "callback": [MockFunction],
         "condition": [MockFunction],
         "event": "messageDelete",
-        "name": "Function4",
       },
     ],
     Object {
@@ -233,31 +218,26 @@ Array [
         Object {
           "callback": [MockFunction],
           "condition": [MockFunction],
-          "name": "Function1",
         },
         Object {
           "callback": [MockFunction],
           "condition": [MockFunction],
           "event": "channelCreate",
-          "name": "Function2",
         },
         Object {
           "callback": [MockFunction],
           "condition": [MockFunction],
           "event": "messageCreate",
-          "name": "Function3",
         },
         Object {
           "callback": [MockFunction],
           "condition": [MockFunction],
           "event": "messageDelete",
-          "name": "Function4",
         },
         Object {
           "callback": [MockFunction],
           "condition": [MockFunction],
           "event": "channelCreate",
-          "name": "Function5",
         },
       ],
     },

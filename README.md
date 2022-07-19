@@ -5,8 +5,8 @@
   <a href="https://www.npmjs.com/package/cordless">
     <img alt="npm latest version" src="https://img.shields.io/npm/v/cordless/latest.svg">
   </a>
-  <a href="https://travis-ci.com/TomerRon/cordless">
-    <img alt="build status" src="https://travis-ci.com/TomerRon/cordless.svg?branch=master">
+  <a href="https://app.travis-ci.com/github/TomerRon/cordless">
+    <img alt="build status" src="https://api.travis-ci.com/TomerRon/cordless.svg?branch=master">
   </a>
   <a href="https://github.com/semantic-release/semantic-release">
     <img alt="semantic-release" src="https://img.shields.io/badge/%20%20%F0%9F%93%A6%F0%9F%9A%80-semantic--release-e10079.svg">
@@ -72,12 +72,6 @@ See: [docs/context.md](docs/context.md)
 By default, cordless initializes the discord.js client with the [Gateway Intents](https://discord.com/developers/docs/topics/gateway#gateway-intents) `[GUILDS, GUILD_MESSAGES]`. This should be sufficient for bots that simply need to receive messages and do something in response. You can provide your own list of intents if you need additional functionality.
 
 See: [docs/gateway-intents.md](docs/gateway-intents.md)
-
-#### Help command / Automatic documentation
-
-You can specify a help command to generate a help function for your bot. This function will describe the different functions of your bot.
-
-See: [docs/help-command.md](docs/help-command.md)
 
 #### Using discord.js features
 

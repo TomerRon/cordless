@@ -38,7 +38,6 @@ describe('context', () => {
     const setup = await setupClients({
       context: mockCustomContext,
       functions: mockFunctions,
-      helpCommand: 'foobar',
     })
 
     cordlessClient = setup.cordlessClient
@@ -64,10 +63,7 @@ describe('context', () => {
     const { functions } = pingCallbackSpy.mock
       .calls[0][1] as Context<CustomContext>
 
-    expect(functions).toStrictEqual([
-      expect.objectContaining({ name: 'help' }),
-      ...mockFunctions,
-    ])
+    expect(functions).toStrictEqual(mockFunctions)
   })
 
   it('should have access to custom context', async () => {
