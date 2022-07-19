@@ -1,7 +1,7 @@
 import { Client, Message } from 'discord.js'
 import { BotFunction, Context } from '../types'
 import initEvents, { InitEventsArgs } from './init'
-import * as handleEventModule from '../utils/handleEvent'
+import * as handleEventModule from './handlers/handleEvent'
 
 describe('initEvents', () => {
   // A function without an explicit event will map to a messageCreate handler

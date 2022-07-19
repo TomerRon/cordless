@@ -1,7 +1,7 @@
 import { Client, Message } from 'discord.js'
-import { BotFunction, CustomContext } from '../types'
+import { BotFunction, CustomContext } from '../../types'
 import handleEvent from './handleEvent'
-import * as isSelfEvent from './isSelfEvent'
+import * as isSelfEvent from '../utils/isSelfEvent'
 
 describe('handleEvent', () => {
   beforeEach(jest.clearAllMocks)

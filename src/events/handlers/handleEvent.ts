@@ -1,6 +1,6 @@
 import { ClientEvents } from 'discord.js'
-import { BotFunction, Context, CustomContext } from '../types'
-import isSelfEvent from './isSelfEvent'
+import { BotFunction, Context, CustomContext } from '../../types'
+import isSelfEvent from '../utils/isSelfEvent'
 
 const handleEvent = async <
   E extends keyof ClientEvents,

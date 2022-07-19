@@ -1,6 +1,6 @@
 import { Client } from 'discord.js'
 import { BotFunction, Context, CustomContext } from '../types'
-import handleEvent from '../utils/handleEvent'
+import handleEvent from './handlers/handleEvent'
 
 export type InitEventsArgs<C extends CustomContext = {}> = {
   client: Client<true>
