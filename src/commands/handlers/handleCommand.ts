@@ -5,18 +5,16 @@ import { isCommandWithSubcommands } from '../utils/guards'
 
 type HandleCommandArgs<C extends CustomContext> = {
   commands: BotCommand<C>[]
-  commandName: string
   interaction: CommandInteraction
   context: Context<C>
 }
 
 const handleCommand = async <C extends CustomContext = {}>({
   commands,
-  commandName,
   interaction,
   context,
 }: HandleCommandArgs<C>): Promise<void> => {
-  let command = commands.find(({ name }) => commandName === name)
+  let command = commands.find(({ name }) => interaction.commandName === name)
 
   if (!command) {
     return

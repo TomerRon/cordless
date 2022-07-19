@@ -37,7 +37,6 @@ const initCommands = <C extends CustomContext>({
     if (interaction.isCommand()) {
       return handleCommand({
         commands,
-        commandName: interaction.commandName,
         context,
         interaction,
       })

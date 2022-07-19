@@ -47,12 +47,6 @@ describe('handleCommand', () => {
     foo: 'bar',
   }
 
-  const mockInteraction = {
-    options: {
-      getSubcommand: jest.fn(),
-    },
-  }
-
   const mockComponents = ['row' as unknown as MessageActionRow]
 
   const buildComponentsSpy = jest
@@ -60,12 +54,13 @@ describe('handleCommand', () => {
     .mockResolvedValue(mockComponents)
 
   describe('when none of the commands match the interaction', () => {
-    const mockCommandName = 'not-found'
+    const mockInteraction = {
+      commandName: 'not-found',
+    }
 
     it('should ignore the interaction', async () => {
       await handleCommand({
         commands: mockCommands,
-        commandName: mockCommandName,
         context: mockContext,
         interaction: mockInteraction as unknown as CommandInteraction,
       })
@@ -79,12 +74,13 @@ describe('handleCommand', () => {
   })
 
   describe('when a BotCommandWithHandler matches the interaction', () => {
-    const mockCommandName = mockCommandWithHandlerB.name
+    const mockInteraction = {
+      commandName: mockCommandWithHandlerB.name,
+    }
 
     it('should call the handler of the matching command', async () => {
       await handleCommand({
         commands: mockCommands,
-        commandName: mockCommandName,
         context: mockContext,
         interaction: mockInteraction as unknown as CommandInteraction,
       })
@@ -107,7 +103,12 @@ describe('handleCommand', () => {
   })
 
   describe('when a BotCommandWithSubcommands matches the interaction', () => {
-    const mockCommandName = mockCommandWithSubcommands.name
+    const mockInteraction = {
+      commandName: mockCommandWithSubcommands.name,
+      options: {
+        getSubcommand: jest.fn(),
+      },
+    }
 
     describe('when none of the subcommands match the interaction', () => {
       beforeEach(() => {
@@ -117,7 +118,6 @@ describe('handleCommand', () => {
       it('should ignore the interaction', async () => {
         await handleCommand({
           commands: mockCommands,
-          commandName: mockCommandName,
           context: mockContext,
           interaction: mockInteraction as unknown as CommandInteraction,
         })
@@ -142,7 +142,6 @@ describe('handleCommand', () => {
       it('should call the handler of the matching subcommand', async () => {
         await handleCommand({
           commands: mockCommands,
-          commandName: mockCommandName,
           context: mockContext,
           interaction: mockInteraction as unknown as CommandInteraction,
         })
