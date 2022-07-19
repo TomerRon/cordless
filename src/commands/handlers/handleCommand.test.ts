@@ -1,9 +1,10 @@
-import { Client, CommandInteraction } from 'discord.js'
+import { Client, CommandInteraction, MessageActionRow } from 'discord.js'
 import {
   BotCommand,
   BotCommandWithHandler,
   BotCommandWithSubcommands,
 } from '../../types'
+import * as buildComponentsModule from '../builders/buildComponents'
 import handleCommand from './handleCommand'
 
 describe('handleCommand', () => {
@@ -46,85 +47,104 @@ describe('handleCommand', () => {
     foo: 'bar',
   }
 
-  describe('when none of the commands match the interaction', () => {
-    const mockInteraction = {
-      commandName: 'not-found',
-    } as CommandInteraction
+  const mockInteraction = {
+    options: {
+      getSubcommand: jest.fn(),
+    },
+  }
 
-    it('should ignore the interaction', () => {
-      handleCommand({
+  const mockComponents = ['row' as unknown as MessageActionRow]
+
+  const buildComponentsSpy = jest
+    .spyOn(buildComponentsModule, 'default')
+    .mockResolvedValue(mockComponents)
+
+  describe('when none of the commands match the interaction', () => {
+    const mockCommandName = 'not-found'
+
+    it('should ignore the interaction', async () => {
+      await handleCommand({
         commands: mockCommands,
+        commandName: mockCommandName,
         context: mockContext,
-        interaction: mockInteraction,
+        interaction: mockInteraction as unknown as CommandInteraction,
       })
 
       expect(mockCommandWithHandlerA.handler).not.toHaveBeenCalled()
       expect(mockCommandWithHandlerB.handler).not.toHaveBeenCalled()
       expect(mockSubcommandA.handler).not.toHaveBeenCalled()
       expect(mockSubcommandB.handler).not.toHaveBeenCalled()
+      expect(buildComponentsSpy).not.toHaveBeenCalled()
     })
   })
 
   describe('when a BotCommandWithHandler matches the interaction', () => {
-    const mockInteraction = {
-      commandName: mockCommandWithHandlerB.name,
-    } as CommandInteraction
+    const mockCommandName = mockCommandWithHandlerB.name
 
-    it('should call the handler of the matching command', () => {
-      handleCommand({
+    it('should call the handler of the matching command', async () => {
+      await handleCommand({
         commands: mockCommands,
+        commandName: mockCommandName,
         context: mockContext,
-        interaction: mockInteraction,
+        interaction: mockInteraction as unknown as CommandInteraction,
       })
 
       expect(mockCommandWithHandlerA.handler).not.toHaveBeenCalled()
       expect(mockCommandWithHandlerB.handler).toHaveBeenCalledWith({
         context: mockContext,
         interaction: mockInteraction,
+        components: mockComponents,
       })
       expect(mockSubcommandA.handler).not.toHaveBeenCalled()
       expect(mockSubcommandB.handler).not.toHaveBeenCalled()
+
+      expect(buildComponentsSpy).toHaveBeenCalledWith({
+        command: mockCommandWithHandlerB,
+        interaction: mockInteraction as unknown as CommandInteraction,
+        context: mockContext,
+      })
     })
   })
 
   describe('when a BotCommandWithSubcommands matches the interaction', () => {
-    describe('when none of the subcommands match the interaction', () => {
-      const mockInteraction = {
-        commandName: mockCommandWithSubcommands.name,
-        options: {
-          getSubcommand: jest.fn().mockReturnValue('not-found'),
-        },
-      } as unknown as CommandInteraction
+    const mockCommandName = mockCommandWithSubcommands.name
 
-      it('should ignore the interaction', () => {
-        handleCommand({
+    describe('when none of the subcommands match the interaction', () => {
+      beforeEach(() => {
+        mockInteraction.options.getSubcommand.mockReturnValueOnce('not-found')
+      })
+
+      it('should ignore the interaction', async () => {
+        await handleCommand({
           commands: mockCommands,
+          commandName: mockCommandName,
           context: mockContext,
-          interaction: mockInteraction,
+          interaction: mockInteraction as unknown as CommandInteraction,
         })
 
         expect(mockCommandWithHandlerA.handler).not.toHaveBeenCalled()
         expect(mockCommandWithHandlerB.handler).not.toHaveBeenCalled()
         expect(mockSubcommandA.handler).not.toHaveBeenCalled()
         expect(mockSubcommandB.handler).not.toHaveBeenCalled()
+        expect(buildComponentsSpy).not.toHaveBeenCalled()
 
         expect(mockInteraction.options.getSubcommand).toHaveBeenCalled()
       })
     })
 
     describe('when a subcommand matches the interaction', () => {
-      const mockInteraction = {
-        commandName: mockCommandWithSubcommands.name,
-        options: {
-          getSubcommand: jest.fn().mockReturnValue(mockSubcommandB.name),
-        },
-      } as unknown as CommandInteraction
+      beforeEach(() => {
+        mockInteraction.options.getSubcommand.mockReturnValueOnce(
+          mockSubcommandB.name,
+        )
+      })
 
-      it('should call the handler of the matching subcommand', () => {
-        handleCommand({
+      it('should call the handler of the matching subcommand', async () => {
+        await handleCommand({
           commands: mockCommands,
+          commandName: mockCommandName,
           context: mockContext,
-          interaction: mockInteraction,
+          interaction: mockInteraction as unknown as CommandInteraction,
         })
 
         expect(mockCommandWithHandlerA.handler).not.toHaveBeenCalled()
@@ -133,6 +153,13 @@ describe('handleCommand', () => {
         expect(mockSubcommandB.handler).toHaveBeenCalledWith({
           context: mockContext,
           interaction: mockInteraction,
+          components: mockComponents,
+        })
+
+        expect(buildComponentsSpy).toHaveBeenCalledWith({
+          command: mockSubcommandB,
+          interaction: mockInteraction as unknown as CommandInteraction,
+          context: mockContext,
         })
 
         expect(mockInteraction.options.getSubcommand).toHaveBeenCalled()

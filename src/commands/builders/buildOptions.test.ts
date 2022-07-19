@@ -4,9 +4,9 @@ import {
 } from '@discordjs/builders'
 import { ChannelType } from 'discord-api-types/v10'
 import { BotCommandOption } from '../../types'
-import addOptionsToCmd from './addOptionsToCmd'
+import buildOptions from './buildOptions'
 
-describe('addOptionsToCmd', () => {
+describe('buildOptions', () => {
   beforeEach(jest.clearAllMocks)
 
   const mockCmd: Partial<Record<keyof SlashCommandBuilder, jest.Mock>> = {
@@ -33,7 +33,7 @@ describe('addOptionsToCmd', () => {
 
   describe('when there are no options', () => {
     it('does not add any options to the command', () => {
-      addOptionsToCmd(mockCmd as unknown as SlashCommandBuilder, [])
+      buildOptions(mockCmd as unknown as SlashCommandBuilder, [])
 
       Object.values(mockCmd).forEach((mock) =>
         expect(mock).not.toHaveBeenCalled(),
@@ -49,7 +49,7 @@ describe('addOptionsToCmd', () => {
     }
 
     it('adds the relevant option to the command', () => {
-      addOptionsToCmd(mockCmd as unknown as SlashCommandBuilder, [option])
+      buildOptions(mockCmd as unknown as SlashCommandBuilder, [option])
 
       const { addRoleOption, ...rest } = mockCmd
 
@@ -104,7 +104,7 @@ describe('addOptionsToCmd', () => {
     const options = [optionA, optionB, optionC]
 
     beforeEach(() => {
-      addOptionsToCmd(mockCmd as unknown as SlashCommandBuilder, options)
+      buildOptions(mockCmd as unknown as SlashCommandBuilder, options)
     })
 
     it('adds option A to the command', () => {
@@ -309,7 +309,7 @@ describe('addOptionsToCmd', () => {
     ]
 
     it('matches the snapshot', () => {
-      addOptionsToCmd(mockCmd as unknown as SlashCommandBuilder, options)
+      buildOptions(mockCmd as unknown as SlashCommandBuilder, options)
 
       Object.values(mockCmd).forEach((fn) => {
         expect(fn).toHaveBeenNthCalledWith(1, expect.any(Function))

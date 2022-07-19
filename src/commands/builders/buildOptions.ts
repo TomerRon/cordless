@@ -7,7 +7,7 @@ import { BotCommandOption } from '../../types'
 /**
  * Adds a list of options to a SlashCommand
  */
-const addOptionsToCmd = (
+const buildOptions = (
   cmd: SlashCommandBuilder | SlashCommandSubcommandBuilder,
   options: BotCommandOption[],
 ) => {
@@ -117,4 +117,4 @@ const addOptionsToCmd = (
   })
 }
 
-export default addOptionsToCmd
+export default buildOptions

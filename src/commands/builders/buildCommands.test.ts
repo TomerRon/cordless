@@ -3,8 +3,8 @@ import {
   BotCommandWithHandler,
   BotCommandWithSubcommands,
 } from '../../types'
-import * as addOptionsToCmdModule from './addOptionsToCmd'
-import build from './build'
+import buildCommands from './buildCommands'
+import * as buildOptionsModule from './buildOptions'
 
 const mockSlashCommandBuilder = {
   setName: jest.fn().mockReturnThis(),
@@ -18,7 +18,7 @@ jest.mock('@discordjs/builders', () => ({
     .mockImplementation(() => mockSlashCommandBuilder),
 }))
 
-describe('build', () => {
+describe('buildCommands', () => {
   const mockCommandWithHandlerA: BotCommandWithHandler = {
     name: 'command-a',
     description: 'command-a-desc',
@@ -65,12 +65,12 @@ describe('build', () => {
     mockCommandWithSubcommands,
   ]
 
-  const addOptionsToCmdSpy = jest
-    .spyOn(addOptionsToCmdModule, 'default')
+  const buildOptionsSpy = jest
+    .spyOn(buildOptionsModule, 'default')
     .mockReturnValue()
 
   it('returns a list of SlashCommandBuilders', () => {
-    expect(build(mockCommands)).toStrictEqual([
+    expect(buildCommands(mockCommands)).toStrictEqual([
       mockSlashCommandBuilder,
       mockSlashCommandBuilder,
       mockSlashCommandBuilder,
@@ -79,7 +79,7 @@ describe('build', () => {
 
   describe('building commands', () => {
     beforeEach(() => {
-      build(mockCommands)
+      buildCommands(mockCommands)
     })
 
     it('builds the first command', () => {
@@ -91,7 +91,7 @@ describe('build', () => {
         1,
         mockCommandWithHandlerA.description,
       )
-      expect(addOptionsToCmdSpy).toHaveBeenNthCalledWith(
+      expect(buildOptionsSpy).toHaveBeenNthCalledWith(
         1,
         mockSlashCommandBuilder,
         [],
@@ -107,7 +107,7 @@ describe('build', () => {
         2,
         'No description',
       )
-      expect(addOptionsToCmdSpy).toHaveBeenNthCalledWith(
+      expect(buildOptionsSpy).toHaveBeenNthCalledWith(
         2,
         mockSlashCommandBuilder,
         mockCommandWithHandlerB.options,
@@ -134,7 +134,7 @@ describe('build', () => {
       const callback = mockSlashCommandBuilder.addSubcommand.mock.calls[0][0]
 
       Object.values(mockSlashCommandBuilder).forEach((mock) => mock.mockClear())
-      addOptionsToCmdSpy.mockClear()
+      buildOptionsSpy.mockClear()
 
       callback(mockSlashCommandBuilder)
 
@@ -146,7 +146,7 @@ describe('build', () => {
         1,
         mockSubcommandA.description,
       )
-      expect(addOptionsToCmdSpy).toHaveBeenNthCalledWith(
+      expect(buildOptionsSpy).toHaveBeenNthCalledWith(
         1,
         mockSlashCommandBuilder,
         [],
@@ -162,7 +162,7 @@ describe('build', () => {
       const callback = mockSlashCommandBuilder.addSubcommand.mock.calls[1][0]
 
       Object.values(mockSlashCommandBuilder).forEach((mock) => mock.mockClear())
-      addOptionsToCmdSpy.mockClear()
+      buildOptionsSpy.mockClear()
 
       callback(mockSlashCommandBuilder)
 
@@ -174,7 +174,7 @@ describe('build', () => {
         1,
         'No description',
       )
-      expect(addOptionsToCmdSpy).toHaveBeenNthCalledWith(
+      expect(buildOptionsSpy).toHaveBeenNthCalledWith(
         1,
         mockSlashCommandBuilder,
         mockSubcommandB.options,

@@ -1,10 +1,12 @@
 import { SlashCommandBuilder } from '@discordjs/builders'
 import { Client, Interaction } from 'discord.js'
-import { BotCommand, Context } from '../types'
+import { BotCommand, BotCommandButtonHandler, Context } from '../types'
 import initCommands, { InitCommandsArgs } from './init'
-import * as buildModule from './utils/build'
-import * as handleCommandModule from './utils/handleCommand'
-import * as registerCommandsModule from './utils/registerCommands'
+import * as buildCommandsModule from './builders/buildCommands'
+import * as handleCommandModule from './handlers/handleCommand'
+import * as restModule from './utils/rest'
+import * as getButtonHandlerMapModule from './utils/getButtonHandlerMap'
+import * as handleButtonModule from './handlers/handleButton'
 
 describe('initCommands', () => {
   beforeEach(jest.clearAllMocks)
@@ -29,13 +31,21 @@ describe('initCommands', () => {
     'slashCommandBuilder' as unknown as SlashCommandBuilder,
   ]
 
-  const buildSpy = jest
-    .spyOn(buildModule, 'default')
+  const mockButtonHandlerMap: Record<string, BotCommandButtonHandler> = {
+    foo: jest.fn(),
+  }
+
+  const buildCommandsSpy = jest
+    .spyOn(buildCommandsModule, 'default')
     .mockReturnValue(mockResolvedCommands)
 
   const registerCommandsSpy = jest
-    .spyOn(registerCommandsModule, 'default')
+    .spyOn(restModule, 'registerCommands')
     .mockReturnValue(undefined)
+
+  const getButtonHandlerMapSpy = jest
+    .spyOn(getButtonHandlerMapModule, 'default')
+    .mockReturnValue(mockButtonHandlerMap)
 
   describe('when the commands are successfully initialized', () => {
     beforeEach(() => {
@@ -43,12 +53,13 @@ describe('initCommands', () => {
     })
 
     it('registers the commands and subscribes to interactionCreate', () => {
-      expect(buildSpy).toHaveBeenCalledWith(mockCommands)
+      expect(buildCommandsSpy).toHaveBeenCalledWith(mockCommands)
       expect(registerCommandsSpy).toHaveBeenCalledWith({
         applicationId: mockApplicationId,
         commands: mockResolvedCommands,
         token: mockToken,
       })
+      expect(getButtonHandlerMapSpy).toHaveBeenCalledWith(mockCommands)
       expect(mockClient.on).toHaveBeenCalledWith(
         'interactionCreate',
         expect.any(Function),
@@ -61,11 +72,16 @@ describe('initCommands', () => {
       const handleCommandSpy = jest
         .spyOn(handleCommandModule, 'default')
         .mockResolvedValue(undefined)
+      const handleButtonSpy = jest
+        .spyOn(handleButtonModule, 'default')
+        .mockResolvedValue(undefined)
 
-      const isCommandSpy = jest.fn()
+      const isCommandSpy = jest.fn().mockReturnValue(false)
+      const isButtonSpy = jest.fn().mockReturnValue(false)
 
       const mockInteraction = {
         isCommand: isCommandSpy,
+        isButton: isButtonSpy,
       } as unknown as Interaction
 
       beforeEach(() => {
@@ -82,24 +98,43 @@ describe('initCommands', () => {
           interactionCreateHandler(mockInteraction)
 
           expect(isCommandSpy).toHaveBeenCalled()
+          expect(isButtonSpy).not.toHaveBeenCalled()
           expect(handleCommandSpy).toHaveBeenCalledWith({
             commands: mockCommands,
-            context: mockContext,
             interaction: mockInteraction,
+            context: mockContext,
+          })
+          expect(handleButtonSpy).not.toHaveBeenCalled()
+        })
+      })
+
+      describe('when the interaction is a button', () => {
+        beforeEach(() => {
+          isButtonSpy.mockReturnValueOnce(true)
+        })
+
+        it('calls handleButton', () => {
+          interactionCreateHandler(mockInteraction)
+
+          expect(isCommandSpy).toHaveBeenCalled()
+          expect(isButtonSpy).toHaveBeenCalled()
+          expect(handleCommandSpy).not.toHaveBeenCalled()
+          expect(handleButtonSpy).toHaveBeenCalledWith({
+            buttonHandlerMap: mockButtonHandlerMap,
+            interaction: mockInteraction,
+            context: mockContext,
           })
         })
       })
 
-      describe('when the interaction is not a command', () => {
-        beforeEach(() => {
-          isCommandSpy.mockReturnValueOnce(false)
-        })
-
+      describe('when the interaction is something else', () => {
         it('does nothing', () => {
           interactionCreateHandler(mockInteraction)
 
           expect(isCommandSpy).toHaveBeenCalled()
+          expect(isButtonSpy).toHaveBeenCalled()
           expect(handleCommandSpy).not.toHaveBeenCalled()
+          expect(handleButtonSpy).not.toHaveBeenCalled()
         })
       })
     })
@@ -107,14 +142,19 @@ describe('initCommands', () => {
 
   describe('when there are no commands', () => {
     beforeEach(() => {
-      buildSpy.mockReturnValueOnce([])
+      buildCommandsSpy.mockReturnValueOnce([])
     })
 
-    it('does nothing', () => {
+    it('registers the commands without subscribing to interactionCreate', () => {
       initCommands({ ...mockArgs, commands: [] })
 
-      expect(buildSpy).toHaveBeenCalledWith([])
-      expect(registerCommandsSpy).not.toHaveBeenCalled()
+      expect(buildCommandsSpy).toHaveBeenCalledWith([])
+      expect(registerCommandsSpy).toHaveBeenCalledWith({
+        applicationId: mockApplicationId,
+        commands: [],
+        token: mockToken,
+      })
+      expect(getButtonHandlerMapSpy).not.toHaveBeenCalled()
       expect(mockClient.on).not.toHaveBeenCalled()
     })
   })
