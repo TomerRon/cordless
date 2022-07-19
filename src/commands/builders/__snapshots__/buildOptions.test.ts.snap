@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`addOptionsToCmd snapshots matches the snapshot: addChannelTypes 1`] = `
+exports[`buildOptions snapshots matches the snapshot: addChannelTypes 1`] = `
 Array [
   Array [
     0,
@@ -9,7 +9,7 @@ Array [
 ]
 `;
 
-exports[`addOptionsToCmd snapshots matches the snapshot: addChoices 1`] = `
+exports[`buildOptions snapshots matches the snapshot: addChoices 1`] = `
 Array [
   Array [
     Object {
@@ -44,7 +44,7 @@ Array [
 ]
 `;
 
-exports[`addOptionsToCmd snapshots matches the snapshot: setDescription 1`] = `
+exports[`buildOptions snapshots matches the snapshot: setDescription 1`] = `
 Array [
   Array [
     "No description",
@@ -103,7 +103,7 @@ Array [
 ]
 `;
 
-exports[`addOptionsToCmd snapshots matches the snapshot: setMaxValue 1`] = `
+exports[`buildOptions snapshots matches the snapshot: setMaxValue 1`] = `
 Array [
   Array [
     1337,
@@ -114,7 +114,7 @@ Array [
 ]
 `;
 
-exports[`addOptionsToCmd snapshots matches the snapshot: setMinValue 1`] = `
+exports[`buildOptions snapshots matches the snapshot: setMinValue 1`] = `
 Array [
   Array [
     10,
@@ -125,7 +125,7 @@ Array [
 ]
 `;
 
-exports[`addOptionsToCmd snapshots matches the snapshot: setName 1`] = `
+exports[`buildOptions snapshots matches the snapshot: setName 1`] = `
 Array [
   Array [
     "mock-option-a",
@@ -184,7 +184,7 @@ Array [
 ]
 `;
 
-exports[`addOptionsToCmd snapshots matches the snapshot: setRequired 1`] = `
+exports[`buildOptions snapshots matches the snapshot: setRequired 1`] = `
 Array [
   Array [
     false,

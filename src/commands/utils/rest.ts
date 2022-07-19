@@ -11,7 +11,7 @@ type RegisterCommandsArgs = {
 /**
  * Registers the given application commands with Discord API.
  */
-const registerCommands = ({
+export const registerCommands = ({
   applicationId,
   commands,
   token,
@@ -22,5 +22,3 @@ const registerCommands = ({
     .put(Routes.applicationCommands(applicationId), { body: commands })
     .catch(console.error)
 }
-
-export default registerCommands

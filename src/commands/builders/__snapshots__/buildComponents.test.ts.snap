@@ -1,0 +1,66 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`buildComponents snapshots matches the snapshot: setCustomId 1`] = `
+Array [
+  Array [
+    "command-a-component-a-label-0",
+  ],
+  Array [
+    "command-a-component-c-label-2",
+  ],
+  Array [
+    "command-a-component-e-label-4",
+  ],
+]
+`;
+
+exports[`buildComponents snapshots matches the snapshot: setLabel 1`] = `
+Array [
+  Array [
+    "component-a-label",
+  ],
+  Array [
+    "component-b-label",
+  ],
+  Array [
+    "component-c-label",
+  ],
+  Array [
+    "component-d-label",
+  ],
+  Array [
+    "component-e-label",
+  ],
+]
+`;
+
+exports[`buildComponents snapshots matches the snapshot: setStyle 1`] = `
+Array [
+  Array [
+    "PRIMARY",
+  ],
+  Array [
+    "LINK",
+  ],
+  Array [
+    "PRIMARY",
+  ],
+  Array [
+    "LINK",
+  ],
+  Array [
+    "DANGER",
+  ],
+]
+`;
+
+exports[`buildComponents snapshots matches the snapshot: setURL 1`] = `
+Array [
+  Array [
+    "component-c-url",
+  ],
+  Array [
+    "component-c-url",
+  ],
+]
+`;

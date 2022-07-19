@@ -1,8 +1,10 @@
 import { Client } from 'discord.js'
 import { BotCommand, Context, CustomContext } from '../types'
-import build from './utils/build'
-import handleCommand from './utils/handleCommand'
-import registerCommands from './utils/registerCommands'
+import buildCommands from './builders/buildCommands'
+import handleButton from './handlers/handleButton'
+import handleCommand from './handlers/handleCommand'
+import getButtonHandlerMap from './utils/getButtonHandlerMap'
+import { registerCommands } from './utils/rest'
 
 export type InitCommandsArgs<C extends CustomContext> = {
   client: Client<true>
@@ -17,11 +19,7 @@ const initCommands = <C extends CustomContext>({
   context,
   token,
 }: InitCommandsArgs<C>) => {
-  const resolvedCommands = build(commands)
-
-  if (!resolvedCommands.length) {
-    return
-  }
+  const resolvedCommands = buildCommands(commands)
 
   registerCommands({
     applicationId: client.application.id,
@@ -29,10 +27,24 @@ const initCommands = <C extends CustomContext>({
     token,
   })
 
-  client.on('interactionCreate', async (interaction) => {
-    if (!interaction.isCommand()) return
+  if (!resolvedCommands.length) {
+    return
+  }
 
-    await handleCommand({ commands, context, interaction })
+  const buttonHandlerMap = getButtonHandlerMap(commands)
+
+  client.on('interactionCreate', (interaction) => {
+    if (interaction.isCommand()) {
+      return handleCommand({
+        commands,
+        context,
+        interaction,
+      })
+    }
+
+    if (interaction.isButton()) {
+      return handleButton({ buttonHandlerMap, interaction, context })
+    }
   })
 }
 

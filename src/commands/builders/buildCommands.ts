@@ -1,12 +1,12 @@
 import { SlashCommandBuilder } from '@discordjs/builders'
 import { BotCommand, CustomContext } from '../../types'
-import addOptionsToCmd from './addOptionsToCmd'
-import isCommandWithHandler from './isCommandWithHandler'
+import { isCommandWithHandler } from '../utils/guards'
+import buildOptions from './buildOptions'
 
 /**
  * Builds a list of discord.js SlashCommands for a given list of BotCommands.
  */
-const build = <C extends CustomContext>(
+const buildCommands = <C extends CustomContext>(
   commands: BotCommand<C>[],
 ): SlashCommandBuilder[] =>
   commands.map((command) => {
@@ -19,7 +19,7 @@ const build = <C extends CustomContext>(
     if (isCommandWithHandler(command)) {
       const { options = [] } = command
 
-      addOptionsToCmd(cmd, options)
+      buildOptions(cmd, options)
     } else {
       command.subcommands.forEach((subcommand) => {
         const {
@@ -31,7 +31,7 @@ const build = <C extends CustomContext>(
         cmd.addSubcommand((s) => {
           s.setName(name).setDescription(description)
 
-          addOptionsToCmd(s, options)
+          buildOptions(s, options)
 
           return s
         })
@@ -41,4 +41,4 @@ const build = <C extends CustomContext>(
     return cmd
   })
 
-export default build
+export default buildCommands

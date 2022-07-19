@@ -2,9 +2,12 @@ import { ApplicationCommandOptionAllowedChannelTypes } from '@discordjs/builders
 import { APIApplicationCommandOptionChoice } from 'discord-api-types/v10'
 import Discord, {
   ApplicationCommandOptionType,
+  ButtonInteraction,
   ClientEvents,
   ClientOptions,
   CommandInteraction,
+  MessageActionRow,
+  MessageButtonStyle,
 } from 'discord.js'
 
 /** Initialization options for your cordless bot */
@@ -49,8 +52,49 @@ export type BotCommand<C extends CustomContext = {}> =
 export interface BotCommandWithHandler<C extends CustomContext = {}>
   extends BotCommandBase {
   handler: (args: BotCommandHandlerArgs<C>) => void | Promise<void>
+  components?: BotCommandComponent<C>[]
   options?: BotCommandOption[]
   subcommands?: never
+}
+
+export type BotCommandHandlerArgs<C extends CustomContext = {}> = {
+  interaction: CommandInteraction
+  context: Context<C>
+  components?: MessageActionRow[]
+}
+
+export type BotCommandComponent<C extends CustomContext = {}> =
+  | BotCommandButtonComponent<C>
+  | BotCommandLinkComponent<C>
+
+export interface BotCommandButtonComponent<C extends CustomContext = {}>
+  extends BotCommandButtonComponentBase {
+  style?: Exclude<MessageButtonStyle, 'LINK'>
+  handler: BotCommandButtonHandler<C>
+}
+
+export type BotCommandButtonHandler<C extends CustomContext = {}> = (
+  args: BotCommandButtonHandlerArgs<C>,
+) => void | Promise<void>
+
+export interface BotCommandLinkComponent<C extends CustomContext = {}>
+  extends BotCommandButtonComponentBase {
+  style: 'LINK'
+  url:
+    | string
+    | ((
+        args: Omit<BotCommandHandlerArgs<C>, 'components'>,
+      ) => string | Promise<string>)
+}
+
+type BotCommandButtonComponentBase = {
+  label: string
+  style?: MessageButtonStyle
+}
+
+export type BotCommandButtonHandlerArgs<C extends CustomContext = {}> = {
+  interaction: ButtonInteraction
+  context: Context<C>
 }
 
 export interface BotCommandWithSubcommands<C extends CustomContext = {}>
@@ -63,11 +107,6 @@ export interface BotCommandWithSubcommands<C extends CustomContext = {}>
 type BotCommandBase = {
   name: string
   description?: string
-}
-
-export type BotCommandHandlerArgs<C extends CustomContext = {}> = {
-  interaction: CommandInteraction
-  context: Context<C>
 }
 
 export type BotCommandOption =
