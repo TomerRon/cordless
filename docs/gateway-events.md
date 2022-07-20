@@ -2,10 +2,10 @@
 
 #### Default behavior
 
-By default, bot functions react to `messageCreate` events, like in the following ping example:
+By default, event handlers react to `messageCreate` events, like in the following ping example:
 
 ```ts
-const ping: BotFunction = {
+const ping: BotEventHandler = {
   condition: (msg) => msg.content === 'ping',
   callback: (msg) => msg.reply('pong'),
 }
@@ -13,20 +13,20 @@ const ping: BotFunction = {
 
 #### Subscribing to other Gateway Events
 
-You may need your functions to react to other events, for example:
+You may need your event handlers to react to other events, for example:
 
 - A user joined/left the server
 - A message was deleted
 - A new channel was created
 - etc...
 
-In these cases, you can subscribe your functions to other events by passing an `event` key.
+In these cases, you can subscribe your event handlers to other events by passing an `event` key.
 
-For example, this function reacts to a new channel being created:
+For example, this event handler reacts to a new channel being created:
 
 ```ts
 // TypeScript
-const channelGreeter: BotFunction<'channelCreate'> = {
+const channelGreeter: BotEventHandler<'channelCreate'> = {
   event: 'channelCreate',
   condition: () => true,
   callback: async (channel) => {
@@ -46,30 +46,6 @@ const channelGreeter = {
     if (channel.isText()) {
       await channel.send(`Hello world! This is ${channel.name}`)
     }
-  },
-}
-```
-
-This function logs when the bot is ready:
-
-```ts
-// TypeScript
-const ready: BotFunction<'ready'> = {
-  event: 'ready',
-  condition: () => true,
-  callback: (client) => {
-    console.log(`Logged in as ${client.user.tag}`)
-  },
-}
-```
-
-```js
-// JavaScript
-const ready = {
-  event: 'ready',
-  condition: () => true,
-  callback: (client) => {
-    console.log(`Logged in as ${client.user.tag}`)
   },
 }
 ```

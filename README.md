@@ -25,18 +25,18 @@ npm i cordless
 ⏲️ Estimated time: **5 minutes**
 
 1. Follow [docs/setup.md](docs/setup.md) to create a new bot in the Discord developer portal.
-2. Write your first bot function and initialize your bot:
+2. Write your first bot event handler and initialize your bot:
 
 ```ts
 // TypeScript
-import { init, BotFunction } from 'cordless'
+import { BotEventHandler, init } from 'cordless'
 
-const ping: BotFunction = {
+const ping: BotEventHandler = {
   condition: (msg) => msg.content === 'ping',
   callback: (msg) => msg.reply('pong'),
 }
 
-init({ functions: [ping], token: 'your.bot.token' })
+init({ handlers: [ping], token: 'your.bot.token' })
 ```
 
 ```js
@@ -48,7 +48,7 @@ const ping = {
   callback: (msg) => msg.reply('pong'),
 }
 
-cordless.init({ functions: [ping], token: 'your.bot.token' })
+cordless.init({ handlers: [ping], token: 'your.bot.token' })
 ```
 
 You can also check out the [code samples](sample) for ready-to-go solutions. See: [sample/01-basic-typescript](sample/01-basic-typescript) or [sample/02-basic-javascript](sample/02-basic-javascript)
@@ -57,13 +57,13 @@ You can also check out the [code samples](sample) for ready-to-go solutions. See
 
 #### Subscribe to Gateway Events
 
-By default, cordless functions subscribe to `messageCreate` events, like in the ping example above. You can also create functions that subscribe to any other event (e.g., user joined, channel created, etc).
+By default, cordless event handlers subscribe to `messageCreate` events, like in the ping example above. You can also create event handlers that subscribe to any other event (e.g., user joined, channel created, etc).
 
 See: [docs/gateway-events.md](docs/gateway-events.md)
 
 #### Context and State Management
 
-You can share business logic and state between your different functions using context. By default, the context contains the `discord.js` client and the current list of functions. You can also extend the context with your own custom context to share additional business logic and even implement state management.
+You can share business logic and state between your different event handlers using context. By default, the context contains the `discord.js` client and the current list of event handlers. You can also extend the context with your own custom context to share additional business logic and even implement state management.
 
 See: [docs/context.md](docs/context.md)
 
