@@ -43,7 +43,7 @@ describe('handleCommand', () => {
 
   const mockContext = {
     client: jest.fn() as unknown as Client,
-    functions: [],
+    handlers: [],
     foo: 'bar',
   }
 

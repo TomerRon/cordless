@@ -1,7 +1,7 @@
 import { Client, Message } from 'discord.js'
-import { BotFunction, CustomContext } from '../types'
+import { BotEventHandler, CustomContext } from '../../types'
 import handleEvent from './handleEvent'
-import * as isSelfEvent from './isSelfEvent'
+import * as isSelfEvent from '../utils/isSelfEvent'
 
 describe('handleEvent', () => {
   beforeEach(jest.clearAllMocks)
@@ -15,18 +15,21 @@ describe('handleEvent', () => {
   } as Client
 
   const pingOneCallbackSpy = jest.fn()
-  const pingOneFunction: BotFunction = {
+  const pingOneEventHandler: BotEventHandler = {
     condition: (msg) => msg.content === 'ping',
     callback: pingOneCallbackSpy,
   }
 
   const pingTwoCallbackSpy = jest.fn()
-  const pingTwoFunction: BotFunction = {
+  const pingTwoEventHandler: BotEventHandler = {
     condition: (msg) => msg.content === 'ping',
     callback: pingTwoCallbackSpy,
   }
 
-  const mockFunctions: BotFunction[] = [pingOneFunction, pingTwoFunction]
+  const mockHandlers: BotEventHandler[] = [
+    pingOneEventHandler,
+    pingTwoEventHandler,
+  ]
 
   const isSelfEventSpy = jest
     .spyOn(isSelfEvent, 'default')
@@ -37,9 +40,9 @@ describe('handleEvent', () => {
     client?: Partial<Client>
     context?: CustomContext
   }) => Promise<void> = ({ msg, client, context = {} } = {}) =>
-    handleEvent([{ ...mockMsg, ...msg } as Message], mockFunctions, {
+    handleEvent([{ ...mockMsg, ...msg } as Message], mockHandlers, {
       client: { ...mockClient, ...client } as Client,
-      functions: mockFunctions,
+      handlers: mockHandlers,
       ...context,
     })
 
@@ -70,18 +73,18 @@ describe('handleEvent', () => {
     })
   })
 
-  it('should call the callback of the first function that matches the condition', async () => {
+  it('should call the callback of the first handler that matches the condition', async () => {
     await setupTest()
 
     expect(isSelfEventSpy).toHaveBeenCalledWith([mockMsg], mockClient.user?.id)
     expect(pingOneCallbackSpy).toHaveBeenCalledWith(mockMsg, {
       client: mockClient,
-      functions: mockFunctions,
+      handlers: mockHandlers,
     })
     expect(pingTwoCallbackSpy).not.toHaveBeenCalled()
   })
 
-  it("should call a function's callback with custom context", async () => {
+  it("should call a handler's callback with custom context", async () => {
     const customContext = { foo: 'bar' }
 
     await setupTest({ context: customContext })
@@ -89,13 +92,13 @@ describe('handleEvent', () => {
     expect(isSelfEventSpy).toHaveBeenCalledWith([mockMsg], mockClient.user?.id)
     expect(pingOneCallbackSpy).toHaveBeenCalledWith(mockMsg, {
       client: mockClient,
-      functions: mockFunctions,
+      handlers: mockHandlers,
       ...customContext,
     })
     expect(pingTwoCallbackSpy).not.toHaveBeenCalled()
   })
 
-  it("should ignore the event if none of the functions' conditions match", async () => {
+  it("should ignore the event if none of the handlers' conditions match", async () => {
     const msg = { content: 'Foobar' }
 
     await setupTest({ msg })

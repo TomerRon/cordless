@@ -12,17 +12,17 @@ import Discord, {
 
 /** Initialization options for your cordless bot */
 export type InitOptions<C extends CustomContext = {}> = {
-  /** The commands used by your bot. */
-  commands?: BotCommand<C>[]
-  /** The functions used by your bot */
-  functions: BotFunction<any, C>[] // eslint-disable-line @typescript-eslint/no-explicit-any
   /**
    * Your bot token.
    *
    * @see https://discordjs.guide/preparations/setting-up-a-bot-application.html#your-bot-s-token
    */
   token: string
-  /** A custom context object which will extend the context passed to your commands and functions */
+  /** The commands used by your bot. */
+  commands?: BotCommand<C>[]
+  /** The event handlers used by your bot. */
+  handlers?: BotEventHandler<any, C>[] // eslint-disable-line @typescript-eslint/no-explicit-any
+  /** A custom context object which will extend the context passed to your commands and event handlers */
   context?: C
   /**
    * Override the default Gateway Intents of the discord.js client.
@@ -34,15 +34,6 @@ export type InitOptions<C extends CustomContext = {}> = {
    * @see https://discordjs.guide/popular-topics/intents.html
    */
   intents?: ClientOptions['intents']
-  /**
-   * Generate a help function for the bot, which will be triggered by the value.
-   *
-   * For example, given a value of "!help", the following commands will be available:
-   *
-   * - !help (shows a list of available functions)
-   * - !help <function-name> (shows a description and usage instructions for the given function)
-   */
-  helpCommand?: string
 }
 
 export type BotCommand<C extends CustomContext = {}> =
@@ -171,27 +162,17 @@ type BotCommandOptionBase = {
   required?: boolean
 }
 
-export type BotFunction<
+export type BotEventHandler<
   E extends keyof ClientEvents = 'messageCreate',
   C extends CustomContext = {},
 > = {
   /**
-   * The name of this function (no spaces allowed).
-   * It will be displayed in the help function if there is a helpCommand.
-   */
-  name?: string
-  /**
-   * The description of this function and usage instructions.
-   * It will be displayed in the help function if there is a helpCommand.
-   */
-  description?: string
-  /**
-   * The event this function should subscribe to (default: "messageCreate").
+   * The event this handler should subscribe to (default: "messageCreate").
    */
   event?: E
-  /** Determines whether or not this function should run */
+  /** Determines whether or not the callback should run */
   condition: (...args: [...ClientEvents[E], Context<C>]) => boolean
-  /** Called whenever this function should run */
+  /** Called whenever an event that matches the condition is received */
   callback: (
     ...args: [...ClientEvents[E], Context<C>]
   ) => void | Promise<Discord.Message | void>
@@ -202,5 +183,5 @@ export type CustomContext = Record<string, any>
 
 export type Context<C extends CustomContext = {}> = {
   client: Discord.Client<true>
-  functions: BotFunction<any, C>[] // eslint-disable-line @typescript-eslint/no-explicit-any
+  handlers: BotEventHandler<any, C>[] // eslint-disable-line @typescript-eslint/no-explicit-any
 } & C

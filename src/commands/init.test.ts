@@ -17,7 +17,7 @@ describe('initCommands', () => {
     application: { id: mockApplicationId },
   } as unknown as Client<true>
   const mockCommands: BotCommand[] = ['botCommand' as unknown as BotCommand]
-  const mockContext: Context = { client: mockClient, functions: [] }
+  const mockContext: Context = { client: mockClient, handlers: [] }
   const mockToken = 'mock-token'
 
   const mockArgs: InitCommandsArgs<{}> = {
