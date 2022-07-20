@@ -1,3 +1,20 @@
+# [3.0.0-beta.6](https://github.com/TomerRon/cordless/compare/v3.0.0-beta.5...v3.0.0-beta.6) (2022-07-20)
+
+
+### Features
+
+* **events:** refactor BotFunction into BotEventHandler ([3379609](https://github.com/TomerRon/cordless/commit/33796097fa9c95e4ed6d8102410f90faeb3b2795))
+* **events:** remove help command ([c1bd973](https://github.com/TomerRon/cordless/commit/c1bd973ea0706b3d4a69983a305bb993ec1784f6))
+
+
+### BREAKING CHANGES
+
+* **events:** Bot functions (`BotFunction`) are now called event handlers (`BotEventHandler`).
+Event handlers should now  be passed into the initialization method as `handlers: [...]` instead of `functions: [...]`.
+It is no longer required to pass a list of handlers on initialization.
+* **events:** The help command has been removed - it is no longer useful because commands can describe themselves.
+Bot functions can no longer receieve a name and a description.
+
 # [3.0.0-beta.5](https://github.com/TomerRon/cordless/compare/v3.0.0-beta.4...v3.0.0-beta.5) (2022-07-19)
 
 
