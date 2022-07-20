@@ -18,7 +18,7 @@ export const init = async <C extends CustomContext = {}>(
   const {
     commands = [],
     context = {} as C,
-    functions,
+    handlers = [],
     intents = DEFAULT_INTENTS,
     token,
   } = options
@@ -36,7 +36,7 @@ export const init = async <C extends CustomContext = {}>(
 
   const resolvedContext: Context<C> = {
     client,
-    functions,
+    handlers,
     ...context,
   }
 
@@ -49,7 +49,7 @@ export const init = async <C extends CustomContext = {}>(
 
   initEvents<C>({
     client,
-    functions,
+    handlers,
     context: resolvedContext,
   })
 

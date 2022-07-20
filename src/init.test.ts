@@ -2,7 +2,7 @@ import { Client, Intents } from 'discord.js'
 import * as initCommandsModule from './commands/init'
 import * as initEventsModule from './events/init'
 import { init } from './init'
-import { BotCommand, BotFunction, InitOptions } from './types'
+import { BotCommand, BotEventHandler, InitOptions } from './types'
 
 const onceSpy = jest.fn()
 const loginSpy = jest.fn()
@@ -41,14 +41,14 @@ describe('init', () => {
     },
   ]
 
-  const mockFunction: BotFunction = {
+  const mockEventHandler: BotEventHandler = {
     condition: (msg) => msg.content === 'ping',
     callback: jest.fn(),
   }
 
   const mockOptions: InitOptions = {
     commands: mockCommands,
-    functions: [mockFunction],
+    handlers: [mockEventHandler],
     token: mockToken,
   }
 
@@ -92,7 +92,7 @@ describe('init', () => {
       commands: mockCommands,
       context: {
         client: mockLoggedInClient,
-        functions: mockOptions.functions,
+        handlers: mockOptions.handlers,
       },
       token: mockToken,
     })
@@ -106,21 +106,34 @@ describe('init', () => {
       commands: [],
       context: {
         client: mockLoggedInClient,
-        functions: mockOptions.functions,
+        handlers: mockOptions.handlers,
       },
       token: mockToken,
     })
   })
 
-  it('should call initEvents with the given functions', async () => {
+  it('should call initEvents with the given event handlers', async () => {
     await setupTest()
 
     expect(initEventsSpy).toHaveBeenCalledWith({
       client: mockLoggedInClient,
-      functions: [mockFunction],
+      handlers: [mockEventHandler],
       context: {
         client: mockLoggedInClient,
-        functions: mockOptions.functions,
+        handlers: mockOptions.handlers,
+      },
+    })
+  })
+
+  it('should call initEvents with an empty list of event handlers by default', async () => {
+    await setupTest({ handlers: undefined })
+
+    expect(initEventsSpy).toHaveBeenCalledWith({
+      client: mockLoggedInClient,
+      handlers: [],
+      context: {
+        client: mockLoggedInClient,
+        handlers: [],
       },
     })
   })

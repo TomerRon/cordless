@@ -1,5 +1,5 @@
 import { ClientEvents } from 'discord.js'
-import { BotFunction, Context, CustomContext } from '../../types'
+import { BotEventHandler, Context, CustomContext } from '../../types'
 import isSelfEvent from '../utils/isSelfEvent'
 
 const handleEvent = async <
@@ -7,7 +7,7 @@ const handleEvent = async <
   C extends CustomContext,
 >(
   eventArgs: ClientEvents[E],
-  functions: BotFunction<E, C>[],
+  handlers: BotEventHandler<E, C>[],
   context: Context<C>,
 ): Promise<void> => {
   const { client } = context
@@ -20,7 +20,7 @@ const handleEvent = async <
     return
   }
 
-  const result = functions.find(({ condition }) =>
+  const result = handlers.find(({ condition }) =>
     condition(...eventArgs, context),
   )
 

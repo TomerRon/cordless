@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`initEvents should handle many functions and map each one to an event handler 1`] = `
+exports[`initEvents should process many event handlers and map each one to the appropriate discord.js event handler 1`] = `
 Array [
   Array [
     Array [
@@ -52,7 +52,7 @@ Array [
           ],
         },
       },
-      "functions": Array [],
+      "handlers": Array [],
     },
   ],
   Array [
@@ -106,7 +106,7 @@ Array [
           ],
         },
       },
-      "functions": Array [],
+      "handlers": Array [],
     },
   ],
   Array [
@@ -155,7 +155,7 @@ Array [
           ],
         },
       },
-      "functions": Array [],
+      "handlers": Array [],
     },
   ],
 ]

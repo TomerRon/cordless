@@ -1,7 +1,7 @@
 import { Client, Message, TextBasedChannel } from 'discord.js'
 import { v4 as uuidv4 } from 'uuid'
-import { BotFunction } from '../src'
-import { setupClients } from './utils'
+import { BotEventHandler } from '../../src'
+import { setupClients } from '../utils'
 
 describe('callback', () => {
   let cordlessClient: Client
@@ -22,7 +22,7 @@ describe('callback', () => {
   beforeEach(jest.clearAllMocks)
 
   beforeAll(async () => {
-    const ping: BotFunction = {
+    const ping: BotEventHandler = {
       condition: (msg) => msg.content === testPing,
       callback: (msg) => {
         msg.channel.send(testPong)
@@ -30,7 +30,7 @@ describe('callback', () => {
       },
     }
 
-    const setup = await setupClients({ functions: [ping] })
+    const setup = await setupClients({ handlers: [ping] })
 
     cordlessClient = setup.cordlessClient
     userClient = setup.userClient

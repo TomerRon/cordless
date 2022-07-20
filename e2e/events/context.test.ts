@@ -1,7 +1,7 @@
 import { Client, Message } from 'discord.js'
 import { v4 as uuidv4 } from 'uuid'
-import { BotFunction, Context } from '../src'
-import { setupClients } from './utils'
+import { BotEventHandler, Context } from '../../src'
+import { setupClients } from '../utils'
 
 interface CustomContext {
   foo: string
@@ -17,12 +17,12 @@ describe('context', () => {
   const testPing = `[context] - ${uuidv4()}`
 
   const pingCallbackSpy = jest.fn()
-  const ping: BotFunction<'messageCreate', CustomContext> = {
+  const ping: BotEventHandler<'messageCreate', CustomContext> = {
     condition: (msg) => msg.content === testPing,
     callback: pingCallbackSpy,
   }
 
-  const mockFunctions = [ping]
+  const mockEventHandlers = [ping]
 
   let mockCount = 0
 
@@ -37,7 +37,7 @@ describe('context', () => {
   beforeAll(async () => {
     const setup = await setupClients({
       context: mockCustomContext,
-      functions: mockFunctions,
+      handlers: mockEventHandlers,
     })
 
     cordlessClient = setup.cordlessClient
@@ -59,11 +59,11 @@ describe('context', () => {
     expect(client.user?.id).toBe(cordlessClient.user?.id)
   })
 
-  it('should have access to the functions', async () => {
-    const { functions } = pingCallbackSpy.mock
+  it('should have access to the event handlers', async () => {
+    const { handlers } = pingCallbackSpy.mock
       .calls[0][1] as Context<CustomContext>
 
-    expect(functions).toStrictEqual(mockFunctions)
+    expect(handlers).toStrictEqual(mockEventHandlers)
   })
 
   it('should have access to custom context', async () => {
@@ -72,7 +72,7 @@ describe('context', () => {
     expect(foo).toBe(mockCustomContext.foo)
   })
 
-  it('should be able to persist the context between function calls', async () => {
+  it('should be able to persist the context between event handler calls', async () => {
     const { getCount, setCount } = pingCallbackSpy.mock
       .calls[0][1] as Context<CustomContext>
 

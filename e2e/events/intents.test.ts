@@ -1,7 +1,7 @@
 import { Client, Intents, Message } from 'discord.js'
 import { v4 as uuidv4 } from 'uuid'
-import { InitOptions } from '../src'
-import { setupClients } from './utils'
+import { InitOptions } from '../../src'
+import { setupClients } from '../utils'
 
 describe('intents', () => {
   let cordlessClient: Client
@@ -12,7 +12,7 @@ describe('intents', () => {
 
   const setupTest = async (intents?: InitOptions['intents']) => {
     const setup = await setupClients({
-      functions: [],
+      handlers: [],
       intents,
     })
 
