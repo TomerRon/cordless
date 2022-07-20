@@ -43,7 +43,7 @@ Now that you have a server, go back to your application page in the [Discord dev
 
 - Click on "OAuth2" in the sidebar
 - Click on "URL Generator" in the new sub-menu that appeared
-- In the list of scopes, tick "bot"
+- In the list of scopes, tick `applications.commands` and `bot`
 - In the list of bot permissions, tick the relevant permissions for your bot, depending on what your bot will do. If you are using your own empty server to develop your bot, you can just tick "Administrator" for now to get all of the permissions
 - Under "Generated URL", click on "Copy" to copy the generated URL and open it in a new tab
 - Choose the server you'd like to add your bot to

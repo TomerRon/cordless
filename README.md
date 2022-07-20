@@ -25,18 +25,18 @@ npm i cordless
 ⏲️ Estimated time: **5 minutes**
 
 1. Follow [docs/setup.md](docs/setup.md) to create a new bot in the Discord developer portal.
-2. Write your first bot event handler and initialize your bot:
+2. Write your first command and initialize your bot:
 
 ```ts
 // TypeScript
-import { BotEventHandler, init } from 'cordless'
+import { BotCommand, init } from 'cordless'
 
-const ping: BotEventHandler = {
-  condition: (msg) => msg.content === 'ping',
-  callback: (msg) => msg.reply('pong'),
+const ping: BotCommand = {
+  name: 'ping',
+  handler: ({ interaction }) => interaction.reply('Pong!'),
 }
 
-init({ handlers: [ping], token: 'your.bot.token' })
+init({ commands: [ping], token: 'your.bot.token' })
 ```
 
 ```js
@@ -44,34 +44,48 @@ init({ handlers: [ping], token: 'your.bot.token' })
 const cordless = require('cordless')
 
 const ping = {
-  condition: (msg) => msg.content === 'ping',
-  callback: (msg) => msg.reply('pong'),
+  name: 'ping',
+  handler: ({ interaction }) => interaction.reply('Pong!'),
 }
 
-cordless.init({ handlers: [ping], token: 'your.bot.token' })
+cordless.init({ commands: [ping], token: 'your.bot.token' })
 ```
-
-You can also check out the [code samples](sample) for ready-to-go solutions. See: [sample/01-basic-typescript](sample/01-basic-typescript) or [sample/02-basic-javascript](sample/02-basic-javascript)
 
 ## Advanced Usage
 
+#### Create advanced interactions
+
+Cordless allow you to interface with the full [Discord Application Commands API](https://discord.com/developers/docs/interactions/application-commands) in a declarative fashion:
+
+- Add interactive buttons and link buttons to your interactions. See: [docs/command-components.md](docs/command-components.md)
+- Create CLI-like commands with arguments and pre-defined choices. See: [docs/command-options.md](docs/command-options.md)
+- Nest commands within each other by creating subcommands. See: [docs/command-subcommands.md](docs/command-subcommands.md)
+- Select menus: **_Coming soon!_**
+- Autocomplete: **_Coming soon!_**
+- Modals: **_Coming soon!_**
+
+For a quick overview of the commands API, see: [docs/commands.md](docs/commands.md)
+
 #### Subscribe to Gateway Events
 
-By default, cordless event handlers subscribe to `messageCreate` events, like in the ping example above. You can also create event handlers that subscribe to any other event (e.g., user joined, channel created, etc).
+Commands are the easiest way to let users interact with your bot, but sometimes you need to react to other events as they happen (for example: user joined the server, a message was deleted, etc). You can use the built-in event handlers to easily subscribe to any [Discord Gateway Event](https://discord.com/developers/docs/topics/gateway#commands-and-events-gateway-events).
 
-See: [docs/gateway-events.md](docs/gateway-events.md)
+For example, let's say our bot needs to greet new channels whenever they are created, expect for channels that start with `admin-`. We can subscribe an event handler to the `channelCreate` event:
 
-#### Context and State Management
+```ts
+// TypeScript
+const channelGreeter: BotEventHandler<'channelCreate'> = {
+  event: 'channelCreate',
+  condition: (channel) => !channel.name.startsWith('admin-'),
+  callback: (channel) => {
+    if (channel.isText()) {
+      return channel.send(`Hello world! This is ${channel.name}`)
+    }
+  },
+}
+```
 
-You can share business logic and state between your different event handlers using context. By default, the context contains the `discord.js` client and the current list of event handlers. You can also extend the context with your own custom context to share additional business logic and even implement state management.
-
-See: [docs/context.md](docs/context.md)
-
-#### Override the default Gateway Intents
-
-By default, cordless initializes the discord.js client with the [Gateway Intents](https://discord.com/developers/docs/topics/gateway#gateway-intents) `[GUILDS, GUILD_MESSAGES]`. This should be sufficient for bots that simply need to receive messages and do something in response. You can provide your own list of intents if you need additional functionality.
-
-See: [docs/gateway-intents.md](docs/gateway-intents.md)
+See: [docs/events.md](docs/events.md)
 
 #### Using discord.js features
 
@@ -86,6 +100,18 @@ console.log(`Logged in as ${client.user.tag}!`)
 ```
 
 See [discord.js documentation](https://discord.js.org/#/docs) for more information about using the client.
+
+#### Context and State Management
+
+You can share business logic and state between your different event handlers using context. By default, the context contains the `discord.js` client and the current list of event handlers. You can also extend the context with your own custom context to share additional business logic and even implement state management.
+
+See: [docs/context.md](docs/context.md)
+
+#### Override the default Gateway Intents
+
+By default, cordless initializes the discord.js client with the [Gateway Intents](https://discord.com/developers/docs/topics/gateway#gateway-intents) `[GUILDS, GUILD_MESSAGES]`. This should be sufficient for bots that only use command interactions, or bots that only subscribe to events like "messageCreate". You can provide your own list of intents if you need additional functionality.
+
+See: [docs/intents.md](docs/intents.md)
 
 ## Local development
 
