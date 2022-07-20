@@ -40,7 +40,10 @@ describe('initEvents', () => {
     on: jest.fn(),
   } as unknown as Client<true>
 
-  const mockContext: Context = { client: mockClient, handlers: [] }
+  const mockContext: Context = {
+    client: mockClient,
+    handlers: mockEventHandlers,
+  }
 
   const mockArgs: InitEventsArgs = {
     client: mockClient,

@@ -52,7 +52,32 @@ Array [
           ],
         },
       },
-      "handlers": Array [],
+      "handlers": Array [
+        Object {
+          "callback": [MockFunction],
+          "condition": [MockFunction],
+        },
+        Object {
+          "callback": [MockFunction],
+          "condition": [MockFunction],
+          "event": "channelCreate",
+        },
+        Object {
+          "callback": [MockFunction],
+          "condition": [MockFunction],
+          "event": "messageCreate",
+        },
+        Object {
+          "callback": [MockFunction],
+          "condition": [MockFunction],
+          "event": "messageDelete",
+        },
+        Object {
+          "callback": [MockFunction],
+          "condition": [MockFunction],
+          "event": "channelCreate",
+        },
+      ],
     },
   ],
   Array [
@@ -106,7 +131,32 @@ Array [
           ],
         },
       },
-      "handlers": Array [],
+      "handlers": Array [
+        Object {
+          "callback": [MockFunction],
+          "condition": [MockFunction],
+        },
+        Object {
+          "callback": [MockFunction],
+          "condition": [MockFunction],
+          "event": "channelCreate",
+        },
+        Object {
+          "callback": [MockFunction],
+          "condition": [MockFunction],
+          "event": "messageCreate",
+        },
+        Object {
+          "callback": [MockFunction],
+          "condition": [MockFunction],
+          "event": "messageDelete",
+        },
+        Object {
+          "callback": [MockFunction],
+          "condition": [MockFunction],
+          "event": "channelCreate",
+        },
+      ],
     },
   ],
   Array [
@@ -155,7 +205,32 @@ Array [
           ],
         },
       },
-      "handlers": Array [],
+      "handlers": Array [
+        Object {
+          "callback": [MockFunction],
+          "condition": [MockFunction],
+        },
+        Object {
+          "callback": [MockFunction],
+          "condition": [MockFunction],
+          "event": "channelCreate",
+        },
+        Object {
+          "callback": [MockFunction],
+          "condition": [MockFunction],
+          "event": "messageCreate",
+        },
+        Object {
+          "callback": [MockFunction],
+          "condition": [MockFunction],
+          "event": "messageDelete",
+        },
+        Object {
+          "callback": [MockFunction],
+          "condition": [MockFunction],
+          "event": "channelCreate",
+        },
+      ],
     },
   ],
 ]
