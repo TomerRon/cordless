@@ -1,4 +1,5 @@
 import {
+  ChannelType,
   ClientEvents,
   Message,
   PartialMessage,
@@ -29,7 +30,7 @@ describe('isSelfEvent', () => {
   describe("when the event's first argument is an object", () => {
     describe("when the object does not have an 'author' key", () => {
       const eventArgs: ClientEvents['channelCreate'] = [
-        { type: 'GUILD_TEXT' } as TextChannel,
+        { type: ChannelType.GuildText } as TextChannel,
       ]
 
       it('returns false', () => {

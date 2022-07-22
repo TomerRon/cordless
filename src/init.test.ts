@@ -1,4 +1,4 @@
-import { Client, Intents } from 'discord.js'
+import { Client, GatewayIntentBits } from 'discord.js'
 import * as initCommandsModule from './commands/init'
 import * as initEventsModule from './events/init'
 import { init } from './init'
@@ -67,14 +67,14 @@ describe('init', () => {
     await setupTest()
 
     expect(Client).toHaveBeenCalledWith({
-      intents: [Intents.FLAGS.GUILD_MESSAGES, Intents.FLAGS.GUILDS],
+      intents: [GatewayIntentBits.GuildMessages, GatewayIntentBits.Guilds],
     })
   })
 
   it('should initialize the client with the provided intents', async () => {
     const intents = [
-      Intents.FLAGS.GUILD_BANS,
-      Intents.FLAGS.GUILD_EMOJIS_AND_STICKERS,
+      GatewayIntentBits.GuildBans,
+      GatewayIntentBits.GuildEmojisAndStickers,
     ]
 
     await setupTest({ intents })

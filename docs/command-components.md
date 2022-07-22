@@ -23,12 +23,15 @@ const example: BotCommand = {
 The following example is a simple "ping" command that also returns a success button that says "Ping again". When clicked, the button's handler is called.
 
 ```ts
+import { BotCommand } from 'cordless'
+import { ButtonStyle } from 'discord.js'
+
 const ping: BotCommand = {
   name: 'ping',
   components: [
     {
       label: 'Ping again',
-      style: 'SUCCESS',
+      style: ButtonStyle.Success,
       handler: ({ interaction }) => interaction.reply('Pong again!'),
     },
   ],
@@ -49,6 +52,9 @@ You can create an interactive button component by giving it a label, a handler, 
 Example of a command with a primary button and danger button:
 
 ```ts
+import { BotCommand } from 'cordless'
+import { ButtonStyle } from 'discord.js'
+
 const commandWithButtons: BotCommand = {
   components: [
     {
@@ -57,7 +63,7 @@ const commandWithButtons: BotCommand = {
     },
     {
       label: 'Delete',
-      style: 'DANGER',
+      style: ButtonStyle.Danger,
       handler: doDangerousThings,
     },
   ],
@@ -74,7 +80,7 @@ You can create link buttons which redirect to the provided URL by defining a but
 ```ts
 {
   label: "Google",
-  style: "LINK",
+  style: ButtonStyle.Link,
   url: "https://www.google.com",
 }
 ```
@@ -84,7 +90,7 @@ You can also dynamically resolve a button's URL, synchronously or asynchronously
 ```ts
 {
   label: "Open Page",
-  style: "LINK",
+  style: ButtonStyle.Link,
   url: ({ interaction }) => {
     const input = interaction.options.getString("input", true);
     const language = interaction.options.getString("language") || "en";

@@ -1,3 +1,4 @@
+import { ButtonStyle } from 'discord.js'
 import {
   BotCommand,
   BotCommandButtonHandler,
@@ -25,7 +26,7 @@ const getButtonHandlerMap = <C extends CustomContext = {}>(
     if (!command.components?.length) return
 
     command.components.forEach((component, i) => {
-      if (component.style === 'LINK') return
+      if (component.style === ButtonStyle.Link) return
 
       const customId = `${command.name}-${component.label}-${i}`
 

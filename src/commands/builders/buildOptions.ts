@@ -1,7 +1,8 @@
 import {
+  ApplicationCommandOptionType,
   SlashCommandBuilder,
   SlashCommandSubcommandBuilder,
-} from '@discordjs/builders'
+} from 'discord.js'
 import { BotCommandOption } from '../../types'
 
 /**
@@ -20,7 +21,7 @@ const buildOptions = (
     } = option
 
     switch (type) {
-      case 'STRING':
+      case ApplicationCommandOptionType.String:
         cmd.addStringOption((o) => {
           o.setName(name).setDescription(description).setRequired(required)
 
@@ -32,7 +33,7 @@ const buildOptions = (
         })
         break
 
-      case 'INTEGER':
+      case ApplicationCommandOptionType.Integer:
         cmd.addIntegerOption((o) => {
           o.setName(name).setDescription(description).setRequired(required)
 
@@ -52,19 +53,19 @@ const buildOptions = (
         })
         break
 
-      case 'BOOLEAN':
+      case ApplicationCommandOptionType.Boolean:
         cmd.addBooleanOption((o) =>
           o.setName(name).setDescription(description).setRequired(required),
         )
         break
 
-      case 'USER':
+      case ApplicationCommandOptionType.User:
         cmd.addUserOption((o) =>
           o.setName(name).setDescription(description).setRequired(required),
         )
         break
 
-      case 'CHANNEL':
+      case ApplicationCommandOptionType.Channel:
         cmd.addChannelOption((o) => {
           o.setName(name).setDescription(description).setRequired(required)
 
@@ -76,19 +77,19 @@ const buildOptions = (
         })
         break
 
-      case 'ROLE':
+      case ApplicationCommandOptionType.Role:
         cmd.addRoleOption((o) =>
           o.setName(name).setDescription(description).setRequired(required),
         )
         break
 
-      case 'MENTIONABLE':
+      case ApplicationCommandOptionType.Mentionable:
         cmd.addMentionableOption((o) =>
           o.setName(name).setDescription(description).setRequired(required),
         )
         break
 
-      case 'NUMBER':
+      case ApplicationCommandOptionType.Number:
         cmd.addNumberOption((o) => {
           o.setName(name).setDescription(description).setRequired(required)
 
@@ -108,7 +109,7 @@ const buildOptions = (
         })
         break
 
-      case 'ATTACHMENT':
+      case ApplicationCommandOptionType.Attachment:
         cmd.addAttachmentOption((o) =>
           o.setName(name).setDescription(description).setRequired(required),
         )

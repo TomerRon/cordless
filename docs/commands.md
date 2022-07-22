@@ -50,7 +50,7 @@ const ping: BotCommand = {
   components: [
     {
       label: 'Ping again',
-      style: 'PRIMARY',
+      style: ButtonStyle.Success,
       handler: ({ interaction }) => interaction.reply('Pong again!'),
     },
   ],
@@ -73,12 +73,12 @@ const commandWithOptions: BotCommand = {
   // ...
   options: [
     {
-      type: 'INTEGER',
+      type: ApplicationCommandOptionType.Integer,
       name: 'num',
       required: true,
     },
     {
-      type: 'STRING',
+      type: ApplicationCommandOptionType.String,
       name: 'language',
       choices: [
         {

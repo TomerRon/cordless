@@ -37,19 +37,19 @@ Array [
 exports[`buildComponents snapshots matches the snapshot: setStyle 1`] = `
 Array [
   Array [
-    "PRIMARY",
+    1,
   ],
   Array [
-    "LINK",
+    5,
   ],
   Array [
-    "PRIMARY",
+    1,
   ],
   Array [
-    "LINK",
+    5,
   ],
   Array [
-    "DANGER",
+    4,
   ],
 ]
 `;

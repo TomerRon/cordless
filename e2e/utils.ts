@@ -1,4 +1,10 @@
-import { Client, Intents, Message, TextBasedChannel } from 'discord.js'
+import {
+  ChannelType,
+  Client,
+  GatewayIntentBits,
+  Message,
+  TextBasedChannel,
+} from 'discord.js'
 import dotenv from 'dotenv'
 import { CustomContext, init, InitOptions } from '../src'
 
@@ -15,12 +21,17 @@ export const setupClients = async <T extends CustomContext>(
   // Login as the cordless client
   const cordlessClient = await init({
     ...options,
+    intents: options.intents || [
+      GatewayIntentBits.Guilds,
+      GatewayIntentBits.GuildMessages,
+      GatewayIntentBits.MessageContent,
+    ],
     token: process.env.E2E_CLIENT_TOKEN || '',
   })
 
   // Login as the test user
   const userClient = new Client({
-    intents: [Intents.FLAGS.GUILDS],
+    intents: [GatewayIntentBits.Guilds],
   })
 
   await new Promise<void>((resolve) => {
@@ -38,7 +49,7 @@ export const setupClients = async <T extends CustomContext>(
     throw new Error('The provided test channel cannot be found.')
   }
 
-  if (!e2eChannel.isText()) {
+  if (e2eChannel.type !== ChannelType.GuildText) {
     throw new Error('The provided test channel is not a text channel.')
   }
 

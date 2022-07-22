@@ -70,15 +70,18 @@ For a quick overview of the commands API, see: [docs/commands.md](docs/commands.
 
 Commands are the easiest way to let users interact with your bot, but sometimes you need to react to other events as they happen (for example: user joined the server, a message was deleted, etc). You can use the built-in event handlers to easily subscribe to any [Discord Gateway Event](https://discord.com/developers/docs/topics/gateway#commands-and-events-gateway-events).
 
-For example, let's say our bot needs to greet new channels whenever they are created, expect for channels that start with `admin-`. We can subscribe an event handler to the `channelCreate` event:
+For example, let's say our bot needs to greet new text channels whenever they are created, expect for channels that start with `admin-`. We can subscribe an event handler to the `channelCreate` event:
 
 ```ts
 // TypeScript
+import { BotEventHandler } from 'cordless'
+import { ChannelType } from 'discord.js'
+
 const channelGreeter: BotEventHandler<'channelCreate'> = {
   event: 'channelCreate',
   condition: (channel) => !channel.name.startsWith('admin-'),
   callback: (channel) => {
-    if (channel.isText()) {
+    if (channel.type === ChannelType.GuildText) {
       return channel.send(`Hello world! This is ${channel.name}`)
     }
   },
@@ -145,7 +148,7 @@ yarn test
 
 #### End-to-end tests
 
-You must first create two bots and add them to a Discord server. One of the bots will run the cordless client, and the other bot will pretend to be a normal user.
+You must first create two bots and add them to a Discord server. One of the bots will run the cordless client, and the other bot will pretend to be a normal user. The cordless client bot must have the "Message Content Intent" enabled - you can enable it in the Discord Developer Dashboard, in your application's "Bot" page.
 
 You'll need the tokens for both of the bots, and the channel ID of a channel where the bots can send messages.
 

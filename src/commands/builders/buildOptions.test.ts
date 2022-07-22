@@ -1,8 +1,9 @@
+import { ChannelType } from 'discord-api-types/v10'
 import {
+  ApplicationCommandOptionType,
   SlashCommandBuilder,
   SlashCommandRoleOption,
-} from '@discordjs/builders'
-import { ChannelType } from 'discord-api-types/v10'
+} from 'discord.js'
 import { BotCommandOption } from '../../types'
 import buildOptions from './buildOptions'
 
@@ -43,7 +44,7 @@ describe('buildOptions', () => {
 
   describe('when one option is passed', () => {
     const option: BotCommandOption = {
-      type: 'ROLE',
+      type: ApplicationCommandOptionType.Role,
       name: 'mock-option',
       description: 'mock-description',
     }
@@ -73,7 +74,7 @@ describe('buildOptions', () => {
 
   describe('when multiple options are passed', () => {
     const optionA: BotCommandOption = {
-      type: 'STRING',
+      type: ApplicationCommandOptionType.String,
       name: 'mock-option-a',
       description: 'mock-description-a',
       required: true,
@@ -90,12 +91,12 @@ describe('buildOptions', () => {
     }
 
     const optionB: BotCommandOption = {
-      type: 'STRING',
+      type: ApplicationCommandOptionType.String,
       name: 'mock-option-b',
     }
 
     const optionC: BotCommandOption = {
-      type: 'NUMBER',
+      type: ApplicationCommandOptionType.Number,
       name: 'mock-option-c',
       min: 5,
       max: 50,
@@ -182,11 +183,11 @@ describe('buildOptions', () => {
   describe('snapshots', () => {
     const options: BotCommandOption[] = [
       {
-        type: 'STRING',
+        type: ApplicationCommandOptionType.String,
         name: 'mock-option-a',
       },
       {
-        type: 'STRING',
+        type: ApplicationCommandOptionType.String,
         name: 'mock-option-b',
         description: 'mock-descrption-b',
         required: true,
@@ -202,11 +203,11 @@ describe('buildOptions', () => {
         ],
       },
       {
-        type: 'INTEGER',
+        type: ApplicationCommandOptionType.Integer,
         name: 'mock-option-c',
       },
       {
-        type: 'INTEGER',
+        type: ApplicationCommandOptionType.Integer,
         name: 'mock-option-d',
         description: 'mock-descrption-d',
         required: true,
@@ -224,62 +225,62 @@ describe('buildOptions', () => {
         ],
       },
       {
-        type: 'BOOLEAN',
+        type: ApplicationCommandOptionType.Boolean,
         name: 'mock-option-e',
       },
       {
-        type: 'BOOLEAN',
+        type: ApplicationCommandOptionType.Boolean,
         name: 'mock-option-f',
         description: 'mock-descrption-f',
         required: true,
       },
       {
-        type: 'USER',
+        type: ApplicationCommandOptionType.User,
         name: 'mock-option-g',
       },
       {
-        type: 'USER',
+        type: ApplicationCommandOptionType.User,
         name: 'mock-option-h',
         description: 'mock-descrption-h',
         required: true,
       },
       {
-        type: 'CHANNEL',
+        type: ApplicationCommandOptionType.Channel,
         name: 'mock-option-i',
       },
       {
-        type: 'CHANNEL',
+        type: ApplicationCommandOptionType.Channel,
         name: 'mock-option-j',
         description: 'mock-descrption-j',
         required: true,
         channelTypes: [ChannelType.GuildText, ChannelType.GuildVoice],
       },
       {
-        type: 'ROLE',
+        type: ApplicationCommandOptionType.Role,
         name: 'mock-option-k',
       },
       {
-        type: 'ROLE',
+        type: ApplicationCommandOptionType.Role,
         name: 'mock-option-l',
         description: 'mock-descrption-l',
         required: true,
       },
       {
-        type: 'MENTIONABLE',
+        type: ApplicationCommandOptionType.Mentionable,
         name: 'mock-option-m',
       },
       {
-        type: 'MENTIONABLE',
+        type: ApplicationCommandOptionType.Mentionable,
         name: 'mock-option-n',
         description: 'mock-descrption-n',
         required: true,
       },
       {
-        type: 'NUMBER',
+        type: ApplicationCommandOptionType.Number,
         name: 'mock-option-o',
       },
       {
-        type: 'NUMBER',
+        type: ApplicationCommandOptionType.Number,
         name: 'mock-option-p',
         description: 'mock-descrption-p',
         required: true,
@@ -297,11 +298,11 @@ describe('buildOptions', () => {
         ],
       },
       {
-        type: 'ATTACHMENT',
+        type: ApplicationCommandOptionType.Attachment,
         name: 'mock-option-q',
       },
       {
-        type: 'ATTACHMENT',
+        type: ApplicationCommandOptionType.Attachment,
         name: 'mock-option-r',
         description: 'mock-descrption-r',
         required: true,
