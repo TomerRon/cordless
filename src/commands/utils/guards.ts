@@ -14,7 +14,7 @@ export const isCommandWithHandler = <C extends CustomContext>(
   Object.prototype.hasOwnProperty.call(command, 'handler')
 
 /**
- * Returns true if the given BotCommand is a BotCommandWithHandler
+ * Returns true if the given BotCommand is a BotCommandWithSubcommands
  */
 export const isCommandWithSubcommands = <C extends CustomContext>(
   command: BotCommand<C>,
