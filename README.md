@@ -148,7 +148,7 @@ yarn test
 
 #### End-to-end tests
 
-You must first create two bots and add them to a Discord server. One of the bots will run the cordless client, and the other bot will pretend to be a normal user.
+You must first create two bots and add them to a Discord server. One of the bots will run the cordless client, and the other bot will pretend to be a normal user. The cordless client bot must have the "Message Content Intent" enabled - you can enable it in the Discord Developer Dashboard, in your application's "Bot" page.
 
 You'll need the tokens for both of the bots, and the channel ID of a channel where the bots can send messages.
 
