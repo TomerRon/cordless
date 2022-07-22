@@ -5,7 +5,7 @@ You can allow your command to receive options (arguments) by adding an `options`
 Each option must have a `type`, which can be one of the following:
 
 ```
-STRING | INTEGER | BOOLEAN | USER | CHANNEL |ROLE | MENTIONABLE | NUMBER | ATTACHMENT
+STRING | INTEGER | BOOLEAN | USER | CHANNEL | ROLE | MENTIONABLE | NUMBER | ATTACHMENT
 ```
 
 Options are not required by default, but can be marked as required by passing `required: true`. Required options must appear before non-required options (according to the Discord API requirements).

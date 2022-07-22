@@ -55,7 +55,7 @@ cordless.init({ commands: [ping], token: 'your.bot.token' })
 
 #### Create advanced interactions
 
-Cordless allow you to interface with the full [Discord Application Commands API](https://discord.com/developers/docs/interactions/application-commands) in a declarative fashion:
+Cordless allows you to interface with the full [Discord Application Commands API](https://discord.com/developers/docs/interactions/application-commands) in a declarative fashion:
 
 - Add interactive buttons and link buttons to your interactions. See: [docs/command-components.md](docs/command-components.md)
 - Create CLI-like commands with arguments and pre-defined choices. See: [docs/command-options.md](docs/command-options.md)
