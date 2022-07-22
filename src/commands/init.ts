@@ -1,4 +1,4 @@
-import { Client } from 'discord.js'
+import { ApplicationCommandType, Client, InteractionType } from 'discord.js'
 import { BotCommand, Context, CustomContext } from '../types'
 import buildCommands from './builders/buildCommands'
 import handleButton from './handlers/handleButton'
@@ -34,7 +34,10 @@ const initCommands = <C extends CustomContext>({
   const buttonHandlerMap = getButtonHandlerMap(commands)
 
   client.on('interactionCreate', (interaction) => {
-    if (interaction.isCommand()) {
+    if (
+      interaction.type === InteractionType.ApplicationCommand &&
+      interaction.commandType === ApplicationCommandType.ChatInput
+    ) {
       return handleCommand({
         commands,
         context,

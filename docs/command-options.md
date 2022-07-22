@@ -21,12 +21,15 @@ const language = interaction.options.getString('language', true)
 The following example takes a required string input and yells it back:
 
 ```ts
+import { BotCommand } from 'cordless'
+import { ApplicationCommandOptionType } from 'discord.js'
+
 const yell: BotCommand = {
   name: 'yell',
   description: 'Yells back your input.',
   options: [
     {
-      type: 'STRING',
+      type: ApplicationCommandOptionType.String,
       name: 'input',
       description: 'The input to yell back.',
       required: true,
@@ -46,7 +49,7 @@ Options of type `STRING | INTEGER | NUMBER` can receive a list of `choices`. If 
 
 ```ts
 {
-  type: 'STRING',
+  type: ApplicationCommandOptionType.String,
   name: 'language',
   choices: [
     {
@@ -68,12 +71,15 @@ Options of type `STRING | INTEGER | NUMBER` can receive a list of `choices`. If 
 Options of type `INTEGER | NUMBER` can receive an optional minimum and maximum value:
 
 ```ts
+import { BotCommand } from 'cordless'
+import { ApplicationCommandOptionType } from 'discord.js'
+
 const double: BotCommand = {
   name: 'double',
   description: 'Doubles the given number.',
   options: [
     {
-      type: 'NUMBER',
+      type: ApplicationCommandOptionType.Number,
       name: 'num',
       required: true,
       min: 1,

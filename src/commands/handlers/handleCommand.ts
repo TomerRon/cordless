@@ -1,11 +1,11 @@
-import { CommandInteraction } from 'discord.js'
+import { ChatInputCommandInteraction } from 'discord.js'
 import { BotCommand, Context, CustomContext } from '../../types'
 import buildComponents from '../builders/buildComponents'
 import { isCommandWithSubcommands } from '../utils/guards'
 
 type HandleCommandArgs<C extends CustomContext> = {
   commands: BotCommand<C>[]
-  interaction: CommandInteraction
+  interaction: ChatInputCommandInteraction
   context: Context<C>
 }
 
@@ -36,7 +36,7 @@ const handleCommand = async <C extends CustomContext = {}>({
 
   const components = await buildComponents({ command, interaction, context })
 
-  return command.handler({
+  await command.handler({
     context,
     interaction,
     components,

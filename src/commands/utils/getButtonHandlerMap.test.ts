@@ -1,3 +1,4 @@
+import { ButtonStyle } from 'discord.js'
 import {
   BotCommand,
   BotCommandWithHandler,
@@ -27,7 +28,7 @@ describe('getButtonHandlerMap', () => {
     components: [
       {
         label: 'component-a-label',
-        style: 'LINK',
+        style: ButtonStyle.Link,
         url: 'component-a-url',
       },
     ],
@@ -43,12 +44,12 @@ describe('getButtonHandlerMap', () => {
       },
       {
         label: 'component-b-label',
-        style: 'LINK',
+        style: ButtonStyle.Link,
         url: () => Promise.resolve('component-b-url'),
       },
       {
         label: 'component-c-label',
-        style: 'SUCCESS',
+        style: ButtonStyle.Success,
         handler: 'subcommand-b-component-c-handler' as unknown as () => void,
       },
     ],

@@ -1,4 +1,4 @@
-import { Client, Intents, Message } from 'discord.js'
+import { Client, GatewayIntentBits, Message } from 'discord.js'
 import { v4 as uuidv4 } from 'uuid'
 import { InitOptions } from '../../src'
 import { setupClients } from '../utils'
@@ -27,9 +27,9 @@ describe('intents', () => {
     await new Promise<void>((resolve) => setTimeout(resolve, 1000))
   })
 
-  describe('when initialized without the GUILD_MESSAGES intent', () => {
+  describe('when initialized without the GUILD_MESSAGES and MESSAGE_CONTENT intents', () => {
     beforeAll(async () => {
-      await setupTest([Intents.FLAGS.GUILDS])
+      await setupTest([GatewayIntentBits.Guilds])
     })
 
     afterAll(() => {
@@ -44,26 +44,13 @@ describe('intents', () => {
     })
   })
 
-  describe('when initialized with the GUILD_MESSAGES intent', () => {
+  describe('when initialized with the GUILD_MESSAGES and MESSAGE_CONTENT intents', () => {
     beforeAll(async () => {
-      await setupTest([Intents.FLAGS.GUILDS, Intents.FLAGS.GUILD_MESSAGES])
-    })
-
-    afterAll(() => {
-      cordlessClient.destroy()
-      userClient.destroy()
-    })
-
-    it('should receive the message', async () => {
-      const message = await sendMessageAndWaitForIt(testPing)
-
-      expect(message.id).toBeDefined()
-    })
-  })
-
-  describe('when initialized with the default intents', () => {
-    beforeAll(async () => {
-      await setupTest()
+      await setupTest([
+        GatewayIntentBits.Guilds,
+        GatewayIntentBits.GuildMessages,
+        GatewayIntentBits.MessageContent,
+      ])
     })
 
     afterAll(() => {

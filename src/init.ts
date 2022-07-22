@@ -1,11 +1,11 @@
-import Discord, { ClientOptions, Intents } from 'discord.js'
+import Discord, { ClientOptions, GatewayIntentBits } from 'discord.js'
 import initCommands from './commands/init'
 import initEvents from './events/init'
 import { Context, CustomContext, InitOptions } from './types'
 
 const DEFAULT_INTENTS: ClientOptions['intents'] = [
-  Intents.FLAGS.GUILD_MESSAGES,
-  Intents.FLAGS.GUILDS,
+  GatewayIntentBits.GuildMessages,
+  GatewayIntentBits.Guilds,
 ]
 
 /**

@@ -7,16 +7,16 @@ type HandleButtonArgs<C extends CustomContext> = {
   context: Context<C>
 }
 
-const handleButton = <C extends CustomContext = {}>({
+const handleButton = async <C extends CustomContext = {}>({
   buttonHandlerMap,
   interaction,
   context,
-}: HandleButtonArgs<C>): void | Promise<void> => {
+}: HandleButtonArgs<C>): Promise<void> => {
   const handler = buttonHandlerMap[interaction.customId]
 
   if (!handler) return
 
-  return handler({ interaction, context })
+  await handler({ interaction, context })
 }
 
 export default handleButton

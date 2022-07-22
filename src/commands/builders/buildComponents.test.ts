@@ -1,12 +1,12 @@
-import { Client, CommandInteraction } from 'discord.js'
+import { ButtonStyle, ChatInputCommandInteraction, Client } from 'discord.js'
 import { BotCommandComponent, BotCommandWithHandler } from '../../types'
 import buildComponents from './buildComponents'
 
-const mockMessageActionRow = {
+const mockActionRowBuilder = {
   addComponents: jest.fn().mockReturnThis(),
 }
 
-const mockMessageButton = {
+const mockButtonBuilder = {
   setCustomId: jest.fn().mockReturnThis(),
   setLabel: jest.fn().mockReturnThis(),
   setStyle: jest.fn().mockReturnThis(),
@@ -18,8 +18,8 @@ jest.mock('discord.js', () => {
 
   return {
     ...originalModule,
-    MessageActionRow: jest.fn().mockImplementation(() => mockMessageActionRow),
-    MessageButton: jest.fn().mockImplementation(() => mockMessageButton),
+    ActionRowBuilder: jest.fn().mockImplementation(() => mockActionRowBuilder),
+    ButtonBuilder: jest.fn().mockImplementation(() => mockButtonBuilder),
   }
 })
 
@@ -32,7 +32,7 @@ describe('buildComponents', () => {
     handler: jest.fn(),
   }
 
-  const mockInteraction = {} as unknown as CommandInteraction
+  const mockInteraction = {} as unknown as ChatInputCommandInteraction
 
   const mockContext = {
     client: jest.fn() as unknown as Client,
@@ -67,7 +67,7 @@ describe('buildComponents', () => {
   describe('when the command has one interactive button', () => {
     const mockComponent: BotCommandComponent = {
       label: 'component-a-label',
-      style: 'PRIMARY',
+      style: ButtonStyle.Primary,
       handler: jest.fn(),
     }
 
@@ -78,21 +78,21 @@ describe('buildComponents', () => {
           interaction: mockInteraction,
           context: mockContext,
         }),
-      ).toStrictEqual([mockMessageActionRow])
+      ).toStrictEqual([mockActionRowBuilder])
 
-      expect(mockMessageButton.setCustomId).toHaveBeenCalledWith(
+      expect(mockButtonBuilder.setCustomId).toHaveBeenCalledWith(
         `command-a-component-a-label-0`,
       )
-      expect(mockMessageButton.setLabel).toHaveBeenCalledWith(
+      expect(mockButtonBuilder.setLabel).toHaveBeenCalledWith(
         mockComponent.label,
       )
-      expect(mockMessageButton.setStyle).toHaveBeenCalledWith(
+      expect(mockButtonBuilder.setStyle).toHaveBeenCalledWith(
         mockComponent.style,
       )
-      expect(mockMessageButton.setURL).not.toHaveBeenCalled()
+      expect(mockButtonBuilder.setURL).not.toHaveBeenCalled()
 
-      expect(mockMessageActionRow.addComponents).toHaveBeenCalledWith([
-        mockMessageButton,
+      expect(mockActionRowBuilder.addComponents).toHaveBeenCalledWith([
+        mockButtonBuilder,
       ])
     })
   })
@@ -100,7 +100,7 @@ describe('buildComponents', () => {
   describe('when the command has one link button with a string url', () => {
     const mockComponent: BotCommandComponent = {
       label: 'component-a-label',
-      style: 'LINK',
+      style: ButtonStyle.Link,
       url: 'component-url',
     }
 
@@ -111,19 +111,19 @@ describe('buildComponents', () => {
           interaction: mockInteraction,
           context: mockContext,
         }),
-      ).toStrictEqual([mockMessageActionRow])
+      ).toStrictEqual([mockActionRowBuilder])
 
-      expect(mockMessageButton.setCustomId).not.toHaveBeenCalled()
-      expect(mockMessageButton.setLabel).toHaveBeenCalledWith(
+      expect(mockButtonBuilder.setCustomId).not.toHaveBeenCalled()
+      expect(mockButtonBuilder.setLabel).toHaveBeenCalledWith(
         mockComponent.label,
       )
-      expect(mockMessageButton.setStyle).toHaveBeenCalledWith(
+      expect(mockButtonBuilder.setStyle).toHaveBeenCalledWith(
         mockComponent.style,
       )
-      expect(mockMessageButton.setURL).toHaveBeenCalledWith(mockComponent.url)
+      expect(mockButtonBuilder.setURL).toHaveBeenCalledWith(mockComponent.url)
 
-      expect(mockMessageActionRow.addComponents).toHaveBeenCalledWith([
-        mockMessageButton,
+      expect(mockActionRowBuilder.addComponents).toHaveBeenCalledWith([
+        mockButtonBuilder,
       ])
     })
   })
@@ -132,7 +132,7 @@ describe('buildComponents', () => {
     const mockResolvedUrl = 'component-url'
     const mockComponent: BotCommandComponent = {
       label: 'component-a-label',
-      style: 'LINK',
+      style: ButtonStyle.Link,
       url: jest.fn().mockResolvedValue(mockResolvedUrl),
     }
 
@@ -143,19 +143,19 @@ describe('buildComponents', () => {
           interaction: mockInteraction,
           context: mockContext,
         }),
-      ).toStrictEqual([mockMessageActionRow])
+      ).toStrictEqual([mockActionRowBuilder])
 
-      expect(mockMessageButton.setCustomId).not.toHaveBeenCalled()
-      expect(mockMessageButton.setLabel).toHaveBeenCalledWith(
+      expect(mockButtonBuilder.setCustomId).not.toHaveBeenCalled()
+      expect(mockButtonBuilder.setLabel).toHaveBeenCalledWith(
         mockComponent.label,
       )
-      expect(mockMessageButton.setStyle).toHaveBeenCalledWith(
+      expect(mockButtonBuilder.setStyle).toHaveBeenCalledWith(
         mockComponent.style,
       )
-      expect(mockMessageButton.setURL).toHaveBeenCalledWith(mockResolvedUrl)
+      expect(mockButtonBuilder.setURL).toHaveBeenCalledWith(mockResolvedUrl)
 
-      expect(mockMessageActionRow.addComponents).toHaveBeenCalledWith([
-        mockMessageButton,
+      expect(mockActionRowBuilder.addComponents).toHaveBeenCalledWith([
+        mockButtonBuilder,
       ])
 
       expect(mockComponent.url).toHaveBeenCalledWith({
@@ -168,13 +168,13 @@ describe('buildComponents', () => {
   describe('snapshots', () => {
     const mockComponentA: BotCommandComponent = {
       label: 'component-a-label',
-      style: 'PRIMARY',
+      style: ButtonStyle.Primary,
       handler: jest.fn(),
     }
 
     const mockComponentB: BotCommandComponent = {
       label: 'component-b-label',
-      style: 'LINK',
+      style: ButtonStyle.Link,
       url: 'component-c-url',
     }
 
@@ -185,13 +185,13 @@ describe('buildComponents', () => {
 
     const mockComponentD: BotCommandComponent = {
       label: 'component-d-label',
-      style: 'LINK',
+      style: ButtonStyle.Link,
       url: () => Promise.resolve('component-c-url'),
     }
 
     const mockComponentE: BotCommandComponent = {
       label: 'component-e-label',
-      style: 'DANGER',
+      style: ButtonStyle.Danger,
       handler: jest.fn(),
     }
 
@@ -210,17 +210,17 @@ describe('buildComponents', () => {
           interaction: mockInteraction,
           context: mockContext,
         }),
-      ).toStrictEqual([mockMessageActionRow])
+      ).toStrictEqual([mockActionRowBuilder])
 
-      expect(mockMessageActionRow.addComponents).toHaveBeenCalledWith([
-        mockMessageButton,
-        mockMessageButton,
-        mockMessageButton,
-        mockMessageButton,
-        mockMessageButton,
+      expect(mockActionRowBuilder.addComponents).toHaveBeenCalledWith([
+        mockButtonBuilder,
+        mockButtonBuilder,
+        mockButtonBuilder,
+        mockButtonBuilder,
+        mockButtonBuilder,
       ])
 
-      Object.entries(mockMessageButton).forEach(([key, fn]) =>
+      Object.entries(mockButtonBuilder).forEach(([key, fn]) =>
         expect(fn.mock.calls).toMatchSnapshot(key),
       )
     })

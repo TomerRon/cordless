@@ -1,13 +1,15 @@
-import { ApplicationCommandOptionAllowedChannelTypes } from '@discordjs/builders'
 import { APIApplicationCommandOptionChoice } from 'discord-api-types/v10'
 import Discord, {
+  ActionRowBuilder,
+  ApplicationCommandOptionAllowedChannelTypes,
   ApplicationCommandOptionType,
+  ButtonBuilder,
   ButtonInteraction,
+  ButtonStyle,
+  ChatInputCommandInteraction,
   ClientEvents,
   ClientOptions,
-  CommandInteraction,
-  MessageActionRow,
-  MessageButtonStyle,
+  InteractionResponse,
 } from 'discord.js'
 
 /** Initialization options for your cordless bot */
@@ -42,16 +44,18 @@ export type BotCommand<C extends CustomContext = {}> =
 
 export interface BotCommandWithHandler<C extends CustomContext = {}>
   extends BotCommandBase {
-  handler: (args: BotCommandHandlerArgs<C>) => void | Promise<void>
+  handler: (
+    args: BotCommandHandlerArgs<C>,
+  ) => void | Promise<InteractionResponse<boolean> | void>
   components?: BotCommandComponent<C>[]
   options?: BotCommandOption[]
   subcommands?: never
 }
 
 export type BotCommandHandlerArgs<C extends CustomContext = {}> = {
-  interaction: CommandInteraction
+  interaction: ChatInputCommandInteraction
   context: Context<C>
-  components?: MessageActionRow[]
+  components?: ActionRowBuilder<ButtonBuilder>[]
 }
 
 export type BotCommandComponent<C extends CustomContext = {}> =
@@ -60,17 +64,17 @@ export type BotCommandComponent<C extends CustomContext = {}> =
 
 export interface BotCommandButtonComponent<C extends CustomContext = {}>
   extends BotCommandButtonComponentBase {
-  style?: Exclude<MessageButtonStyle, 'LINK'>
+  style?: Exclude<ButtonStyle, ButtonStyle.Link>
   handler: BotCommandButtonHandler<C>
 }
 
 export type BotCommandButtonHandler<C extends CustomContext = {}> = (
   args: BotCommandButtonHandlerArgs<C>,
-) => void | Promise<void>
+) => void | Promise<InteractionResponse<boolean> | void>
 
 export interface BotCommandLinkComponent<C extends CustomContext = {}>
   extends BotCommandButtonComponentBase {
-  style: 'LINK'
+  style: ButtonStyle.Link
   url:
     | string
     | ((
@@ -80,7 +84,7 @@ export interface BotCommandLinkComponent<C extends CustomContext = {}>
 
 type BotCommandButtonComponentBase = {
   label: string
-  style?: MessageButtonStyle
+  style?: ButtonStyle
 }
 
 export type BotCommandButtonHandlerArgs<C extends CustomContext = {}> = {
@@ -112,47 +116,47 @@ export type BotCommandOption =
   | BotCommandAttachmentOption
 
 export interface BotCommandStringOption extends BotCommandOptionBase {
-  type: 'STRING'
+  type: ApplicationCommandOptionType.String
   choices?: APIApplicationCommandOptionChoice<string>[]
 }
 
 export interface BotCommandIntegerOption extends BotCommandOptionBase {
-  type: 'INTEGER'
+  type: ApplicationCommandOptionType.Integer
   choices?: APIApplicationCommandOptionChoice<number>[]
   min?: number
   max?: number
 }
 
 export interface BotCommandBooleanOption extends BotCommandOptionBase {
-  type: 'BOOLEAN'
+  type: ApplicationCommandOptionType.Boolean
 }
 
 export interface BotCommandUserOption extends BotCommandOptionBase {
-  type: 'USER'
+  type: ApplicationCommandOptionType.User
 }
 
 export interface BotCommandChannelOption extends BotCommandOptionBase {
-  type: 'CHANNEL'
+  type: ApplicationCommandOptionType.Channel
   channelTypes?: ApplicationCommandOptionAllowedChannelTypes[]
 }
 
 export interface BotCommandRoleOption extends BotCommandOptionBase {
-  type: 'ROLE'
+  type: ApplicationCommandOptionType.Role
 }
 
 export interface BotCommandMentionableOption extends BotCommandOptionBase {
-  type: 'MENTIONABLE'
+  type: ApplicationCommandOptionType.Mentionable
 }
 
 export interface BotCommandNumberOption extends BotCommandOptionBase {
-  type: 'NUMBER'
+  type: ApplicationCommandOptionType.Number
   choices?: APIApplicationCommandOptionChoice<number>[]
   min?: number
   max?: number
 }
 
 export interface BotCommandAttachmentOption extends BotCommandOptionBase {
-  type: 'ATTACHMENT'
+  type: ApplicationCommandOptionType.Attachment
 }
 
 type BotCommandOptionBase = {

@@ -1,4 +1,9 @@
-import { Client, CommandInteraction, MessageActionRow } from 'discord.js'
+import {
+  ActionRowBuilder,
+  ButtonBuilder,
+  ChatInputCommandInteraction,
+  Client,
+} from 'discord.js'
 import {
   BotCommand,
   BotCommandWithHandler,
@@ -47,7 +52,7 @@ describe('handleCommand', () => {
     foo: 'bar',
   }
 
-  const mockComponents = ['row' as unknown as MessageActionRow]
+  const mockComponents = ['row' as unknown as ActionRowBuilder<ButtonBuilder>]
 
   const buildComponentsSpy = jest
     .spyOn(buildComponentsModule, 'default')
@@ -62,7 +67,7 @@ describe('handleCommand', () => {
       await handleCommand({
         commands: mockCommands,
         context: mockContext,
-        interaction: mockInteraction as unknown as CommandInteraction,
+        interaction: mockInteraction as unknown as ChatInputCommandInteraction,
       })
 
       expect(mockCommandWithHandlerA.handler).not.toHaveBeenCalled()
@@ -82,7 +87,7 @@ describe('handleCommand', () => {
       await handleCommand({
         commands: mockCommands,
         context: mockContext,
-        interaction: mockInteraction as unknown as CommandInteraction,
+        interaction: mockInteraction as unknown as ChatInputCommandInteraction,
       })
 
       expect(mockCommandWithHandlerA.handler).not.toHaveBeenCalled()
@@ -96,7 +101,7 @@ describe('handleCommand', () => {
 
       expect(buildComponentsSpy).toHaveBeenCalledWith({
         command: mockCommandWithHandlerB,
-        interaction: mockInteraction as unknown as CommandInteraction,
+        interaction: mockInteraction as unknown as ChatInputCommandInteraction,
         context: mockContext,
       })
     })
@@ -119,7 +124,8 @@ describe('handleCommand', () => {
         await handleCommand({
           commands: mockCommands,
           context: mockContext,
-          interaction: mockInteraction as unknown as CommandInteraction,
+          interaction:
+            mockInteraction as unknown as ChatInputCommandInteraction,
         })
 
         expect(mockCommandWithHandlerA.handler).not.toHaveBeenCalled()
@@ -143,7 +149,8 @@ describe('handleCommand', () => {
         await handleCommand({
           commands: mockCommands,
           context: mockContext,
-          interaction: mockInteraction as unknown as CommandInteraction,
+          interaction:
+            mockInteraction as unknown as ChatInputCommandInteraction,
         })
 
         expect(mockCommandWithHandlerA.handler).not.toHaveBeenCalled()
@@ -157,7 +164,8 @@ describe('handleCommand', () => {
 
         expect(buildComponentsSpy).toHaveBeenCalledWith({
           command: mockSubcommandB,
-          interaction: mockInteraction as unknown as CommandInteraction,
+          interaction:
+            mockInteraction as unknown as ChatInputCommandInteraction,
           context: mockContext,
         })
 

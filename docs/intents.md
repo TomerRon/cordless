@@ -11,7 +11,8 @@ For example, let's say our bot has an event handler that should do something whe
 Therefore, in order to subscribe our event handler to the `INVITE_CREATE` event, we will also have to specify the `GUILD_INVITES` intent:
 
 ```ts
-import { Intents } from 'discord.js'
+import { init, BotEventHandler } from 'cordless'
+import { GatewayIntentBits } from 'discord.js'
 
 const inviteLogger: BotEventHandler<'inviteCreate'> = {
   event: 'inviteCreate',
@@ -24,14 +25,42 @@ const inviteLogger: BotEventHandler<'inviteCreate'> = {
 }
 
 init({
-  handlers: [
-    inviteLogger,
-    // ...
-  ],
+  handlers: [inviteLogger],
   intents: [
-    Intents.FLAGS.GUILDS,
-    Intents.FLAGS.GUILD_MESSAGES,
-    Intents.FLAGS.GUILD_INVITES,
+    GatewayIntentBits.Guilds,
+    GatewayIntentBits.GuildMessages,
+    GatewayIntentBits.GuildInvites,
+  ],
+  token: 'your.bot.token',
+})
+```
+
+#### Message Content Intent
+
+As of Discord API v10, there are new requirements to be able to read message contents - for example, if you wish to subscribe to the `messageCreate` event.
+
+In order to read message contents, you must:
+
+1. Enable "Message Content Intent" in the Discord Developer Portal, in your application's "Bot" page
+2. Pass the `GatewayIntentBits.MessageContent` intent to the intialization method
+
+⚠️ **Note!** [Commands](commands.md) provide a much better way for users to interact with your bot. It is not recommended to enable the Message Content Intent except for specific usecases (e.g., a language moderation bot).
+
+```ts
+import { init, BotEventHandler } from 'cordless'
+import { GatewayIntentBits } from 'discord.js'
+
+const ping: BotEventHandler = {
+  condition: (msg) => msg.content === 'ping',
+  callback: (msg) => msg.reply('pong'),
+}
+
+const client = await init({
+  handlers: [ping],
+  intents: [
+    GatewayIntentBits.Guilds,
+    GatewayIntentBits.GuildMessages,
+    GatewayIntentBits.MessageContent,
   ],
   token: 'your.bot.token',
 })

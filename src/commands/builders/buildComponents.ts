@@ -1,9 +1,14 @@
-import { CommandInteraction, MessageActionRow, MessageButton } from 'discord.js'
+import {
+  ActionRowBuilder,
+  ButtonBuilder,
+  ButtonStyle,
+  ChatInputCommandInteraction,
+} from 'discord.js'
 import { BotCommandWithHandler, Context, CustomContext } from '../../types'
 
 interface BuildComponentsArgs<C extends CustomContext = {}> {
   command: BotCommandWithHandler<C>
-  interaction: CommandInteraction
+  interaction: ChatInputCommandInteraction
   context: Context<C>
 }
 
@@ -14,24 +19,26 @@ const buildComponents = async <C extends CustomContext = {}>({
   command,
   interaction,
   context,
-}: BuildComponentsArgs<C>): Promise<MessageActionRow[] | undefined> => {
+}: BuildComponentsArgs<C>): Promise<
+  ActionRowBuilder<ButtonBuilder>[] | undefined
+> => {
   const { components } = command
 
   if (!components?.length) return
 
-  const buttons: MessageButton[] = []
+  const buttons: ButtonBuilder[] = []
 
   for (const [i, component] of components.entries()) {
-    const { label, style = 'PRIMARY' } = component
+    const { label, style = ButtonStyle.Primary } = component
 
-    if (component.style === 'LINK') {
+    if (component.style === ButtonStyle.Link) {
       const url =
         typeof component.url === 'string'
           ? component.url
           : await component.url({ interaction, context })
 
       buttons.push(
-        new MessageButton().setLabel(label).setStyle(style).setURL(url),
+        new ButtonBuilder().setLabel(label).setStyle(style).setURL(url),
       )
 
       continue
@@ -40,11 +47,11 @@ const buildComponents = async <C extends CustomContext = {}>({
     const customId = `${command.name}-${label}-${i}`
 
     buttons.push(
-      new MessageButton().setCustomId(customId).setLabel(label).setStyle(style),
+      new ButtonBuilder().setCustomId(customId).setLabel(label).setStyle(style),
     )
   }
 
-  const row = new MessageActionRow().addComponents(buttons)
+  const row = new ActionRowBuilder<ButtonBuilder>().addComponents(buttons)
 
   return [row]
 }

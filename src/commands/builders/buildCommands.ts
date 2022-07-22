@@ -1,4 +1,4 @@
-import { SlashCommandBuilder } from '@discordjs/builders'
+import { SlashCommandBuilder } from 'discord.js'
 import { BotCommand, CustomContext } from '../../types'
 import { isCommandWithHandler } from '../utils/guards'
 import buildOptions from './buildOptions'

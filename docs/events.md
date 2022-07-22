@@ -7,15 +7,26 @@ Event handlers allow you to subscribe to any [Discord Gateway Event](https://dis
 - A new channel was created
 - etc...
 
-For example, let's say our bot needs to greet new channels whenever they are created, expect for channels that start with `admin-`. We can subscribe an event handler to the `channelCreate` event:
+##### ⚠️ Important note regarding Message Content
+
+As of Discord API v10, there are new requirements to be able to read message contents - for example, if you wish to subscribe to the `messageCreate` event.
+
+For more information, see: [docs/intents.md#message-content-intent](intents.md#message-content-intent)
+
+#### Basic example
+
+For example, let's say our bot needs to greet new text channels whenever they are created, expect for channels that start with `admin-`. We can subscribe an event handler to the `channelCreate` event:
 
 ```ts
 // TypeScript
+import { BotEventHandler } from 'cordless'
+import { ChannelType } from 'discord.js'
+
 const channelGreeter: BotEventHandler<'channelCreate'> = {
   event: 'channelCreate',
   condition: (channel) => !channel.name.startsWith('admin-'),
   callback: (channel) => {
-    if (channel.isText()) {
+    if (channel.type === ChannelType.GuildText) {
       return channel.send(`Hello world! This is ${channel.name}`)
     }
   },
@@ -26,10 +37,10 @@ const channelGreeter: BotEventHandler<'channelCreate'> = {
 // JavaScript
 const channelGreeter = {
   event: 'channelCreate',
-  condition: () => true,
+  condition: () => !channel.name.startsWith('admin-'),
   callback: async (channel) => {
-    if (channel.isText()) {
-      await channel.send(`Hello world! This is ${channel.name}`)
+    if (channel.type === ChannelType.GuildText) {
+      return channel.send(`Hello world! This is ${channel.name}`)
     }
   },
 }

@@ -1,3 +1,4 @@
+import { ApplicationCommandOptionType } from 'discord.js'
 import {
   BotCommand,
   BotCommandWithHandler,
@@ -12,11 +13,16 @@ const mockSlashCommandBuilder = {
   addSubcommand: jest.fn().mockReturnThis(),
 }
 
-jest.mock('@discordjs/builders', () => ({
-  SlashCommandBuilder: jest
-    .fn()
-    .mockImplementation(() => mockSlashCommandBuilder),
-}))
+jest.mock('discord.js', () => {
+  const originalModule = jest.requireActual('discord.js')
+
+  return {
+    ...originalModule,
+    SlashCommandBuilder: jest
+      .fn()
+      .mockImplementation(() => mockSlashCommandBuilder),
+  }
+})
 
 describe('buildCommands', () => {
   const mockCommandWithHandlerA: BotCommandWithHandler = {
@@ -29,7 +35,7 @@ describe('buildCommands', () => {
     name: 'command-b',
     options: [
       {
-        type: 'STRING',
+        type: ApplicationCommandOptionType.String,
         name: 'foobar',
       },
     ],
@@ -46,7 +52,7 @@ describe('buildCommands', () => {
     name: 'subcommand-b',
     options: [
       {
-        type: 'STRING',
+        type: ApplicationCommandOptionType.String,
         name: 'subcommand-foobar',
       },
     ],
