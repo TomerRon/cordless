@@ -1,3 +1,34 @@
+# [3.0.0](https://github.com/TomerRon/cordless/compare/v2.2.0...v3.0.0) (2022-07-22)
+
+
+### chore
+
+* **deps:** upgrade discord.js to v14 ([cca5cea](https://github.com/TomerRon/cordless/commit/cca5ceaa1c29b83a334916e251f1b6f22ffa59da))
+
+
+### Features
+
+* **client:** modify initialization behavior to return a logged-in client ([bdc902a](https://github.com/TomerRon/cordless/commit/bdc902a3c222dd7c98ae2f811976270f387f4980))
+* **commands:** Add Application Commands integration ([cb3a55f](https://github.com/TomerRon/cordless/commit/cb3a55fdc27bf4068172eb01190c6ed4884d72b2))
+* **commands:** allow commands to receive components ([2569f9a](https://github.com/TomerRon/cordless/commit/2569f9a184e9f05a7a72889c29d160a843a57fb4))
+* **commands:** allow commands to receive options ([f283a00](https://github.com/TomerRon/cordless/commit/f283a00e989a1673d4731893373fcae9e3b7e70c))
+* **commands:** allow commands to receive subcommands ([14449ae](https://github.com/TomerRon/cordless/commit/14449aee71eda44a922c0b26ee00b5632bfa87de))
+* **events:** refactor BotFunction into BotEventHandler ([3379609](https://github.com/TomerRon/cordless/commit/33796097fa9c95e4ed6d8102410f90faeb3b2795))
+* **events:** remove help command ([c1bd973](https://github.com/TomerRon/cordless/commit/c1bd973ea0706b3d4a69983a305bb993ec1784f6))
+
+
+### BREAKING CHANGES
+
+* **deps:** Discord.js has been upgraded to v14. Now uses Discord API v10. See: https://discordjs.guide/additional-info/changes-in-v14.html
+* **events:** Bot functions (`BotFunction`) are now called event handlers (`BotEventHandler`).
+Event handlers should now  be passed into the initialization method as `handlers: [...]` instead of `functions: [...]`.
+It is no longer required to pass a list of handlers on initialization.
+* **events:** The help command has been removed - it is no longer useful because commands can describe themselves.
+Bot functions can no longer receieve a name and a description.
+* **client:** The init method now returns a `Promise<Discord.Client<true>>`. You now need to `await init()` if you want to use the returned client.
+* **commands:** With the introduction of Application Commands, the bot token must now be passed into the initialization method (even if you are not using commands).
+Also, the client now logs in automatically, so you should not call `.login(token)` anymore.
+
 # [3.0.0-beta.7](https://github.com/TomerRon/cordless/compare/v3.0.0-beta.6...v3.0.0-beta.7) (2022-07-22)
 
 
