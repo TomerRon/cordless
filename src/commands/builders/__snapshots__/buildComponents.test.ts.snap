@@ -57,10 +57,10 @@ Array [
 exports[`buildComponents snapshots matches the snapshot: setURL 1`] = `
 Array [
   Array [
-    "component-c-url",
+    "component-b-url",
   ],
   Array [
-    "component-c-url",
+    "component-d-url",
   ],
 ]
 `;

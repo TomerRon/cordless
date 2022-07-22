@@ -175,7 +175,7 @@ describe('buildComponents', () => {
     const mockComponentB: BotCommandComponent = {
       label: 'component-b-label',
       style: ButtonStyle.Link,
-      url: 'component-c-url',
+      url: 'component-b-url',
     }
 
     const mockComponentC: BotCommandComponent = {
@@ -186,7 +186,7 @@ describe('buildComponents', () => {
     const mockComponentD: BotCommandComponent = {
       label: 'component-d-label',
       style: ButtonStyle.Link,
-      url: () => Promise.resolve('component-c-url'),
+      url: () => Promise.resolve('component-d-url'),
     }
 
     const mockComponentE: BotCommandComponent = {
