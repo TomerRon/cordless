@@ -1,33 +1,41 @@
-import { Client, Intents, Message, TextBasedChannel } from 'discord.js'
+import {
+  ChannelType,
+  Client,
+  GatewayIntentBits,
+  Message,
+  TextBasedChannel,
+} from 'discord.js'
 import dotenv from 'dotenv'
 import { CustomContext, init, InitOptions } from '../src'
 
 dotenv.config()
 
 export const setupClients = async <T extends CustomContext>(
-  options: InitOptions<T>,
+  options: Omit<InitOptions<T>, 'token'>,
 ): Promise<{
-  cordlessClient: Client
-  userClient: Client
+  cordlessClient: Client<true>
+  userClient: Client<true>
   e2eChannel: TextBasedChannel
   sendMessageAndWaitForIt: (content: string) => Promise<Message>
 }> => {
   // Login as the cordless client
-  const cordlessClient = init(options)
-
-  await new Promise<void>((resolve) => {
-    cordlessClient.on('ready', () => resolve())
-
-    cordlessClient.login(process.env.E2E_CLIENT_TOKEN)
+  const cordlessClient = await init({
+    ...options,
+    intents: options.intents || [
+      GatewayIntentBits.Guilds,
+      GatewayIntentBits.GuildMessages,
+      GatewayIntentBits.MessageContent,
+    ],
+    token: process.env.E2E_CLIENT_TOKEN || '',
   })
 
   // Login as the test user
   const userClient = new Client({
-    intents: [Intents.FLAGS.GUILDS],
+    intents: [GatewayIntentBits.Guilds],
   })
 
   await new Promise<void>((resolve) => {
-    userClient.on('ready', () => resolve())
+    userClient.once('ready', () => resolve())
 
     userClient.login(process.env.E2E_USER_TOKEN)
   })
@@ -41,7 +49,7 @@ export const setupClients = async <T extends CustomContext>(
     throw new Error('The provided test channel cannot be found.')
   }
 
-  if (!e2eChannel.isText()) {
+  if (e2eChannel.type !== ChannelType.GuildText) {
     throw new Error('The provided test channel is not a text channel.')
   }
 

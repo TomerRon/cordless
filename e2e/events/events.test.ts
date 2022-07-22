@@ -1,7 +1,7 @@
 import { Client, Message } from 'discord.js'
 import { v4 as uuidv4 } from 'uuid'
-import { BotFunction, InitOptions } from '../src'
-import { setupClients } from './utils'
+import { BotEventHandler, InitOptions } from '../../src'
+import { setupClients } from '../utils'
 
 describe('events', () => {
   beforeEach(jest.clearAllMocks)
@@ -12,9 +12,9 @@ describe('events', () => {
 
   const testPing = `[events] - ${uuidv4()}`
 
-  const setupTest = async (functions: InitOptions['functions']) => {
+  const setupTest = async (handlers: InitOptions['handlers']) => {
     const setup = await setupClients({
-      functions,
+      handlers,
     })
 
     cordlessClient = setup.cordlessClient
@@ -28,9 +28,9 @@ describe('events', () => {
     await new Promise<void>((resolve) => setTimeout(resolve, 1000))
   })
 
-  describe('when initialized with one function without an explicit event', () => {
+  describe('when initialized with one event handler without an explicit event', () => {
     const pingCallbackSpy = jest.fn()
-    const ping: BotFunction = {
+    const ping: BotEventHandler = {
       condition: (msg) => msg.content === testPing,
       callback: (msg) => {
         pingCallbackSpy(msg)
@@ -46,17 +46,17 @@ describe('events', () => {
       userClient.destroy()
     })
 
-    it('should subscribe the function to messageCreate events', async () => {
+    it('should subscribe the event handler to messageCreate events', async () => {
       const message = await sendMessageAndWaitForIt(testPing)
 
       expect(pingCallbackSpy).toHaveBeenCalledWith(message)
     })
   })
 
-  describe('when initialized with a messageCreate function event', () => {
+  describe('when initialized with a messageCreate event handler', () => {
     const pingCallbackSpy = jest.fn()
 
-    const ping: BotFunction<'messageCreate'> = {
+    const ping: BotEventHandler<'messageCreate'> = {
       event: 'messageCreate',
       condition: (msg) => msg.content === testPing,
       callback: (msg) => {
@@ -73,34 +73,34 @@ describe('events', () => {
       userClient.destroy()
     })
 
-    it('should subscribe the function to messageCreate events', async () => {
+    it('should subscribe the event handler to messageCreate events', async () => {
       const message = await sendMessageAndWaitForIt(testPing)
 
       expect(pingCallbackSpy).toHaveBeenCalledWith(message)
     })
   })
 
-  describe('when initialized with some functions that are not messageCreate', () => {
-    const messageDeleteFnCallbackSpy = jest.fn()
-    const messageDeleteFn: BotFunction<'messageDelete'> = {
+  describe('when initialized with some event handlers that are not messageCreate', () => {
+    const messageDeleteHandlerCallbackSpy = jest.fn()
+    const messageDeleteHandler: BotEventHandler<'messageDelete'> = {
       event: 'messageDelete',
       condition: () => true,
       callback: (msg) => {
-        messageDeleteFnCallbackSpy(msg)
+        messageDeleteHandlerCallbackSpy(msg)
       },
     }
 
-    const channelCreateFnCallbackSpy = jest.fn()
-    const channelCreateFn: BotFunction<'channelCreate'> = {
+    const channelCreateHandlerCallbackSpy = jest.fn()
+    const channelCreateHandler: BotEventHandler<'channelCreate'> = {
       event: 'channelCreate',
       condition: () => true,
       callback: (channel) => {
-        channelCreateFnCallbackSpy(channel)
+        channelCreateHandlerCallbackSpy(channel)
       },
     }
 
     beforeAll(async () => {
-      await setupTest([messageDeleteFn, channelCreateFn])
+      await setupTest([messageDeleteHandler, channelCreateHandler])
     })
 
     afterAll(() => {
@@ -111,23 +111,23 @@ describe('events', () => {
     it('should not respond to messageCreate events', async () => {
       await sendMessageAndWaitForIt(testPing)
 
-      expect(messageDeleteFnCallbackSpy).not.toHaveBeenCalled()
-      expect(channelCreateFnCallbackSpy).not.toHaveBeenCalled()
+      expect(messageDeleteHandlerCallbackSpy).not.toHaveBeenCalled()
+      expect(channelCreateHandlerCallbackSpy).not.toHaveBeenCalled()
     })
 
     it('should respond to messageDelete events', async () => {
       const message = await sendMessageAndWaitForIt(testPing)
 
-      expect(messageDeleteFnCallbackSpy).not.toHaveBeenCalled()
-      expect(channelCreateFnCallbackSpy).not.toHaveBeenCalled()
+      expect(messageDeleteHandlerCallbackSpy).not.toHaveBeenCalled()
+      expect(channelCreateHandlerCallbackSpy).not.toHaveBeenCalled()
 
       await message.delete()
 
       // Wait half a second for the bot to receive the messageDelete event
       await new Promise<void>((resolve) => setTimeout(resolve, 500))
 
-      expect(messageDeleteFnCallbackSpy).toHaveBeenCalledWith(message)
-      expect(channelCreateFnCallbackSpy).not.toHaveBeenCalled()
+      expect(messageDeleteHandlerCallbackSpy).toHaveBeenCalledWith(message)
+      expect(channelCreateHandlerCallbackSpy).not.toHaveBeenCalled()
     })
   })
 })

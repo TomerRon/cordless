@@ -15,10 +15,13 @@ Setting up a Discord bot can be broken down to 3 steps:
 
 #### Step 2: Generate a bot token
 
-After creating your bot, click on "Reset Token" and confirm. You will then see the new token that was generated. Copy this token to your code.
+After creating your bot, click on "Reset Token" and confirm. You will then see the new token that was generated. Copy this token to your code (or hold onto it for now, if you didn't write any code yet).
 
 ```ts
-init({ ... }).login('your.bot.token');
+init({
+  // ...
+  token: 'your.bot.token',
+})
 ```
 
 ⚠️ **Important!** Do not share this token with anyone. It's best to store it in your environment variables and load it with [dotenv](https://github.com/motdotla/dotenv) or another env loader.
@@ -26,7 +29,10 @@ init({ ... }).login('your.bot.token');
 ```ts
 dotenv.config()
 
-init({ ... }).login(process.env.BOT_TOKEN);
+init({
+  // ...
+  token: process.env.BOT_TOKEN || '',
+})
 ```
 
 #### Step 3: Add the bot to a server
@@ -37,7 +43,7 @@ Now that you have a server, go back to your application page in the [Discord dev
 
 - Click on "OAuth2" in the sidebar
 - Click on "URL Generator" in the new sub-menu that appeared
-- In the list of scopes, tick "bot"
+- In the list of scopes, tick `applications.commands` and `bot`
 - In the list of bot permissions, tick the relevant permissions for your bot, depending on what your bot will do. If you are using your own empty server to develop your bot, you can just tick "Administrator" for now to get all of the permissions
 - Under "Generated URL", click on "Copy" to copy the generated URL and open it in a new tab
 - Choose the server you'd like to add your bot to

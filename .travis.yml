@@ -7,10 +7,18 @@ jobs:
     - stage: release
       node_js: 16
       deploy:
-        provider: script
-        skip_cleanup: true
-        script:
-          - yarn semantic-release
+        - provider: script
+          skip_cleanup: true
+          script:
+            - yarn semantic-release
+          on:
+            branch: master
+        - provider: script
+          skip_cleanup: true
+          script:
+            - yarn semantic-release
+          on:
+            branch: beta
 
 script:
   - yarn lint

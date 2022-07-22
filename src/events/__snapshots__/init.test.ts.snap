@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`init should handle many functions and map each one to an event handler 1`] = `
+exports[`initEvents should process many event handlers and map each one to the appropriate discord.js event handler 1`] = `
 Array [
   Array [
     Array [
@@ -12,13 +12,11 @@ Array [
       Object {
         "callback": [MockFunction],
         "condition": [MockFunction],
-        "name": "Function1",
       },
       Object {
         "callback": [MockFunction],
         "condition": [MockFunction],
         "event": "messageCreate",
-        "name": "Function3",
       },
     ],
     Object {
@@ -54,35 +52,30 @@ Array [
           ],
         },
       },
-      "functions": Array [
+      "handlers": Array [
         Object {
           "callback": [MockFunction],
           "condition": [MockFunction],
-          "name": "Function1",
         },
         Object {
           "callback": [MockFunction],
           "condition": [MockFunction],
           "event": "channelCreate",
-          "name": "Function2",
         },
         Object {
           "callback": [MockFunction],
           "condition": [MockFunction],
           "event": "messageCreate",
-          "name": "Function3",
         },
         Object {
           "callback": [MockFunction],
           "condition": [MockFunction],
           "event": "messageDelete",
-          "name": "Function4",
         },
         Object {
           "callback": [MockFunction],
           "condition": [MockFunction],
           "event": "channelCreate",
-          "name": "Function5",
         },
       ],
     },
@@ -98,13 +91,11 @@ Array [
         "callback": [MockFunction],
         "condition": [MockFunction],
         "event": "channelCreate",
-        "name": "Function2",
       },
       Object {
         "callback": [MockFunction],
         "condition": [MockFunction],
         "event": "channelCreate",
-        "name": "Function5",
       },
     ],
     Object {
@@ -140,35 +131,30 @@ Array [
           ],
         },
       },
-      "functions": Array [
+      "handlers": Array [
         Object {
           "callback": [MockFunction],
           "condition": [MockFunction],
-          "name": "Function1",
         },
         Object {
           "callback": [MockFunction],
           "condition": [MockFunction],
           "event": "channelCreate",
-          "name": "Function2",
         },
         Object {
           "callback": [MockFunction],
           "condition": [MockFunction],
           "event": "messageCreate",
-          "name": "Function3",
         },
         Object {
           "callback": [MockFunction],
           "condition": [MockFunction],
           "event": "messageDelete",
-          "name": "Function4",
         },
         Object {
           "callback": [MockFunction],
           "condition": [MockFunction],
           "event": "channelCreate",
-          "name": "Function5",
         },
       ],
     },
@@ -184,7 +170,6 @@ Array [
         "callback": [MockFunction],
         "condition": [MockFunction],
         "event": "messageDelete",
-        "name": "Function4",
       },
     ],
     Object {
@@ -220,35 +205,30 @@ Array [
           ],
         },
       },
-      "functions": Array [
+      "handlers": Array [
         Object {
           "callback": [MockFunction],
           "condition": [MockFunction],
-          "name": "Function1",
         },
         Object {
           "callback": [MockFunction],
           "condition": [MockFunction],
           "event": "channelCreate",
-          "name": "Function2",
         },
         Object {
           "callback": [MockFunction],
           "condition": [MockFunction],
           "event": "messageCreate",
-          "name": "Function3",
         },
         Object {
           "callback": [MockFunction],
           "condition": [MockFunction],
           "event": "messageDelete",
-          "name": "Function4",
         },
         Object {
           "callback": [MockFunction],
           "condition": [MockFunction],
           "event": "channelCreate",
-          "name": "Function5",
         },
       ],
     },

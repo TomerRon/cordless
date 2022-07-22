@@ -1,66 +1,56 @@
-import Discord, { ClientOptions, Intents } from 'discord.js'
-import getHelpFunction from './functions/help'
-import { BotFunction, Context, CustomContext, InitOptions } from './types'
-import handleEvent from './utils/handleEvent'
+import Discord, { ClientOptions, GatewayIntentBits } from 'discord.js'
+import initCommands from './commands/init'
+import initEvents from './events/init'
+import { Context, CustomContext, InitOptions } from './types'
 
 const DEFAULT_INTENTS: ClientOptions['intents'] = [
-  Intents.FLAGS.GUILD_MESSAGES,
-  Intents.FLAGS.GUILDS,
+  GatewayIntentBits.GuildMessages,
+  GatewayIntentBits.Guilds,
 ]
 
 /**
  * Initializes a cordless bot with the given options.
  * Returns a discord.js client.
  */
-export const init = <C extends CustomContext = {}>(
+export const init = async <C extends CustomContext = {}>(
   options: InitOptions<C>,
-): Discord.Client => {
+): Promise<Discord.Client<true>> => {
   const {
+    commands = [],
     context = {} as C,
-    functions,
-    helpCommand,
+    handlers = [],
     intents = DEFAULT_INTENTS,
+    token,
   } = options
 
-  if (functions.some((fn) => fn.name?.includes(' '))) {
-    throw new Error('A function cannot have spaces in its name.')
-  }
+  //
+  // Initialize Discord.js client and login
+  //
+  const client = await new Promise<Discord.Client<true>>((resolve) => {
+    const c = new Discord.Client({ intents })
 
-  //
-  // Initialize Discord.js client
-  //
-  const client = new Discord.Client({ intents })
+    c.once('ready', resolve)
 
-  //
-  // Resolve functions and context
-  //
-  const resolvedFns = helpCommand
-    ? [getHelpFunction<C>(helpCommand), ...functions]
-    : functions
+    c.login(token)
+  })
 
   const resolvedContext: Context<C> = {
     client,
-    functions: resolvedFns,
+    handlers,
     ...context,
   }
 
-  //
-  // Subscribe functions to events
-  //
-  const eventFunctionsMap = resolvedFns.reduce<
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    Record<string, BotFunction<any, C>[]>
-  >((acc, curr) => {
-    const key = curr.event || 'messageCreate'
+  initCommands<C>({
+    client,
+    commands,
+    context: resolvedContext,
+    token,
+  })
 
-    return {
-      ...acc,
-      [key]: [...(acc[key] || []), curr],
-    }
-  }, {})
-
-  Object.entries(eventFunctionsMap).forEach(([event, eventFns]) => {
-    client.on(event, (...args) => handleEvent(args, eventFns, resolvedContext))
+  initEvents<C>({
+    client,
+    handlers,
+    context: resolvedContext,
   })
 
   return client
