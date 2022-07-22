@@ -1,3 +1,15 @@
+# [3.0.0-beta.7](https://github.com/TomerRon/cordless/compare/v3.0.0-beta.6...v3.0.0-beta.7) (2022-07-22)
+
+
+### chore
+
+* **deps:** upgrade discord.js to v14 ([cca5cea](https://github.com/TomerRon/cordless/commit/cca5ceaa1c29b83a334916e251f1b6f22ffa59da))
+
+
+### BREAKING CHANGES
+
+* **deps:** Discord.js has been upgraded to v14. Now uses Discord API v10. See: https://discordjs.guide/additional-info/changes-in-v14.html
+
 # [3.0.0-beta.6](https://github.com/TomerRon/cordless/compare/v3.0.0-beta.5...v3.0.0-beta.6) (2022-07-20)
 
 
