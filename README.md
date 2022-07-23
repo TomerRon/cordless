@@ -51,6 +51,8 @@ const ping = {
 cordless.init({ commands: [ping], token: 'your.bot.token' })
 ```
 
+You can also check out the [code samples](sample) for ready-to-go solutions. See: [sample/01-basic-typescript](sample/01-basic-typescript) or [sample/02-basic-javascript](sample/02-basic-javascript)
+
 ## Advanced Usage
 
 #### Create advanced interactions

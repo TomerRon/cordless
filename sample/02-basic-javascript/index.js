@@ -1,13 +1,16 @@
 import { init } from 'cordless'
 import dotenv from 'dotenv'
-import ping from './functions/ping.js'
+import ping from './commands/ping.js'
 
 dotenv.config()
 
-const client = init({ functions: [ping] })
+const main = async () => {
+  const client = await init({
+    commands: [ping],
+    token: process.env.BOT_TOKEN || '',
+  })
 
-client.on('ready', (client) => {
   console.log(`Logged in as ${client.user.tag}!`)
-})
+}
 
-client.login(process.env.BOT_TOKEN)
+main()
