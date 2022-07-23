@@ -1,5 +1,3 @@
-# NOTE: This sample is outdated as it still uses cordless v2. It will be updated soon to use v3.
-
 ## Basic JavaScript sample
 
 Minimal code sample for creating a cordless bot with JavaScript.
