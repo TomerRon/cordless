@@ -4,7 +4,7 @@
  * Otherwise, the client might fail to login.
  */
 beforeEach(async () => {
-  await new Promise<void>((resolve) => setTimeout(resolve, 2000))
+  await new Promise<void>((resolve) => setTimeout(resolve, 1024))
 })
 
 jest.setTimeout(30000)
